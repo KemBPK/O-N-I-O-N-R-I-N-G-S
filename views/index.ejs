@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% include _head %>
+    <% include ./Shared/_head %>
 </head>
 <body>
 
@@ -9,6 +9,8 @@
 	<% if(locals.input){ %>
 		<p>input: <%= input %></p>
 	<% } %>
+
+	<a href="Test/test_page">test</a>
 
 	<form action="/get_input">
 		<div class="form-inline">

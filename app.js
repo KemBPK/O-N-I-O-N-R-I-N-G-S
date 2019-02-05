@@ -10,6 +10,8 @@ app.use(express.urlencoded()); //allows retrievals of post parameters
 
 app.set('view engine', 'ejs');
 
+require('./controllers/TestController')(app);
+
 app.get('/', function (req, res) {
     res.render('index');
 })
@@ -41,9 +43,7 @@ app.post('/test_post', function (req, res) {
 })
 
 
-
-
-
-
 //localhost:3000
 app.listen(3000);
+
+exports = module.exports = app;
