@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include _head %>
+</head>
+<body>
+
+<div class="container">
+	<% if(locals.input){ %>
+		<p>input: <%= input %></p>
+	<% } %>
+
+	<form action="/get_input">
+		<div class="form-inline">
+			<input type="text" name="input" class="form-control" />
+			<input type="submit" value="submit" class="btn btn-primary"/>
+		</div>
+	</form>
+
+	</br>
+
+	<table style="width: auto;">
+		<thead>
+			<tr>
+				<td>Restaurant</td>
+				<td>Menu Item</td>
+				<td>Image</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% if(locals.result){ %>
+				
+					<% for(var i=0;i<result.length;++i) { %> 
+						
+						<tr>
+							<td> <%= result[i].restaurantChain %> </td>
+							<td> <%= result[i].title %> </td>
+							<td> <img src="<%= result[i].image %>"/> </td>
+						</tr>
+					<% } %>
+			<% } %>
+		</tbody>
+	</table>
+</div>
+</body>
+
+</html>
