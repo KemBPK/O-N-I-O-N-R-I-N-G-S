@@ -16,3 +16,9 @@ Use the following command <br/><br/>
 node app.js <br/><br/>
 
 Then type in the URL http://localhost:3000 to test the website.
+
+# Other Resources
+
+https://www.w3schools.com/nodejs/ <br/>
+https://www.w3schools.com/booTsTrap/default.asp <br/>
+https://expressjs.com/en/guide/routing.html <br/>
