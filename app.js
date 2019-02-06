@@ -1,32 +1,34 @@
 //INSTRUCTIONS:
 //npm install express
 //npm install ejs
+//npm install mysql
 
-//app needs express package
-var express = require('express');
+var express = require('express'); //express module
 var app = express();
+
+var db = require('./data/data'); //imports data module
 
 app.use(express.urlencoded()); //allows retrievals of post parameters
 
 app.set('view engine', 'ejs');
 
-require('./controllers/HomeController')(app);
-
-app.get('/', function (req, res) {
-    //res.render('index');
-    res.render('./Home/Welcome');
+app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
+  //console.log(db.connection());
+  res.render('./Home/Welcome');
 })
 
-app.use(function(req, res, next){
-    res.status(404);
-    // respond with html page
-    if (req.accepts('html')) {
-      res.render('404', { url: req.url });
-      return;
-    }
-  });
+/* Controller Imports  */
+require('./controllers/HomeController')(app); //imports home controller module 
+
+/* End Controller Imports */
+
+
+app.use(function(req, res, next) {
+  res.status(404);
+  res.render('./Error/404', { url: req.url });
+});
 
 //localhost:3000
 app.listen(3000);
 
-exports = module.exports = app;
+//exports = module.exports = app;

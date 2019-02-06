@@ -10,7 +10,7 @@ module.exports = function(app) {
         var unirest = require('unirest'); //npm install unirest
         unirest.get("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/menuItems/search?query=" + input)
             .header("X-RapidAPI-Key", "bc37d905e4msh4f3080a6fc02ccdp136f37jsnbe8cef869ce7")
-            .end(function (result) {
+            .end(function (result) { //ends unirest.get with a render response
     
                 //console.log(Object.keys(result.body.menuItems[0])); //View object properties inside the command prompt
                 res.render('./Home/Welcome', {
