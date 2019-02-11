@@ -7,6 +7,7 @@ var express = require('express'); //express module
 var app = express();
 
 var db = require('./data/data'); //imports data module
+var yelp = require('./api/yelp');//import yelp module
 
 app.use(express.urlencoded()); //allows retrievals of post parameters
 
@@ -18,7 +19,7 @@ app.get('/', function (req, res) { //redirect to homepage when the root URL is r
 })
 
 /* Controller Imports  */
-require('./controllers/HomeController')(app); //imports home controller module 
+require('./controllers/HomeController')(app, yelp); //imports home controller module 
 
 /* End Controller Imports */
 
