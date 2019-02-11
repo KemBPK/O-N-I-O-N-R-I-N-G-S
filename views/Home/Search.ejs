@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../Partials/_head //relative path %>
+</head>
+<body>
+
+<div class="container">
+	<!-- <% if(locals.input){ %>
+		<p>input: <%= input %></p>
+	<% } %> -->
+
+    </br>
+    
+	<table style="width: auto;">
+		<thead>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% if(locals.result){ %>
+				
+				<% result.then(function(response){
+					     console.log(response.jsonBody);
+					   }); 
+				%>
+				
+			<% } %>
+		</tbody>
+	</table>
+</div>
+</body>
+
+</html>
