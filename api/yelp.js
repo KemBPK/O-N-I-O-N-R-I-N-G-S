@@ -30,8 +30,6 @@ function SearchPlaces(input){
     
     //There are some embedded object inside the arrays (locations, coordinates, categories, etc.). Use JSON.stringify() and pass in an element of businesses to access them.
 
-
-
       return client.search(input);
 }
 
@@ -84,3 +82,20 @@ module.exports.SearchPlaces = SearchPlaces;
 //         "alias": "burgers",
 //         "title": "Burgers"
 //     }
+
+// 
+// 							_________________________________________________________________________________________________________
+// 							| Pic	| Restaurant name 															Directions
+// 							| 		| -----------------------------------------------------------------------------------------------
+// 							|		| Yelp link (with  yelp logo), Yelp rating   | ORWW link to review page (with logo), ORWW rating
+// 							|_______|________________________________________________________________________________________________								 |
+						
+// 							Restaurant schedule
+// 							Open?
+// 							phone
+// 							yelp link to Onion rings menu item
+
+// 							Direction button will show a pop up modal with a google map 
+							
+// 							Google API key = AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k //DO NOT SHARE THIS 
+// 						

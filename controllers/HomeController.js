@@ -9,10 +9,12 @@ module.exports = function(app, yelp) {
     })
 
     app.get('/Home/Search', function (req, res) {
+        console.log("hello");
         const input = {
             term:'Onion Rings',
             location: req.query.city + ", " + req.query.state,
-            limit: 50
+            limit: 5
+            //categories: 'hotdogs' //fast food 
           };
         search = yelp.SearchPlaces(input);
 

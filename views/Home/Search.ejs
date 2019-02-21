@@ -13,21 +13,27 @@
     </br>
     
 	<table style="width: auto;">
-		<thead>
+		<!-- <thead>
 			<tr>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-		</thead>
+		</thead> -->
 
 		<tbody>
 			<% if(locals.result){ %>
 				
 				<% result.then(function(response){
-					     console.log(response.jsonBody);
-					   }); 
-				%>
+
+					console.log(response.jsonBody.businesses.length);
+					
+					for(var i=0; i< response.jsonBody.businesses.length; ++i){
+						var output = JSON.stringify(response.jsonBody.businesses[i], null, 4);
+						console.log(output);
+					}
+					<!-- console.log(response.jsonBody); -->
+				}); %>
 				
 			<% } %>
 		</tbody>
