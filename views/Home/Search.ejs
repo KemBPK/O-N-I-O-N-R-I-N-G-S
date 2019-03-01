@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <% include ../Partials/_head //relative path %>
+	<% include ../Partials/_head //relative path %>
+<style>
+	#map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 400px; 
+      }
+</style>
+	
 </head>
 <body>
 
@@ -12,33 +19,59 @@
 
     </br>
     
-	<table style="width: auto;">
-		<!-- <thead>
+	<!-- <table style="width: auto;">
+		<thead>
 			<tr>
 				<td></td>
 				<td></td>
 				<td></td>
 			</tr>
-		</thead> -->
-
+		</thead>
 		<tbody>
-			<% if(locals.result){ %>
-				
-				<% result.then(function(response){
-
-					console.log(response.jsonBody.businesses.length);
-					
-					for(var i=0; i< response.jsonBody.businesses.length; ++i){
-						var output = JSON.stringify(response.jsonBody.businesses[i], null, 4);
-						console.log(output);
-					}
-					<!-- console.log(response.jsonBody); -->
-				}); %>
-				
-			<% } %>
+			
 		</tbody>
-	</table>
+	</table> -->
+	
 </div>
+<div class="container container-fluid">
+<% if(locals.result){ %>
+				
+		<% 	
+			var latitude = result[0].coordinates['latitude'];
+			var longitude = result[0].coordinates['longitude']
+			
+			console.log( latitude + "\n");
+			console.log( longitude + "\n");
+		%>
+
+		<div id="latitude"><%= latitude %></div>
+		<div id="longitude"><%= longitude %></div>
+
+		<div id="map">map</div>
+		<script>		
+			function initMap() {
+				var latitude = $('#latitude').html();
+				latitude = Math.round(latitude * 1000) / 1000;
+				var longitude = $('#longitude').html()
+				longitude = Math.round(longitude * 1000) / 1000;
+
+				var location = {lat: latitude, lng: longitude};
+				// alert("latitude: " + latitude);
+				// alert("longitude: " + longitude);
+				var map = new google.maps.Map(document.getElementById('map'), {
+					center: location,
+					zoom: 15
+				});
+				var marker = new google.maps.Marker({position: location, map: map});
+			}
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
+		async defer></script>
+			
+<% } %>
+</div>
+
+
 </body>
 
 </html>
