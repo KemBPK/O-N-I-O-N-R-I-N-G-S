@@ -9,20 +9,29 @@ module.exports = function(app, yelp) {
     })
 
     app.get('/Home/Search', function (req, res) {
+        console.log("hello");
         const input = {
             term:'Onion Rings',
             location: req.query.city + ", " + req.query.state,
-            limit: 50
+            limit: 5
+            //categories: 'hotdogs' //fast food 
           };
         search = yelp.SearchPlaces(input);
 
-        res.render('./Home/Search', {
-            input: input,
-            result: search
+        // res.render('./Home/Search', {
+        //     input: input,
+        //     result: search
+        // });
+
+        search.then(function(response){
+        // console.log(response.jsonBody);
+        return response.jsonBody.businesses;
+        }).then(function(result){
+            res.render('./Home/Search', {
+                input: input,
+                result: result
+            });
         });
-        //   search.then(function(response){
-        //     console.log(response.jsonBody);
-        //   });
     })
     
     app.post('/Home/get_input', function (req, res) {

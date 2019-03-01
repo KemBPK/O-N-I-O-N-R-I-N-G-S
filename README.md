@@ -7,7 +7,7 @@ Then use the following commands: <br/> <br/>
 
 npm install express <br/>
 npm install ejs <br/>
-npm install unirest <br/>
+npm install yelp-fusion <br/>
 
 # Running The Website
 
@@ -22,3 +22,5 @@ Then type in the URL http://localhost:3000 to test the website.
 https://www.w3schools.com/nodejs/ <br/>
 https://www.w3schools.com/booTsTrap/default.asp <br/>
 https://expressjs.com/en/guide/routing.html <br/>
+https://www.tutorialspoint.com/nodejs/nodejs_express_framework.htm <br/>
+https://developers.google.com/maps/documentation/javascript/tutorial?authuser=1 <br/>
