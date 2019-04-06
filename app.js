@@ -30,6 +30,7 @@ app.use(function(req, res, next) {
 });
 
 //localhost:3000
-app.listen(3000);
+//app.listen(3000);
 
 //exports = module.exports = app;
+module.exports = app;
