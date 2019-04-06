@@ -1,8 +1,10 @@
 {
   "name": "Onion-Rings-World-Wide",
   "version": "0.0.1",
-  "lockfileVersion": 1,
-  "requires": true,
+  "private": true,
+  "scripts": {
+    "start": "node main.js"
+  },
   "dependencies": {
     "@tonybadguy/call-me-maybe": {
       "version": "2.1.1",
