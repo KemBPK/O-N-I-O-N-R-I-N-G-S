@@ -15,6 +15,10 @@ function connection(){
         // password: "z5zuQ5G6r4CiVmF"
       });
     console.log('Attempting to connect...\n');
+
+    console.log(process.env.RDS_HOSTNAME);
+    console.log(process.env.RDS_USERNAME);
+
     con.connect(function(err){
       if(err){
         console.log('Database connection failed: ' + err.stack);
