@@ -1,8 +1,13 @@
 'use strict';
 
-module.exports = function(app, yelp) {
+module.exports = function(app, yelp, db) {
 
     var search; 
+
+    app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
+        db.connection();
+        res.render('./Home/Welcome');
+    })
 
     app.get('/Home/Welcome', function (req, res) {        
         res.render('./Home/Welcome'); //relative to the root view folder
