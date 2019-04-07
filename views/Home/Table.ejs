@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<% include ../Partials/_head //relative path %>	
+</head>
+<body>
+
+<div class="container">
+    <br>
+    <table>
+            <thead>
+                <tr>
+                    <td style="width: auto;">First Name</td>
+                    <td style="width: auto;">Last Name</td>
+                    <td style="width: auto;">Age</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% if(locals.result){ %>                     
+                    <% for(var i=0; i<locals.result.length; ++i){ %>
+                        <tr>
+                            <td><%= locals.result[i].firstName %></td>
+                            <td><%= locals.result[i].lastName %></td>
+                            <td><%= locals.result[i].age %></td>
+                        </tr> 
+                    <% } %>
+                <% } %>
+            </tbody>
+        </table>
+       
+</div>
+</body>
+
+</html>
