@@ -4,23 +4,43 @@ var mysql = require('mysql');
 
 function connection(){
     var con = mysql.createConnection({
-        host: "localhost",
-        user: "yourusername",
-        password: "yourpassword"
+
+        //deployment code
+        // host     : process.env.RDS_HOSTNAME,
+        // user     : process.env.RDS_USERNAME,
+        // password : process.env.RDS_PASSWORD,
+        // port     : process.env.RDS_PORT
+
+        //testing code
+        host: "aa10bua224idnik.cvo7xscrgkdh.us-west-1.rds.amazonaws.com",
+        port: 3306,
+        user: "orwwDB",
+        password: "z5zuQ5G6r4CiVmF"
       });
-    return con;
+    console.log('Attempting to connect...\n');
+
+    con.connect(function(err){
+      if(err){
+        console.log('Database connection failed: ' + err.stack);
+        return;
+      }
+      console.log('Connected to database');
+      con.end();   
+      return;
+    });
+    // return con;
 }
 
-function select(){
-    var con = connection();
-    con.connect(function(err) {
-        if (err) throw err;
-        con.query("SELECT * FROM customers", function (err, result, fields) {
-          if (err) throw err;
-          console.log(result);
-        });
-      });
-}
+// function select(){
+//     var con = connection();
+//     con.connect(function(err) {
+//         if (err) throw err;
+//         con.query("SELECT * FROM customers", function (err, result, fields) {
+//           if (err) throw err;
+//           console.log(result);
+//         });
+//       });
+// }
 
 module.exports.connection = connection;
-module.exports.select = select;
+//module.exports.select = select;

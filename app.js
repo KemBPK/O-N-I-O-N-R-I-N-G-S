@@ -13,13 +13,13 @@ app.use(express.urlencoded()); //allows retrievals of post parameters
 
 app.set('view engine', 'ejs');
 
-app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
-  //console.log(db.connection());
-  res.render('./Home/Welcome');
-})
+// app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
+//   //console.log(db.connection());
+//   res.render('./Home/Welcome');
+// })
 
 /* Controller Imports  */
-require('./controllers/HomeController')(app, yelp); //imports home controller module 
+require('./controllers/HomeController')(app, yelp, db); //imports home controller module 
 
 /* End Controller Imports */
 
