@@ -5,7 +5,6 @@ module.exports = function(app, yelp, db) {
     var search; 
 
     app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
-        db.connection();
         res.render('./Home/Welcome');
     })
 
@@ -23,14 +22,9 @@ module.exports = function(app, yelp, db) {
           };
         search = yelp.SearchPlaces(input);
 
-        // res.render('./Home/Search', {
-        //     input: input,
-        //     result: search
-        // });
-
         search.then(function(response){
-        // console.log(response.jsonBody);
-        return response.jsonBody.businesses;
+            // console.log(response.jsonBody);
+            return response.jsonBody.businesses;
         }).then(function(result){
             res.render('./Home/Search', {
                 input: input,
@@ -38,10 +32,26 @@ module.exports = function(app, yelp, db) {
             });
         });
     })
-    
-    app.post('/Home/get_input', function (req, res) {
-        var input = req.body.input //post parameter
-        console.log(input);
-        res.redirect('./Welcome'); //relative to the view folder
+
+    app.get('/Home/Table', function(req, res){
+        db.selectAll(function(result){
+            console.log(result);
+            res.render('./Home/Table', {
+                result: result
+            });
+        });     
     })
+
+    app.post('/Home/Insert', function(req, res){
+        var input = req.body;
+        db.insert(input.first, input.last, input.age, function(err){
+            res.redirect('./Table');
+        });  
+    })
+    
+    // app.post('/Home/get_input', function (req, res) {
+    //     var input = req.body.input; //post parameter
+    //     console.log(input);
+    //     res.redirect('./Welcome'); //relative to the view folder
+    // })
 }
