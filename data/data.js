@@ -5,18 +5,18 @@ var mysql = require('mysql');
 function connection(){
     var con = mysql.createConnection({
         //deployment code
-        host     : process.env.RDS_HOSTNAME,
-        user     : process.env.RDS_USERNAME,
-        password : process.env.RDS_PASSWORD,
-        port     : process.env.RDS_PORT,
-        database    : "ebdb"
+        // host     : process.env.RDS_HOSTNAME,
+        // user     : process.env.RDS_USERNAME,
+        // password : process.env.RDS_PASSWORD,
+        // port     : process.env.RDS_PORT,
+        // database    : "ebdb"
 
         //testing code
-        // host: "aa10bua224idnik.cvo7xscrgkdh.us-west-1.rds.amazonaws.com",
-        // port: 3306,
-        // user: "orwwDB",
-        // password: "z5zuQ5G6r4CiVmF",
-        // database: "ebdb"
+        host: "aa10bua224idnik.cvo7xscrgkdh.us-west-1.rds.amazonaws.com",
+        port: 3306,
+        user: "orwwDB",
+        password: "z5zuQ5G6r4CiVmF",
+        database: "ebdb"
       });
     return con;    
 }
