@@ -18,6 +18,7 @@ function connection(){
 
     console.log(process.env.RDS_HOSTNAME);
     console.log(process.env.RDS_USERNAME);
+    console.log(process.env.RDS_PASSWORD);
 
     con.connect(function(err){
       if(err){
