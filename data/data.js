@@ -22,14 +22,14 @@ function connection(){
     return con;    
 }
 
-function insert(First, Last, Age, callback){
+function insert(first, last, age, callback){
     var con = connection();
     con.connect(function(err){
       if(err){
         console.log('Database connection failed: ' + err.stack);  
         throw err;
       }
-      var sql = "INSERT INTO TestTable (firstName, lastName, age) VALUES (\'" + First + "\', \'" + Last + "\', \'" + Age + "\')";
+      var sql = "INSERT INTO TestTable (firstName, lastName, age) VALUES (\'" + first + "\', \'" + last + "\', \'" + age + "\')";
       con.query(sql, function (err, result){
         if(err){
           console.log("insertion failed\n");
