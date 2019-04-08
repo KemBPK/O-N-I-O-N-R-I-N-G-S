@@ -44,11 +44,12 @@ module.exports = function(app, yelp, db) {
 
     app.post('/Home/Insert', function(req, res){
         var input = req.body;
-        db.insert(input.first, input.last, input.age, function(err){
+        db.insert(input.first, input.last, input.age, function(){
             res.redirect('./Table');
         });  
     })
     
+    //POST example
     // app.post('/Home/get_input', function (req, res) {
     //     var input = req.body.input; //post parameter
     //     console.log(input);
