@@ -1,6 +1,7 @@
 'use strict';
 
 var mysql = require('mysql');
+require('dotenv').config();
 
 function connection(){
     var con = mysql.createConnection({
@@ -9,14 +10,14 @@ function connection(){
         // user     : process.env.RDS_USERNAME,
         // password : process.env.RDS_PASSWORD,
         // port     : process.env.RDS_PORT,
-        // database    : "ebdb"
+        // database : process.env.DB_SCHEMA
 
         //testing code
-        host: "aa10bua224idnik.cvo7xscrgkdh.us-west-1.rds.amazonaws.com",
-        port: 3306,
-        user: "orwwDB",
-        password: "z5zuQ5G6r4CiVmF",
-        database: "ebdb"
+        host: process.env.DB_HOSTNAME,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_SCHEMA
       });
     return con;    
 }
