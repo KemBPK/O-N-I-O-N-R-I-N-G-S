@@ -5,15 +5,13 @@
 Clone repo into computer and go to the project folder inside the command prompt. <br/>
 Then use the following commands: <br/> <br/>
 
-npm install express <br/>
-npm install ejs <br/>
-npm install yelp-fusion <br/>
+npm install <br>
 
 # Running The Website
 
 Use the following command <br/><br/>
 
-node app.js <br/><br/>
+npm start<br/><br/>
 
 Then type in the URL http://localhost:3000 to test the website.
 
