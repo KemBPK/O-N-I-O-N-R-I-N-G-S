@@ -9,6 +9,8 @@ npm install <br>
 
 # Running The Website
 
+You must have the .env file (ask Brandon for it) inside the project folder. This file should never be on github. 
+
 Use the following command <br/><br/>
 
 npm start<br/><br/>

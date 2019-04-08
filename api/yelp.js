@@ -1,9 +1,10 @@
 'use strict';
 
 const yelp = require('yelp-fusion');
+require('dotenv').config();
 
 // Grab your Yelp Fusion's API Key from https://www.yelp.com/developers/v3/manage_app
-const apiKey = 'tuH81aTwFCLXWG40RpA9AOC9HCL3-q9j6c6Uc3hLO7By1flxZ0ZJguwFQIV8Yq9s9JgXL3sucqNrinHWbDZeIJnh9gQo10FU1CtHPibViSoqHw-CpyR8Bllu_mdSXHYx';
+const apiKey = process.env.YELP_KEY;
 
 const client = yelp.client(apiKey);
 
