@@ -6,6 +6,8 @@ var yelp = require('./api/yelp');//import yelp module
 
 app.use(express.urlencoded()); //allows retrievals of post parameters
 
+app.use(express.static("images"));
+
 app.set('view engine', 'ejs');
 
 /* Controller Imports  */
