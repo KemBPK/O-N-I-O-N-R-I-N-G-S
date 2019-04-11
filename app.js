@@ -1,5 +1,7 @@
 var express = require('express'); //express module
+var httpsRedirect = require('express-https-redirect');
 var app = express();
+app.use('/', httpsRedirect());
 
 var db = require('./data/data'); //imports data module
 var yelp = require('./api/yelp');//import yelp module
