@@ -35,9 +35,9 @@
 		<script>		
 			function initMap() {
 				var latitude = $('#latitude').html();
-				latitude = Math.round(latitude * 1000) / 1000;
+				latitude = Math.round(latitude * 10000000) / 10000000;
 				var longitude = $('#longitude').html()
-				longitude = Math.round(longitude * 1000) / 1000;
+				longitude = Math.round(longitude * 10000000) / 10000000;
 
 				var location = {lat: latitude, lng: longitude};
 				// alert("latitude: " + latitude);
