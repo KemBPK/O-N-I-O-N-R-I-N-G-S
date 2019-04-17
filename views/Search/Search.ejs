@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../Partials/_head //relative path %>
+</head>
+<body style="padding-top: 70px;">
+    
+    <div class="container">
+        <% include ../Partials/_navbar //relative path %>
+
+        <!-- <% if(locals.result){ %>
+            <div>There are <%= locals.result.length %> results.</div>
+        <% } %> -->
+
+        <% for(var i=0; i<locals.result.length; ++i){ %>
+            <div class="panel panel-default opaque">
+                <div class="panel-heading"><h3><%= locals.result[i].name %></h3></div>
+                <div class="panel-body row">
+                    <div class="col-md-3" style="border-right: 1px solid black;">
+                        <img src="<%= locals.result[i].image_url %>" class="rest-img">
+                    </div>
+                    <div class="col-md-5" style="border-right: 1px solid black;">test</div>
+                    <div class="col-md-4">test</div>
+                </div>
+            </div>
+        <% } %>
+
+    </div>
+    
+</body>
+
+</html>
