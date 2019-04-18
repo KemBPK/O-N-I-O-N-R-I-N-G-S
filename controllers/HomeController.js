@@ -15,7 +15,7 @@ module.exports = function(app, yelp, db) {
         const input = {
             term:'Onion Rings',
             location: req.query.city + ", " + req.query.state,
-            limit: 5
+            limit: 50
             //categories: 'hotdogs' //fast food 
           };
         var search = yelp.SearchPlaces(input);
