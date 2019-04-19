@@ -27,6 +27,18 @@
   width:100%;
 }
 
+#map {
+  height: 400px;
+  width: 400px; 
+}
+
+body { padding-right: 0 !important }
+
+.modal-open {
+  padding-right: 0px !important;
+  overflow: scroll;
+}
+
 /* navbar */
 .navbar-default {
     background-color: #337ab7;
