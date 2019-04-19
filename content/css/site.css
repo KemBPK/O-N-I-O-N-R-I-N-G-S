@@ -12,6 +12,14 @@
   border-radius: 8px;
 }
 
+#slide1{
+  background-image: url("/content/images/onions-248027_1280.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+}
+
 /* navbar */
 .navbar-default {
     background-color: #337ab7;
