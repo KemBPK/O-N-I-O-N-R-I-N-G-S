@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../Partials/_head //relative path %>
+</head>
+<body id="top" style="padding-top: 60px;">
+    <% include ../Partials/_navbar //relative path %>
+    <div class="container">
+        
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+            <!-- <li>
+                <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li> -->
+            <% if(locals.result.length > 0){ %>
+                <li><a href="#top" onclick="switchPage(1);">1</a></li>
+            <% } %>
+            <% if(locals.result.length > 10){ %>
+                <li><a href="#top" onclick="switchPage(2);">2</a></li>
+            <% } %>
+            <% if(locals.result.length > 20){ %>
+                <li><a href="#top" onclick="switchPage(3);">3</a></li>
+            <% } %>
+            <% if(locals.result.length > 30){ %>
+                <li><a href="#top" onclick="switchPage(4);">4</a></li>
+            <% } %>
+            <% if(locals.result.length > 40){ %>
+                <li><a href="#top" onclick="switchPage(5);">5</a></li>
+            <% } %>
+            <!-- <li>
+                <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li> -->
+            </ul>
+        </nav>
+
+        <div id="list">  
+            <% for(var i=0; i<10; ++i){ %>
+                <div class="panel panel-default opaque">
+                    <div class="panel-heading"><h3><%= locals.result[i].name %></h3></div>
+                    <div class="panel-body row">
+                        <div class="col-md-3" style="border-right: 1px solid black;">
+                            <img src="<%= locals.result[i].image_url %>" class="rest-img">
+                        </div>
+                        <div class="col-md-5">
+                            <div class="row" style="height: 125px;">
+                                <div class="col-md-6">
+                                    <a title="Click here to go to the restaurant's yelp page." target="_blank" rel="noopener noreferrer" href="<%= locals.result[i].url %>"> <img src="/content/images/yelp2.png" class="logo"> </a>
+                                </div>
+                                <div class="col-md-6">
+                                        <label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5<br><br>
+                                        <label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %>
+                                </div>
+                                
+                            </div>
+                            <div class="row" style="height: 125px;">
+                                <div class="col-md-6">
+                                    <a title="Click here to go to the restaurant's profile page." href="<%= locals.result[i].url %>"> <img src="/content/images/temp.jpg" class="logo"> </a>
+                                </div>
+                                <div class="col-md-6">
+                                        <label>ORWW's rating:&nbsp;</label> / 5<br><br>
+                                        <label>ORWW's review count:&nbsp;</label>
+                                </div>
+                            </div>                     
+                        </div>
+                        <div class="col-md-4">
+                            <div style="height: 250px;">
+                                <div style="height: 200px;">
+                                    <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
+                                    <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
+                                    <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
+                                </div>
+                                <div style="float: right;">
+                                    <input type="button" value="Get Direction" class="btn" >
+                                </div>
+                                <div class="clear"></div>
+                            </div>                     
+                        </div>
+                        
+                    </div>
+                </div>
+            <% } %>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+            <!-- <li>
+                <a href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li> -->
+            <% if(locals.result.length > 0){ %>
+                <li><a href="#top" onclick="switchPage(1);">1</a></li>
+            <% } %>
+            <% if(locals.result.length > 10){ %>
+                <li><a href="#top" onclick="switchPage(2);">2</a></li>
+            <% } %>
+            <% if(locals.result.length > 20){ %>
+                <li><a href="#top" onclick="switchPage(3);">3</a></li>
+            <% } %>
+            <% if(locals.result.length > 30){ %>
+                <li><a href="#top" onclick="switchPage(4);">4</a></li>
+            <% } %>
+            <% if(locals.result.length > 40){ %>
+                <li><a href="#top" onclick="switchPage(5);">5</a></li>
+            <% } %>
+            <!-- <li>
+                <a href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li> -->
+            </ul>
+        </nav>
+        <div style="margin-right: 0; padding-right: 0;">
+            <% include ../Partials/_footer //relative path %>
+        </div>
+    </div>
+    
+    <script>
+
+        function switchPage(pagenum){
+            $('#list').html('');
+            if(pagenum === 1){
+                $('#list').html(
+
+                    " <% if(locals.result.length < 10){ %> "+
+                        " <% for(var i=0; i<locals.result.length; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " +
+
+                    " <% } else { %> " +
+                        " <% for(var i=0; i<10; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " + 
+                    "<% } %>"
+                   
+
+                )             
+            }
+            else if(pagenum === 2){
+                $('#list').html(
+
+                    " <% if(locals.result.length < 20){ %> "+
+                        " <% for(var i=10; i<locals.result.length; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " +
+
+                    " <% } else { %> " +
+                        " <% for(var i=10; i<20; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " + 
+                    "<% } %>"
+
+                )             
+            }
+            else if(pagenum === 3){
+                $('#list').html(
+
+                    " <% if(locals.result.length < 30){ %> "+
+                        " <% for(var i=20; i<locals.result.length; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " +
+
+                    " <% } else { %> " +
+                        " <% for(var i=20; i<30; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " + 
+                    "<% } %>"
+
+                )             
+            }
+            else if(pagenum === 4){
+                $('#list').html(
+
+                    " <% if(locals.result.length < 40){ %> "+
+                        " <% for(var i=30; i<locals.result.length; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " +
+
+                    " <% } else { %> " +
+                        " <% for(var i=30; i<40; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " + 
+                    "<% } %>"
+
+                )             
+            }
+            else if(pagenum === 5){
+                $('#list').html(
+
+                    " <% if(locals.result.length < 50){ %> "+
+                        " <% for(var i=40; i<locals.result.length; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " +
+
+                    " <% } else { %> " +
+                        " <% for(var i=40; i<50; ++i){ %> " +
+                        " <div class=\"panel panel-default opaque\"> " +
+                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
+                        "     <div class=\"panel-body row\"> " +
+                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "        </div> " +
+                        "        <div class=\"col-md-9\"> " +
+                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
+                        "                 test " +
+                        "             </div> " +
+                        "             <div style=\"height: 125px;\"> " +
+                        "                 test " +
+                        "             </div> " +                          
+                        "         </div> " +                           
+                        "     </div> " +
+                        " </div>" +
+                        " <% } %> " + 
+                    "<% } %>"
+
+                )             
+            }
+            
+            
+        }
+     
+    </script>
+
+
+    
+</body>
+
+</html>
