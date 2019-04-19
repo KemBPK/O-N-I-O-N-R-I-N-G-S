@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <% include ../Partials/_head //relative path %>
+</head>
+<body>
+    <div class="modal-header text-center">
+        <strong>Note:&nbsp;</strong>Zoom further to see the restaurant's interactive pinpoint near the red marker.
+    </div>
+    <div class="modal-body">
+            <% if(locals.input){ %>
+                        
+                    <div id="latitude" hidden><%= locals.input.latitude %></div>
+                    <div id="longitude" hidden><%= locals.input.longitude %></div>
+            
+                    <div id="map">map</div>
+                    <script>		
+                        function initMap() {
+                            var latitude = $('#latitude').html();
+                            latitude = Math.round(latitude * 10000000) / 10000000;
+                            var longitude = $('#longitude').html()
+                            longitude = Math.round(longitude * 10000000) / 10000000;
+            
+                            var location = {lat: latitude, lng: longitude};
+                            // alert("latitude: " + latitude);
+                            // alert("longitude: " + longitude);
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                center: location,
+                                zoom: 15
+                            });
+                            var marker = new google.maps.Marker({position: location, map: map});
+                        }
+                    </script>
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
+                    async defer></script>
+                        
+            <% } %>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+
+</body>
+</html>

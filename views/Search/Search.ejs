@@ -51,8 +51,8 @@
                                     <a title="Click here to go to the restaurant's yelp page." target="_blank" rel="noopener noreferrer" href="<%= locals.result[i].url %>"> <img src="/content/images/yelp2.png" class="logo"> </a>
                                 </div>
                                 <div class="col-md-6">
-                                        <label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5<br><br>
-                                        <label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %>
+                                        <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p>
+                                        <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p>
                                 </div>
                                 
                             </div>
@@ -61,8 +61,8 @@
                                     <a title="Click here to go to the restaurant's profile page." href="<%= locals.result[i].url %>"> <img src="/content/images/temp.jpg" class="logo"> </a>
                                 </div>
                                 <div class="col-md-6">
-                                        <label>ORWW's rating:&nbsp;</label> / 5<br><br>
-                                        <label>ORWW's review count:&nbsp;</label>
+                                        <p><label>ORWW's rating:&nbsp;</label> / 5</p>
+                                        <p><label>ORWW's review count:&nbsp;</label></p>
                                 </div>
                             </div>                     
                         </div>
@@ -74,7 +74,8 @@
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
                                 </div>
                                 <div style="float: right;">
-                                    <input type="button" value="Get Direction" class="btn" >
+                                    <a href="/Search/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
+                                    <!-- <input type="button" value="Get Direction" class="btn" data-toggle="modal" data-target="#myModal" > -->
                                 </div>
                                 <div class="clear"></div>
                             </div>                     
@@ -117,6 +118,29 @@
             <% include ../Partials/_footer //relative path %>
         </div>
     </div>
+
+    
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $(function () {
+
+            // when the modal is closed
+            $('#myModal').on('hidden.bs.modal', function () {
+                // remove the bs.modal data attribute from it
+                $(this).removeData('bs.modal');
+                // and empty the modal-content element
+                $('#myModal .modal-content').empty();
+
+                
+            });
+        });
+    </script>
     
     <script>
 
