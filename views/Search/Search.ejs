@@ -45,14 +45,39 @@
                         <div class="col-md-3" style="border-right: 1px solid black;">
                             <img src="<%= locals.result[i].image_url %>" class="rest-img">
                         </div>
-                        <div class="col-md-9">
-                            <div style="height: 125px; border-bottom:  1px solid black; width: 100%;">
-                                test
+                        <div class="col-md-5">
+                            <div class="row" style="height: 125px;">
+                                <div class="col-md-6">
+                                    <a title="Click here to go to the restaurant's yelp page." target="_blank" rel="noopener noreferrer" href="<%= locals.result[i].url %>"> <img src="/content/images/yelp2.png" class="logo"> </a>
+                                </div>
+                                <div class="col-md-6">
+                                        <label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5<br><br>
+                                        <label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %>
+                                </div>
+                                
                             </div>
-                            <div style="height: 125px;">
-                                test
-                            </div>
-                        
+                            <div class="row" style="height: 125px;">
+                                <div class="col-md-6">
+                                    <a title="Click here to go to the restaurant's profile page." href="<%= locals.result[i].url %>"> <img src="/content/images/temp.jpg" class="logo"> </a>
+                                </div>
+                                <div class="col-md-6">
+                                        <label>ORWW's rating:&nbsp;</label> / 5<br><br>
+                                        <label>ORWW's review count:&nbsp;</label>
+                                </div>
+                            </div>                     
+                        </div>
+                        <div class="col-md-4">
+                            <div style="height: 250px;">
+                                <div style="height: 200px;">
+                                    <p><label>Location:&nbsp;</label><%= locals.result[i].location.address1 %></p>
+                                    <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
+                                    <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
+                                </div>
+                                <div style="float: right;">
+                                    <input type="button" value="Get Direction" class="btn" >
+                                </div>
+                                <div class="clear"></div>
+                            </div>                     
                         </div>
                         
                     </div>

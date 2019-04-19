@@ -12,6 +12,13 @@
   border-radius: 8px;
 }
 
+.logo{
+  height: 100px; 
+  width: 125px; 
+  object-fit: cover;
+  background: transparent;
+}
+
 #slide1{
   background-image: url("/content/images/onions-248027_1280.jpg");
   background-size: 100%;
