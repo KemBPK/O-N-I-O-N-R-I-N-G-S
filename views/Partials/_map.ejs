@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <% include ../Partials/_head //relative path %>
-</head>
-<body>
+
     <div class="modal-header text-center">
         <strong>Note:&nbsp;</strong>Zoom further to see the restaurant's interactive pinpoint near the red marker.
     </div>
     <div class="modal-body">
+        <div >
             <% if(locals.input){ %>
                         
                     <div id="latitude" hidden><%= locals.input.latitude %></div>
                     <div id="longitude" hidden><%= locals.input.longitude %></div>
             
-                    <div id="map">map</div>
+                    <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
                     <script>		
                         function initMap() {
                             var latitude = $('#latitude').html();
@@ -35,10 +31,17 @@
                     async defer></script>
                         
             <% } %>
+        </div>
+            
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
 
-</body>
-</html>
+    <script>
+        $(window).load(function(){
+        setTimeout(function(){
+            $('#myModal').modal('show');
+        }, 2000);
+        });
+    </script>

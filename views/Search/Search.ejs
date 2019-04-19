@@ -68,13 +68,14 @@
                         </div>
                         <div class="col-md-4">
                             <div style="height: 250px;">
-                                <div style="height: 200px;">
+                                <div style="height: 230px;">
                                     <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
                                     <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
                                 </div>
                                 <div style="float: right;">
-                                    <a href="/Search/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
+                                    <a href="/Search/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
+                                        data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
                                     <!-- <input type="button" value="Get Direction" class="btn" data-toggle="modal" data-target="#myModal" > -->
                                 </div>
                                 <div class="clear"></div>
@@ -120,26 +121,23 @@
     </div>
 
     
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
             </div>
         </div>
     </div>
     
-    <script>
-        $(function () {
-
-            // when the modal is closed
-            $('#myModal').on('hidden.bs.modal', function () {
-                // remove the bs.modal data attribute from it
-                $(this).removeData('bs.modal');
-                // and empty the modal-content element
-                $('#myModal .modal-content').empty();
-
-                
-            });
+    <script>    
+        // when the modal is closed
+        $('#myModal').on('hidden.bs.modal', function () {
+            // remove the bs.modal data attribute from it
+            $(this).removeData('bs.modal');
+            // and empty the modal-content element
+            $('#myModal .modal-content').empty();
+            $('body').attr("style", "padding-top: 60px; padding-right:0px;");           
         });
+     
     </script>
     
     <script>

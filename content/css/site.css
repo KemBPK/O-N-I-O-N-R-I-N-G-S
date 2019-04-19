@@ -32,7 +32,10 @@
   width: 400px; 
 }
 
+body { padding-right: 0 !important }
+
 .modal-open {
+  padding-right: 0px !important;
   overflow: scroll;
 }
 
