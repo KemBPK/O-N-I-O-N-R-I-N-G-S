@@ -16,6 +16,7 @@ app.set('view engine', 'ejs');
 require('./controllers/HomeController')(app, yelp, db); //imports home controller module 
 require('./controllers/ExampleController')(app, yelp, db); //imports home controller module
 require('./controllers/SearchController')(app, yelp, db); //imports home controller module
+require('./controllers/UserController')(app, yelp, db,);   //imports user controller module
 /* End Controller Imports */
 
 app.use(function(req, res, next) {
