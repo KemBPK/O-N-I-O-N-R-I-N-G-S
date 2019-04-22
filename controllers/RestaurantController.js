@@ -14,7 +14,7 @@ module.exports = function(app, yelp, db) {
             input: input
         });    
         //res.render('./Home/Welcome'); //relative to the root view folder
-    })
+    });
 
     app.post('/Search/RestaurantProfile', function (req, res) {
         var id = req.body.id; //post parameter
@@ -28,5 +28,7 @@ module.exports = function(app, yelp, db) {
         });
 
         res.redirect('../Home/Welcome'); //relative to the view folder
-    })
+    });
+
+    
 }

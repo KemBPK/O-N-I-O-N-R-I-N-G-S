@@ -24,7 +24,7 @@ module.exports = function(app, yelp, db) {
             // console.log(response.jsonBody);
             return response.jsonBody.businesses;
         }).then(function(result){
-            res.render('./Search/Search', {
+            res.render('./Restaurant/Search', {
                 input: input,
                 result: result
             });
