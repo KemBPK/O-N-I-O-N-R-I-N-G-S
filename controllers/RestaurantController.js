@@ -14,7 +14,7 @@ module.exports = function(app, yelp, db) {
             input: input
         });    
         //res.render('./Home/Welcome'); //relative to the root view folder
-    })
+    });
 
     app.post('/Search/RestaurantProfile', function (req, res) {
         var id = req.body.id; //post parameter
@@ -22,11 +22,13 @@ module.exports = function(app, yelp, db) {
         var alias = req.body.alias; //post parameter
         console.log(alias);
 
-        db.CheckRestaurant(id,function(result){
+        db.search.CheckRestaurant(id,function(result){
             //if(result) res.redirect
             //else {make profile and res.redirect}
         });
 
         res.redirect('../Home/Welcome'); //relative to the view folder
-    })
+    });
+
+    
 }
