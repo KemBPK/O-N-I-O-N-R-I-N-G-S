@@ -22,11 +22,17 @@ module.exports = function(app, yelp, db) {
         var alias = req.body.alias; //post parameter
         console.log(alias);
 
-        db.restaurant.checkRestaurant(id,function(doesExist){
+        db.restaurant.checkRestaurant(id,function(err, doesExist){
+            if(err){
+                console.log('caught error in checkRestaurant');
+                res.redirect('/');
+                return;
+            }           
             if(doesExist){
                 console.log('exists');
                 //res.redirect
-                res.redirect('/Restaurant?alias=' + alias); 
+                res.redirect('/Restaurant?alias=' + alias);
+                return;
             } 
             else {
                 console.log('does not exists');
@@ -38,13 +44,22 @@ module.exports = function(app, yelp, db) {
                 }).then(function(result){
                     //console.log(result);
                     result.name = result.name.replace('\'', '\\\'');
-                    //console.log(result.name);
                     db.restaurant.insertRestaurant(result.id, result.name, result.alias, result.location.display_address, result.location.city, result.location.state,
                         result.location.zip_code, result.coordinates.latitude, result.coordinates.longitude, result.display_phone, result.url,
-                        function(){
+                        function(err){
+                            if(err){
+                                console.log('caught error in insertRestaurant');
+                                res.redirect('/');
+                                return;
+                            }
                             console.log('inserted new restaurant');
                             res.redirect('/Restaurant?alias=' + alias);
+                            return;
                         });
+                }).catch(function(err){
+                    console.log('SearchRestaurant error: ');
+                    res.redirect('/');
+                    return;
                 });
             }
         });   
