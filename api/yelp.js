@@ -30,10 +30,15 @@ function SearchPlaces(input){
     
     //There are some embedded object inside the arrays (locations, coordinates, categories, etc.). Use JSON.stringify() and pass in an element of businesses to access them.
 
-      return client.search(input);
+    return client.search(input);
+}
+
+function SearchRestaurant(id){
+    return client.business(id);
 }
 
 module.exports.SearchPlaces = SearchPlaces;
+module.exports.SearchRestaurant = SearchRestaurant;
 
 // busisnesses[i]
 // { id: 'px_IFazBLG4JendEU5BH8Q',
