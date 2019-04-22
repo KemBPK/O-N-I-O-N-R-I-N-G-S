@@ -31,7 +31,4 @@ module.exports = function(app, yelp, db) {
         });
     })
 
-    app.get('/Home/Register', function (req, res) { 
-        res.render('./Home/Register');
-    })
 }
