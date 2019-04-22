@@ -22,14 +22,14 @@ function connection(){
     return con;    
 }
 
-function CheckRestaurant(id, callback){ //Look up callback and asynchronous call with javascript
+function checkRestaurant(id, callback){ //Look up callback and asynchronous call with javascript
   var con = connection();
   con.connect(function(err) {
     if(err){
       console.log('Database connection failed: ' + err.stack);   
       throw err;
     }
-    con.query("SELECT COUNT(*) FROM tblRestaurant WHERE yelpID =\'" + id + "\'", function (err, result, fields) {
+    con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID =\'" + id + "\'", function (err, result, fields) {
       if(err){
         console.log("CheckRestaurant failed\n");
         con.end(); 
@@ -37,11 +37,39 @@ function CheckRestaurant(id, callback){ //Look up callback and asynchronous call
       }
       con.end(); 
       console.log('Returning result');
-      if (result > 0){
+      console.log(result);
+      if (result[0].rowNum > 0){
+        console.log('true')
         return callback(true);
       }
-      else return callback(false);
+      else{
+        return callback(false);
+      }           
     });
   });
 }
 
+function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL, callback){
+  var con = connection();
+  con.connect(function(err){
+    if(err){
+      console.log('Database connection failed: ' + err.stack);  
+      throw err;
+    }
+    var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
+              + yelpID + "\', \'" + restName + "\', \'" + alias + "\', \'" + address + "\', \'" + city + "\', \'" + state + "\', \'" 
+              + zipCode + "\', \'" + latitude + "\', \'" + longitude + "\', \'" + phoneNum + "\', \'" + yelpURL + "\')";
+    con.query(sql, function (err, result){
+      if(err){
+        console.log("insertRestaurant failed\n");
+        con.end(); 
+        throw err;
+      }
+    });
+    con.end();   
+    return callback(null);
+  });
+}
+
+module.exports.checkRestaurant  = checkRestaurant;
+module.exports.insertRestaurant = insertRestaurant;

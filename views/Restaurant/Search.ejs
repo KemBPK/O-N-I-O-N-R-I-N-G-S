@@ -74,7 +74,7 @@
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
                                 </div>
                                 <div style="float: right;">
-                                    <a href="/Search/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
+                                    <a href="/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
                                         data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
                                     <!-- <input type="button" value="Get Direction" class="btn" data-toggle="modal" data-target="#myModal" > -->
                                 </div>
@@ -121,7 +121,7 @@
     </div>
 
     <div hidden>
-        <form id="frm_prof" action="/Search/RestaurantProfile" method="POST">
+        <form id="frm_prof" action="/Restaurant/Search" method="POST">
 
         </form>
     </div>
@@ -144,8 +144,8 @@
         });
        
         function clickProfilePage(id, alias){
-            alert(id);
-            alert(alias);
+            // alert(id);
+            // alert(alias);
             var form = document.getElementById('frm_prof');
 
             for(var i=0; i<form.childNodes.length; ++i){
