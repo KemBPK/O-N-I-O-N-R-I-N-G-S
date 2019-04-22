@@ -15,4 +15,18 @@ module.exports = function(app, yelp, db) {
         });    
         //res.render('./Home/Welcome'); //relative to the root view folder
     })
+
+    app.post('/Search/RestaurantProfile', function (req, res) {
+        var id = req.body.id; //post parameter
+        console.log(id);
+        var alias = req.body.alias; //post parameter
+        console.log(alias);
+
+        db.CheckRestaurant(id,function(result){
+            //if(result) res.redirect
+            //else {make profile and res.redirect}
+        });
+
+        res.redirect('../Home/Welcome'); //relative to the view folder
+    })
 }
