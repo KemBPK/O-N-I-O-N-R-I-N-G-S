@@ -22,7 +22,7 @@ module.exports = function(app, yelp, db) {
         var alias = req.body.alias; //post parameter
         console.log(alias);
 
-        db.CheckRestaurant(id,function(result){
+        db.search.CheckRestaurant(id,function(result){
             //if(result) res.redirect
             //else {make profile and res.redirect}
         });
