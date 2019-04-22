@@ -27,23 +27,25 @@ function checkRestaurant(id, callback){ //Look up callback and asynchronous call
   con.connect(function(err) {
     if(err){
       console.log('Database connection failed: ' + err.stack);   
-      throw err;
+      return callback(err, null);
+      //throw err;
     }
     con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID =\'" + id + "\'", function (err, result, fields) {
       if(err){
         console.log("CheckRestaurant failed\n");
         con.end(); 
-        throw err;
+        return callback(err, null);
+        //throw err;
       }
       con.end(); 
       console.log('Returning result');
       console.log(result);
       if (result[0].rowNum > 0){
         console.log('true')
-        return callback(true);
+        return callback(null, true);
       }
       else{
-        return callback(false);
+        return callback(null, false);
       }           
     });
   });
@@ -54,7 +56,8 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
   con.connect(function(err){
     if(err){
       console.log('Database connection failed: ' + err.stack);  
-      throw err;
+      return callback(err);
+      //throw err;
     }
     var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
               + yelpID + "\', \'" + restName + "\', \'" + alias + "\', \'" + address + "\', \'" + city + "\', \'" + state + "\', \'" 
@@ -63,7 +66,8 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
       if(err){
         console.log("insertRestaurant failed\n");
         con.end(); 
-        throw err;
+        return callback(err);
+        //throw err;
       }
     });
     con.end();   
