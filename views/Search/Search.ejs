@@ -58,7 +58,7 @@
                             </div>
                             <div class="row" style="height: 125px;">
                                 <div class="col-md-6">
-                                    <a title="Click here to go to the restaurant's profile page." href="<%= locals.result[i].url %>"> <img src="/content/images/temp.jpg" class="logo"> </a>
+                                    <a title="Click here to go to the restaurant's profile page." href="#top" onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
                                 </div>
                                 <div class="col-md-6">
                                         <p><label>ORWW's rating:&nbsp;</label> / 5</p>
@@ -120,7 +120,12 @@
         </div>
     </div>
 
-    
+    <div hidden>
+        <form id="frm_prof" action="/Search/RestaurantProfile" method="POST">
+
+        </form>
+    </div>
+
     <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -137,10 +142,30 @@
             $('#myModal .modal-content').empty();
             $('body').attr("style", "padding-top: 60px; padding-right:0px;");           
         });
-     
-    </script>
-    
-    <script>
+       
+        function clickProfilePage(id, alias){
+            alert(id);
+            alert(alias);
+            var form = document.getElementById('frm_prof');
+
+            for(var i=0; i<form.childNodes.length; ++i){
+                form.removeChild(form.childNodes[i]);
+            }
+
+            var input_id = document.createElement("INPUT");
+            input_id.setAttribute("name", "id");
+            input_id.setAttribute("type", "text");
+            input_id.setAttribute("value", id);
+            form.appendChild(input_id);
+            
+            var input_alias = document.createElement("INPUT");
+            input_alias.setAttribute("name", "alias");
+            input_alias.setAttribute("type", "text");
+            input_alias.setAttribute("value", alias);
+            form.appendChild(input_alias);
+ 
+            form.submit();
+        };
 
         function switchPage(pagenum){
             $('#list').html('');
@@ -377,7 +402,7 @@
             }
             
             
-        }
+        };
      
     </script>
 

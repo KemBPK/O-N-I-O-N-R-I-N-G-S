@@ -32,7 +32,7 @@ module.exports = function(app, yelp, db) {
     // })
 
     app.get('/Example/Table', function(req, res){
-        db.selectAll(function(result){
+        db.data.selectAll(function(result){
             console.log(result);
             res.render('./Example/Table', {
                 result: result
@@ -42,7 +42,7 @@ module.exports = function(app, yelp, db) {
 
     app.post('/Example/Insert', function(req, res){
         var input = req.body;
-        db.insert(input.first, input.last, input.age, function(){
+        db.data.insert(input.first, input.last, input.age, function(){
             res.redirect('./Table');
         });  
     })
