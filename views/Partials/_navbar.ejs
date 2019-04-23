@@ -1,29 +1,35 @@
 <nav class="navbar navbar-default navbar-fixed-top opaque">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">WebSiteName</a>
+            <a class="navbar-brand" href="#">OnionRingsWorldWide</a>
         </div>
         <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">template</a></li>
-            <li><a href="#">template</a></li>
-            <li><a href="#">template</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Search</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">template</a></li>
-            <li><a href="#">template</a></li>
-            <li><a id="aLogin" href="/User/Login">Login</a></li>
-            <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
-
-            <!--TODO: Only show Account Dropdown when someone is logged in -->
-            <li id="ddAccount" class="dropdown" hidden>
-                <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
-                <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="/User/Logout">Sign out</a></li> 
+        <div id="notloggedDiv" hidden>
+                <ul class="nav navbar-nav navbar-right">
+                        <!-- <li><a href="#">template</a></li>
+                        <li><a href="#">template</a></li> -->
+                        <li><a id="aLogin" href="/User/Login">Login</a></li>
+                        <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
                 </ul>
-            </li>
-        </ul>      
+        </div>
+        
+        <div id="loggedDiv" hidden>
+            <ul class="nav navbar-nav navbar-right">
+                <!--TODO: Only show Account Dropdown when someone is logged in -->
+                <li><a href="#">Reviews</a></li>
+                <li id="ddAccount" class="dropdown">
+                    <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/User/Logout">Sign out</a></li> 
+                    </ul>
+                </li>
+            </ul> 
+        </div>
+              
     </div>
 </nav>
 <script>
@@ -35,15 +41,21 @@
         success: function(account) {
             if(account.isLogged){
                 $('#aAccount').html(account.username);
-                $('#ddAccount').show();
-                $('#aLogin').hide();
-                $('#aRegister').hide();
+                $('#loggedDiv').show();
+                $('#notloggedDiv').hide();
+                // $('#ddAccount').show();
+                // $('#aLogin').hide();
+                // $('#aRegister').hide();
             }
             else{
-                $('#ddAccount').hide();
+                $('#loggedDiv').hide();
+                $('#notloggedDiv').show();
+                // $('#ddAccount').hide();
+                // $('#aLogin').show();
+                // $('#aRegister').show();
             }
             //  $('#champ').html(result);
-        }
-      });
+            }
+        });
     });
 </script>
