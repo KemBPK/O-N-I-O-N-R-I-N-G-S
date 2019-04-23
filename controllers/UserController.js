@@ -65,7 +65,7 @@ module.exports = function(app, yelp, db) {
  
     app.get('/User/Logout', function (req, res) { 
         req.session = null;
-        res.redirect('/');
+        res.redirect('/User/Login');
     })
 
     app.post('/User/GetUsername', function(req, res){
