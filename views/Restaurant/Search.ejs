@@ -37,6 +37,33 @@
             </ul>
         </nav>
 
+        <script>             
+            function getRating(yelpID, index){
+                // alert(yelpID);
+                // alert(index);
+                $.ajax({
+                    async: true,
+                    type: 'POST',
+                    url: '/Restaurant/Rating',
+                    data: { id: yelpID} ,
+                    success: function(rating) {
+                        // alert('success');
+                        // alert(rating.count);
+                        if(rating.count > 0){
+                            var avg = (rating.sum / rating.count) * 100 / 100 
+                            $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
+                            $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                        }
+                        else{
+                            $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>none");
+                            $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                        }                       
+                    }
+                });
+            };
+                
+        </script>
+
         <div id="list">  
             <% for(var i=0; i<10; ++i){ %>
                 <div class="panel panel-default opaque">
@@ -61,9 +88,10 @@
                                     <a title="Click here to go to the restaurant's profile page." href="#top" onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
                                 </div>
                                 <div class="col-md-6">
-                                        <p><label>ORWW's rating:&nbsp;</label> / 5</p>
-                                        <p><label>ORWW's review count:&nbsp;</label></p>
+                                        <p id="rating<%= i %>"><label>ORWW's rating:&nbsp;</label> / 5</p>
+                                        <p id="count<%= i %>"><label>ORWW's review count:&nbsp;</label></p>
                                 </div>
+                                <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
                             </div>                     
                         </div>
                         <div class="col-md-4">
@@ -80,10 +108,9 @@
                                 </div>
                                 <div class="clear"></div>
                             </div>                     
-                        </div>
-                        
+                        </div>              
                     </div>
-                </div>
+                </div>              
             <% } %>
         </div>
         <nav aria-label="Page navigation">
