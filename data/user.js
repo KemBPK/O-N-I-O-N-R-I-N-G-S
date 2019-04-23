@@ -58,7 +58,7 @@ function authenicateUser(email, password, callback){
     con.connect(function(err) {
         if(err) {
             console.log('Database connection failed: ' + err.stack);
-            return callback(err);
+            return callback(err, null);
             //throw err;
         }
 
@@ -67,22 +67,22 @@ function authenicateUser(email, password, callback){
             if(err){
                 console.log("authenicateUser SQL INSERT FAILED\n");
                 con.end(); 
-                return callback(err);
+                return callback(err, null);
                 //throw err;
             }
             con.end(); 
             console.log('Returning result');
             if(result.length == 0){
                 console.log('User ' + email + ' not found');
-                return callback(false)
+                return callback(null, false)
             }
             var dbPassword = result[0].pass;
             bcrypt.compare(password, dbPassword, function(err, res){
                 if(err){
                     console.log('Hash function failed');
-                    return callback(err);
+                    return callback(err, null);
                 }
-                return callback(res) //true or false
+                return callback(null, res) //true or false
             })
         });
     });
