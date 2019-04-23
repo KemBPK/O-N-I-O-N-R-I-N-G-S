@@ -62,7 +62,7 @@ function authenicateUser(email, password, callback){
             //throw err;
         }
 
-        var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\' AND pass = \'" + password + "\'";
+        var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
         con.query(sql, function(err, result, field) {
             if(err){
                 console.log("authenicateUser SQL INSERT FAILED\n");
@@ -88,5 +88,34 @@ function authenicateUser(email, password, callback){
     });
 }
 
+function getUserId(email, callback){
+    var con = connection();
+    con.connect(function(err) {
+        if(err) {
+            console.log('Database connection failed: ' + err.stack);
+            return callback(err, null);
+            //throw err;
+        }
+
+        var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
+        con.query(sql, function(err, result, field) {
+            if(err){
+                console.log("authenicateUser SQL INSERT FAILED\n");
+                con.end(); 
+                return callback(err, null);
+                //throw err;
+            }
+            if(result.length == 0){
+                console.log('User ' + email + ' not found');
+                return callback(null, -1)
+            }
+            var id = result[0].userID;
+            return callback(null, id);
+        });
+
+    });
+}
+
 module.exports.registerUser = registerUser;
 module.exports.authenicateUser = authenicateUser;
+module.exports.getUserId = getUserId;

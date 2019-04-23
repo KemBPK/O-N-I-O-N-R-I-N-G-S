@@ -2,11 +2,11 @@
 
 module.exports = function(app, yelp, db) {
 
-    app.get('/User/register', function (req, res) { 
+    app.get('/User/Register', function (req, res) { 
         res.render('./User/Register');
     })
 
-    app.post('/User/register', function (req, res) { 
+    app.post('/User/Register', function (req, res) { 
         console.log("test");
         //res.render('./User/Register');
 
@@ -17,36 +17,56 @@ module.exports = function(app, yelp, db) {
         var password = req.body.password;
 
         db.user.registerUser(email, password, fname, lname, function(err){
-            if(err)
+            if(err){
                 console.log("didn't work");
-            else   
-                console.log("worked");
-        });
-        
+                res.redirect('/User/Register');
+                return;
+            }             
+            console.log("worked");
+            res.redirect('/User/Login');
+            return;
+        });     
     })
 
-    app.get('/User/login', function (req, res) { 
+    app.get('/User/Login', function (req, res) { 
         res.render('./User/login');
     })
 
-    app.post('/User/login', function (req, res) {
+    app.post('/User/Login', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
         db.user.authenicateUser(email, password, function(err, isAuthenticated){
             if(err){
                 console.log("email " + email + " not found");
-                res.redirect('/User/login');
+                res.redirect('/User/Login');
                 return;
             }
             if(isAuthenticated == true){
-                //set cookie
+                db.user.getUserId(email, function(err, id){
+                    if(err){
+                        console.log('Login failed');
+                        res.redirect('/User/Login');
+                        return;
+                    }
+                    req.session.id = id;
+                    console.log('Login succeeded');
+                    res.redirect('/');
+                    return;
+                });
             }
             else{
-                //error message
+                console.log('Login failed');
+                res.redirect('/User/Login');
+                return;
             }
 
         });
     });
 
+    
+    app.get('/User/Logout', function (req, res) { 
+        req.session = null;
+        res.redirect('/');
+    })
 
 }
