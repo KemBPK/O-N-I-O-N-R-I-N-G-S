@@ -47,10 +47,10 @@ function registerUser(email, password, fname, lname, callback) {
                 con.end(); 
                 console.log('Returning result');
                 return callback(null);
-            });
+            })
 
-        });      
-    });
+        })     
+    })
 }
 
 function authenicateUser(email, password, callback){
@@ -72,9 +72,10 @@ function authenicateUser(email, password, callback){
             }
             con.end(); 
             console.log('Returning result');
-            if(result.length == 0){
+            if(result.length < 1){
                 console.log('User ' + email + ' not found');
-                return callback(null, false)
+                var error = {messsage: 'User ' + email + ' not found'};
+                return callback(error, null)
             }
             var dbPassword = result[0].pass;
             bcrypt.compare(password, dbPassword, function(err, res){
@@ -84,8 +85,8 @@ function authenicateUser(email, password, callback){
                 }
                 return callback(null, res) //true or false
             })
-        });
-    });
+        })
+    })
 }
 
 function getUserId(email, callback){
@@ -105,15 +106,16 @@ function getUserId(email, callback){
                 return callback(err, null);
                 //throw err;
             }
-            if(result.length == 0){
+            if(result.length < 1){
                 console.log('User ' + email + ' not found');
-                return callback(null, -1);
+                var error = {messsage: 'User ' + email + ' not found'};
+                return callback(error, null);
             }
             var id = result[0].userID;
             return callback(null, id);
-        });
+        })
 
-    });
+    })
 }
 
 function getUsername(id, callback){
@@ -133,14 +135,15 @@ function getUsername(id, callback){
                 return callback(err, null);
                 //throw err;
             }
-            if(result.length == 0){
+            if(result.length < 1){
                 console.log('User id ' + id + ' not found');
-                return callback(null, null);
+                var error = {messsage: 'User id ' + id + ' not found'};
+                return callback(error, null);
             }
             var name = result[0].firstName + ' ' + result[0].lastName.charAt(0) + '.';
             return callback(null, name);
-        });
-    });
+        })
+    })
 }
 
 module.exports.registerUser = registerUser;

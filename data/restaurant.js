@@ -47,8 +47,8 @@ function checkRestaurant(id, callback){ //Look up callback and asynchronous call
       else{
         return callback(null, false);
       }           
-    });
-  });
+    })
+  })
 }
 
 function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL, callback){
@@ -69,11 +69,87 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
         return callback(err);
         //throw err;
       }
-    });
+    })
     con.end();   
     return callback(null);
-  });
+  })
+}
+
+function getRestaurantID(yelpID, callback){
+  var con = connection();
+  con.connect(function(err){
+    if(err){
+      console.log('Database connection failed: ' + err.stack);  
+      return callback(err, null);
+    }
+    var sql = "SELECT restID FROM tblRestaurant WHERE yelpID = \'" + yelpID + "\'";
+    con.query(sql, function (err, result){
+      if(err){
+        console.log("getRestaurantID failed");
+        con.end(); 
+        return callback(err, null);
+      }
+      con.end();
+      if(result.length < 1){
+        console.log("yelpID: " + yelpID + "not found");
+        var error = {messsage: "yelpID: " + yelpID + " not found"};
+        return callback(error, null);
+      }
+      console.log(result);
+      var id = result[0].restID;
+      return callback(null, id);
+    })
+    
+  })
+}
+
+// function getReviewCount(restID, callback){
+//   var con = connection();
+//   con.connect(function(err){
+//     if(err){
+//       console.log('Database connection failed: ' + err.stack);  
+//       return callback(err);
+//       //throw err;
+//     }
+//     var sql = "SELECT COUNT(*) AS count FROM tblReview WHERE restID = " + restID;
+//     con.query(sql, function (err, result){
+//       if(err){
+//         console.log("getReviewCount failed");
+//         con.end(); 
+//         return callback(err, null);
+//       }
+//       con.end();
+//       var count = result[0].count;
+//       return callback(null, count);
+//     })
+
+//   })
+// }
+
+function getRatingSumAndCount(restID, callback){
+  var con = connection();
+  con.connect(function(err){
+    if(err){
+      console.log('Database connection failed: ' + err.stack);  
+      return callback(err, null, null);
+      //throw err;
+    }
+    var sql = "SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = " + restID;
+    con.query(sql, function (err, result){
+      if(err){
+        console.log("getRating failed");
+        con.end(); 
+        return callback(err, null, null);
+      }
+      con.end(); 
+      var count = result[0].count;
+      var sum = result[0].sum;
+      return callback(null, count, sum);
+    })
+  })
 }
 
 module.exports.checkRestaurant  = checkRestaurant;
 module.exports.insertRestaurant = insertRestaurant;
+module.exports.getRestaurantID = getRestaurantID;
+module.exports.getRatingSumAndCount = getRatingSumAndCount;

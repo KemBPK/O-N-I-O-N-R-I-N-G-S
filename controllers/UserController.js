@@ -25,7 +25,7 @@ module.exports = function(app, yelp, db) {
             console.log("worked");
             res.redirect('/User/Login');
             return;
-        });     
+        })   
     })
 
     app.get('/User/Login', function (req, res) { 
@@ -52,7 +52,7 @@ module.exports = function(app, yelp, db) {
                     console.log('Login succeeded');
                     res.redirect('/');
                     return;
-                });
+                })
             }
             else{
                 console.log('Login failed');
@@ -60,7 +60,7 @@ module.exports = function(app, yelp, db) {
                 return;
             }
 
-        });
+        })
     })
  
     app.get('/User/Logout', function (req, res) { 
@@ -85,7 +85,7 @@ module.exports = function(app, yelp, db) {
                     username: name
                 };
                 res.send(account);
-            });
+            })
         }
         else{
             console.log('not logged in');

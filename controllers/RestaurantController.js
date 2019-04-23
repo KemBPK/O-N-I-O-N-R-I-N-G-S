@@ -14,7 +14,7 @@ module.exports = function(app, yelp, db) {
             input: input
         });    
         //res.render('./Home/Welcome'); //relative to the root view folder
-    });
+    })
 
     app.post('/Restaurant/Search', function (req, res) {
         var id = req.body.id; //post parameter
@@ -62,16 +62,40 @@ module.exports = function(app, yelp, db) {
                     return;
                 });
             }
-        });   
-    });
+        })   
+    })
 
     app.get('/Restaurant/', function (req, res) {
         var alias = req.query.alias;
         res.render('./Restaurant/Profile',{
             input: alias
         });  
-    });
+    })
 
+    app.post('/Restaurant/Rating', function (req, res) {
+        console.log('calling Rating');
+        var yelpID = req.body.id;
+        db.restaurant.getRestaurantID(yelpID, function(err, restID){
+            if(err){
+                console.log("error when calling getRestaurantID");
+                var rating = {
+                    count: 0,
+                    sum: 0
+                };
+                res.send(rating);
+                return;
+            }
+            console.log('returning result');
+            db.restaurant.getRatingSumAndCount(restID, function(err, count, sum){
+                var rating = {
+                    count: count,
+                    sum: sum
+                };
+                res.send(rating);
+                return;
+            })
 
+        }) 
+    })
     
 }
