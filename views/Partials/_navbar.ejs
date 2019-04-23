@@ -12,12 +12,12 @@
         <ul class="nav navbar-nav navbar-right">
             <li><a href="#">template</a></li>
             <li><a href="#">template</a></li>
-            <li><a href="/User/Login">Login</a></li>
-            <li><a href="/User/Register">Sign Up</a></li>
+            <li><a id="aLogin" href="/User/Login">Login</a></li>
+            <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
 
             <!--TODO: Only show Account Dropdown when someone is logged in -->
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
+            <li id="ddAccount" class="dropdown" hidden>
+                <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/User/Logout">Sign out</a></li> 
@@ -25,4 +25,25 @@
             </li>
         </ul>      
     </div>
-</nav> 
+</nav>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+        async: true,
+        type: 'POST',
+        url: '/User/GetUsername',
+        success: function(account) {
+            if(account.isLogged){
+                $('#aAccount').html(account.username);
+                $('#ddAccount').show();
+                $('#aLogin').hide();
+                $('#aRegister').hide();
+            }
+            else{
+                $('#ddAccount').hide();
+            }
+            //  $('#champ').html(result);
+        }
+      });
+    });
+</script>

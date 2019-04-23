@@ -2,7 +2,8 @@
 
 module.exports = function(app, yelp, db) {
     app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
-        if(req.session){
+        if(req.session.id){
+            console.log('test');
             console.log(req.session.id);
         }
         // req.session.id = 1; 

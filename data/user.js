@@ -100,14 +100,14 @@ function getUserId(email, callback){
         var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
         con.query(sql, function(err, result, field) {
             if(err){
-                console.log("authenicateUser SQL INSERT FAILED\n");
+                console.log("getUserId SQL SELECT FAILED\n");
                 con.end(); 
                 return callback(err, null);
                 //throw err;
             }
             if(result.length == 0){
                 console.log('User ' + email + ' not found');
-                return callback(null, -1)
+                return callback(null, -1);
             }
             var id = result[0].userID;
             return callback(null, id);
@@ -116,6 +116,34 @@ function getUserId(email, callback){
     });
 }
 
+function getUsername(id, callback){
+    var con = connection();
+    con.connect(function(err) {
+        if(err) {
+            console.log('Database connection failed: ' + err.stack);
+            return callback(err, null);
+            //throw err;
+        }
+
+        var sql = "SELECT firstName, lastName  FROM tblUser WHERE userID = " + id;
+        con.query(sql, function(err, result, field) {
+            if(err){
+                console.log("getUsername SQL SELECT FAILED\n");
+                con.end(); 
+                return callback(err, null);
+                //throw err;
+            }
+            if(result.length == 0){
+                console.log('User id ' + id + ' not found');
+                return callback(null, null);
+            }
+            var name = result[0].firstName + ' ' + result[0].lastName.charAt(0) + '.';
+            return callback(null, name);
+        });
+    });
+}
+
 module.exports.registerUser = registerUser;
 module.exports.authenicateUser = authenicateUser;
 module.exports.getUserId = getUserId;
+module.exports.getUsername = getUsername;
