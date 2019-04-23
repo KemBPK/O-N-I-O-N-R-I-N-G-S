@@ -7,7 +7,7 @@ module.exports = function(app, yelp, db) {
     })
 
     app.post('/User/Register', function (req, res) { 
-        console.log("test");
+        //console.log("test");
         //res.render('./User/Register');
 
         // POST parameters
@@ -61,12 +61,39 @@ module.exports = function(app, yelp, db) {
             }
 
         });
-    });
-
-    
+    })
+ 
     app.get('/User/Logout', function (req, res) { 
         req.session = null;
         res.redirect('/');
+    })
+
+    app.post('/User/GetUsername', function(req, res){
+        console.log('called GetUsername');
+        if(req.session.id){
+            db.user.getUsername(req.session.id, function(err, name){
+                if(err){
+                    var account = {
+                        isLogged: false,                
+                    }
+                    // return callback(JSON.stringify(account));
+                    res.send(account);
+                }
+                console.log('logged in');
+                var account = {
+                    isLogged: true,
+                    username: name
+                };
+                res.send(account);
+            });
+        }
+        else{
+            console.log('not logged in');
+            var account = {
+                isLogged: false,                
+            }
+            res.send(account);
+        }
     })
 
 }
