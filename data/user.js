@@ -18,7 +18,7 @@ function connection() {
     return con;    
 }
 
-function registerUser(email, password, lname, fname, age, bio, city, state, country, callback) {
+function registerUser(email, password, fname, lname, callback) {
     var con = connection();
     con.connect(function(err) {
         if(err) {
@@ -34,8 +34,8 @@ function registerUser(email, password, lname, fname, age, bio, city, state, coun
             }
             
             // TODO - test once page is made
-            var sql = "INSERT INTO ebdb.tblUser (email, pass, lastName, firstName, age, bio, city, state, country) " +
-            "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\', \'" + age + "\', \'" + bio + "\', \'" + city + "\', \'" + state + "\', \'" + country + "\')";
+            var sql = "INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) " +
+            "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\')";
     
             con.query(sql, function(err, result, field) {
                 if(err){
