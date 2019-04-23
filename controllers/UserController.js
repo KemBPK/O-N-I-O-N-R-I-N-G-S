@@ -25,10 +25,28 @@ module.exports = function(app, yelp, db) {
         
     })
 
-    app.post('/User/Login', function (req, res) {
-        var password = req.body.password;
-
+    app.get('/User/login', function (req, res) { 
+        res.render('./User/login');
     })
+
+    app.post('/User/login', function (req, res) {
+        var email = req.body.email;
+        var password = req.body.password;
+        db.user.authenicateUser(email, password, function(err, isAuthenticated){
+            if(err){
+                console.log("email " + email + " not found");
+                res.redirect('/User/login');
+                return;
+            }
+            if(isAuthenticated == true){
+                //set cookie
+            }
+            else{
+                //error message
+            }
+
+        });
+    });
 
 
 }
