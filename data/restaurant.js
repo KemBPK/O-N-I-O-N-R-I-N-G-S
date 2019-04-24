@@ -28,14 +28,12 @@ function checkRestaurant(id, callback){ //Look up callback and asynchronous call
     if(err){
       console.log('Database connection failed: ' + err.stack);   
       return callback(err, null);
-      //throw err;
     }
     con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID =\'" + id + "\'", function (err, result, fields) {
       if(err){
-        console.log("CheckRestaurant failed\n");
+        console.log("CheckRestaurant SQL failed\n");
         con.end(); 
         return callback(err, null);
-        //throw err;
       }
       con.end(); 
       console.log('Returning result');
@@ -57,17 +55,15 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
     if(err){
       console.log('Database connection failed: ' + err.stack);  
       return callback(err);
-      //throw err;
     }
     var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
               + yelpID + "\', \'" + restName + "\', \'" + alias + "\', \'" + address + "\', \'" + city + "\', \'" + state + "\', \'" 
               + zipCode + "\', \'" + latitude + "\', \'" + longitude + "\', \'" + phoneNum + "\', \'" + yelpURL + "\')";
     con.query(sql, function (err, result){
       if(err){
-        console.log("insertRestaurant failed\n");
+        console.log("insertRestaurant SQL failed\n");
         con.end(); 
         return callback(err);
-        //throw err;
       }
     })
     con.end();   
@@ -85,7 +81,7 @@ function getRestaurantID(yelpID, callback){
     var sql = "SELECT restID FROM tblRestaurant WHERE yelpID = \'" + yelpID + "\'";
     con.query(sql, function (err, result){
       if(err){
-        console.log("getRestaurantID failed");
+        console.log("getRestaurantID SQL failed");
         con.end(); 
         return callback(err, null);
       }
@@ -132,12 +128,11 @@ function getRatingSumAndCount(restID, callback){
     if(err){
       console.log('Database connection failed: ' + err.stack);  
       return callback(err, null, null);
-      //throw err;
     }
     var sql = "SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = " + restID;
     con.query(sql, function (err, result){
       if(err){
-        console.log("getRating failed");
+        console.log("getRating SQL failed");
         con.end(); 
         return callback(err, null, null);
       }
@@ -149,7 +144,34 @@ function getRatingSumAndCount(restID, callback){
   })
 }
 
+function getRestaurantInfoByAlias(alias, callback){
+  var con = connection();
+  con.connect(function(err){
+    if(err){
+      console.log('Database connection failed: ' + err.stack);  
+      return callback(err, null, null);
+    }
+    var sql = "SELECT * FROM tblRestaurant WHERE alias = \'" + alias + "\'";
+    con.query(sql, function (err, result){
+      con.end();
+      if(err){
+        console.log("getRestaurantInfoByAlias SQL failed");
+        return callback(err, null);
+      }
+      if(result.length < 1){
+        console.log("alias " + alias + " not found");
+        var error = {
+          messsage: "alias " + alias + " not found"
+        };
+        return callback(error, null);
+      }
+      return callback(null, result[0]);
+    })
+  })
+}
+
 module.exports.checkRestaurant  = checkRestaurant;
 module.exports.insertRestaurant = insertRestaurant;
 module.exports.getRestaurantID = getRestaurantID;
 module.exports.getRatingSumAndCount = getRatingSumAndCount;
+module.exports.getRestaurantInfoByAlias = getRestaurantInfoByAlias;
