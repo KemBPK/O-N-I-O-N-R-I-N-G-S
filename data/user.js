@@ -33,11 +33,11 @@ function registerUser(email, password, fname, lname, callback) {
                 return callback(err);
             }
             
-            // TODO - test once page is made
-            var sql = "INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) " +
-            "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\')";
-    
-            con.query(sql, function(err, result, field) {
+            // var sql = "INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) " +
+            // "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\')";
+
+            // Prepare SQL statement, avoid SQL injection
+            con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) VALUES (?, ?, ?, ?)", [email, hash, lname, fname], function(err, result, field) {
                 if(err){
                     console.log("registerUser SQL INSERT FAILED\n");
                     con.end(); 
@@ -62,8 +62,8 @@ function authenicateUser(email, password, callback){
             //throw err;
         }
 
-        var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
-        con.query(sql, function(err, result, field) {
+        //var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
+        con.query("SELECT email, pass FROM tblUser WHERE email = ?", [email], function(err, result, field) {
             if(err){
                 console.log("authenicateUser SQL INSERT FAILED\n");
                 con.end(); 
@@ -98,8 +98,8 @@ function getUserId(email, callback){
             //throw err;
         }
 
-        var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
-        con.query(sql, function(err, result, field) {
+        //var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
+        con.query("SELECT userID FROM tblUser WHERE email = ?", [email], function(err, result, field) {
             if(err){
                 console.log("getUserId SQL SELECT FAILED\n");
                 con.end(); 
@@ -127,8 +127,8 @@ function getUsername(id, callback){
             //throw err;
         }
 
-        var sql = "SELECT firstName, lastName  FROM tblUser WHERE userID = " + id;
-        con.query(sql, function(err, result, field) {
+        //var sql = "SELECT firstName, lastName  FROM tblUser WHERE userID = " + id;
+        con.query("SELECT firstName, lastName  FROM tblUser WHERE userID = ?", [id], function(err, result, field) {
             if(err){
                 console.log("getUsername SQL SELECT FAILED\n");
                 con.end(); 
