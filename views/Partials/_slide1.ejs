@@ -5,7 +5,7 @@
                 <form action="/Home/Search" >
                     <div class="form-group">
                         <label>City</label>
-                        <input type="text" name="city" class="form-control" placeholder="Fullerton" style="width: auto;" required />
+                        <input type="text" name="city" class="form-control" placeholder="Fullerton" pattern="[A-Za-z]{1,25}" title="Alphabetic characters only" style="width: auto;" required />
                     </div>
                     <div class="form-group">
                         <label>State</label>
