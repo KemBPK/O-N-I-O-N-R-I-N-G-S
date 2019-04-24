@@ -117,3 +117,7 @@ body { padding-right: 0 !important }
   border-color: #337ab7;
   color: white;
 }
+
+.panel {
+  background-color: #F3F3F3;
+}

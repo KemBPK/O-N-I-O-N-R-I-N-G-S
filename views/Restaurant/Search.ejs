@@ -72,35 +72,37 @@
                         <div class="col-md-3" style="border-right: 1px solid black;">
                             <img src="<%= locals.result[i].image_url %>" class="rest-img">
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="row" style="height: 125px;">
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <a title="Click here to go to the restaurant's yelp page." target="_blank" rel="noopener noreferrer" href="<%= locals.result[i].url %>"> <img src="/content/images/yelp2.png" class="logo"> </a>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                         <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p>
                                         <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p>
                                 </div>
                                 
                             </div>
                             <div class="row" style="height: 125px;">
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <a title="Click here to go to the restaurant's profile page." href="#top" onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                         <p id="rating<%= i %>"><label>ORWW's rating:&nbsp;</label> / 5</p>
                                         <p id="count<%= i %>"><label>ORWW's review count:&nbsp;</label></p>
                                 </div>
                                 <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
                             </div>                     
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div style="height: 250px;">
                                 <div style="height: 230px;">
                                     <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
                                     <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
+                                    <p id="rating<%= i %>"><label>Recent Review:&nbsp;</label><br></p>
                                 </div>
+                                <!-- TODO ajax request to get most recent review -->
                                 <div style="float: right;">
                                     <a href="/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
                                         data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>

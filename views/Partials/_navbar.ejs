@@ -15,6 +15,34 @@
                         <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
                 </ul>
         </div>
+
+        <script>
+            function checkUser(){
+                $.ajax({
+                async: true,
+                type: 'POST',
+                url: '/User/GetUsername',
+                success: function(account) {
+                    if(account.isLogged){
+                        $('#aAccount').html(account.username);
+                        $('#loggedDiv').show();
+                        $('#notloggedDiv').hide();
+                        // $('#ddAccount').show();
+                        // $('#aLogin').hide();
+                        // $('#aRegister').hide();
+                    }
+                    else{
+                        $('#loggedDiv').hide();
+                        $('#notloggedDiv').show();
+                        // $('#ddAccount').hide();
+                        // $('#aLogin').show();
+                        // $('#aRegister').show();
+                    }
+                    }
+                });
+            };
+            checkUser();
+        </script>
         
         <div id="loggedDiv" hidden>
             <ul class="nav navbar-nav navbar-right">
@@ -33,29 +61,28 @@
     </div>
 </nav>
 <script>
-    $(document).ready(function(){
-        $.ajax({
-        async: true,
-        type: 'POST',
-        url: '/User/GetUsername',
-        success: function(account) {
-            if(account.isLogged){
-                $('#aAccount').html(account.username);
-                $('#loggedDiv').show();
-                $('#notloggedDiv').hide();
-                // $('#ddAccount').show();
-                // $('#aLogin').hide();
-                // $('#aRegister').hide();
-            }
-            else{
-                $('#loggedDiv').hide();
-                $('#notloggedDiv').show();
-                // $('#ddAccount').hide();
-                // $('#aLogin').show();
-                // $('#aRegister').show();
-            }
-            //  $('#champ').html(result);
-            }
-        });
-    });
+    // $(document).ready(function(){
+    //     $.ajax({
+    //     async: true,
+    //     type: 'POST',
+    //     url: '/User/GetUsername',
+    //     success: function(account) {
+    //         if(account.isLogged){
+    //             $('#aAccount').html(account.username);
+    //             $('#loggedDiv').show();
+    //             $('#notloggedDiv').hide();
+    //             // $('#ddAccount').show();
+    //             // $('#aLogin').hide();
+    //             // $('#aRegister').hide();
+    //         }
+    //         else{
+    //             $('#loggedDiv').hide();
+    //             $('#notloggedDiv').show();
+    //             // $('#ddAccount').hide();
+    //             // $('#aLogin').show();
+    //             // $('#aRegister').show();
+    //         }
+    //         }
+    //     });
+    // });
 </script>

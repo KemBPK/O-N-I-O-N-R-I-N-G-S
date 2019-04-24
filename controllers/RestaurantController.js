@@ -67,9 +67,19 @@ module.exports = function(app, yelp, db) {
 
     app.get('/Restaurant/', function (req, res) {
         var alias = req.query.alias;
-        res.render('./Restaurant/Profile',{
-            input: alias
-        });  
+        db.restaurant.getRestaurantInfoByAlias(alias, function(err, restaurant){
+            if(err){
+                console.log("error when calling getRestaurantInfoByAlias");
+                res.status(404);
+                res.render('./Error/404', { url: req.url });
+                return;
+            }
+            res.render('./Restaurant/Profile',{
+                profile: restaurant
+            }); 
+            return;
+        })
+         
     })
 
     app.post('/Restaurant/Rating', function (req, res) {
@@ -85,7 +95,7 @@ module.exports = function(app, yelp, db) {
                 res.send(rating);
                 return;
             }
-            console.log('returning result');
+            console.log('returning rating result');
             db.restaurant.getRatingSumAndCount(restID, function(err, count, sum){
                 var rating = {
                     count: count,
