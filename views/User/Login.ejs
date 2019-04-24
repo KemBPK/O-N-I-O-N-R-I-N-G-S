@@ -110,13 +110,13 @@
 		<input type="email" class="form-control" name="email" placeholder="Email" required="required">
 		</div>
 		<div class="form-group">
-			<input type="password" class="form-control" name="password" placeholder="Password" required="required">
+			<input type="password" class="form-control" name="password" placeholder="Password" pattern=".{3,}" title="Enter 3 or more characters" required="required">
 		</div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
 		</div>
 	</form>
-	<div class="text-center">Go to <a href="/">Home page</a></div>
+	<div class="text-center">Don't have an account? <a href="/User/Register">Sign in</a></div>
 </div>
 </body>
 </html>
