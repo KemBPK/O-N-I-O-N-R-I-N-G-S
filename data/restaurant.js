@@ -29,7 +29,7 @@ function checkRestaurant(id, callback){ //Look up callback and asynchronous call
       console.log('Database connection failed: ' + err.stack);   
       return callback(err, null);
     }
-    con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID =\'" + id + "\'", function (err, result, fields) {
+    con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID = ?",[id] , function (err, result, fields) {
       if(err){
         console.log("CheckRestaurant SQL failed\n");
         con.end(); 
@@ -56,10 +56,12 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
       console.log('Database connection failed: ' + err.stack);  
       return callback(err);
     }
-    var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
-              + yelpID + "\', \'" + restName + "\', \'" + alias + "\', \'" + address + "\', \'" + city + "\', \'" + state + "\', \'" 
-              + zipCode + "\', \'" + latitude + "\', \'" + longitude + "\', \'" + phoneNum + "\', \'" + yelpURL + "\')";
-    con.query(sql, function (err, result){
+    // var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
+    //           + yelpID + "\', \'" + restName + "\', \'" + alias + "\', \'" + address + "\', \'" + city + "\', \'" + state + "\', \'" 
+    //           + zipCode + "\', \'" + latitude + "\', \'" + longitude + "\', \'" + phoneNum + "\', \'" + yelpURL + "\')";
+    con.query("INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) " +
+              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              [yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL], function (err, result){
       if(err){
         console.log("insertRestaurant SQL failed\n");
         con.end(); 
@@ -78,8 +80,9 @@ function getRestaurantID(yelpID, callback){
       console.log('Database connection failed: ' + err.stack);  
       return callback(err, null);
     }
-    var sql = "SELECT restID FROM tblRestaurant WHERE yelpID = \'" + yelpID + "\'";
-    con.query(sql, function (err, result){
+
+    //var sql = "SELECT restID FROM tblRestaurant WHERE yelpID = \'" + yelpID + "\'";
+    con.query("SELECT restID FROM tblRestaurant WHERE yelpID = ?", [yelpID], function (err, result){
       if(err){
         console.log("getRestaurantID SQL failed");
         con.end(); 
@@ -129,8 +132,9 @@ function getRatingSumAndCount(restID, callback){
       console.log('Database connection failed: ' + err.stack);  
       return callback(err, null, null);
     }
-    var sql = "SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = " + restID;
-    con.query(sql, function (err, result){
+    //var sql = "SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = " + restID;
+    
+    con.query("SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = ?", [restID], function (err, result){
       if(err){
         console.log("getRating SQL failed");
         con.end(); 
@@ -151,8 +155,9 @@ function getRestaurantInfoByAlias(alias, callback){
       console.log('Database connection failed: ' + err.stack);  
       return callback(err, null, null);
     }
-    var sql = "SELECT * FROM tblRestaurant WHERE alias = \'" + alias + "\'";
-    con.query(sql, function (err, result){
+    
+    //var sql = "SELECT * FROM tblRestaurant WHERE alias = \'" + alias + "\'";
+    con.query("SELECT * FROM tblRestaurant WHERE alias = ?", [alias], function (err, result){
       con.end();
       if(err){
         console.log("getRestaurantInfoByAlias SQL failed");
