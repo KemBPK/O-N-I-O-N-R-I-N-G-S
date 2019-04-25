@@ -44,7 +44,6 @@ module.exports = function(app, yelp, db) {
                 }).then(function(result){
                     //console.log(result);
                     result.name = result.name.replace('\'', '\\\'');
-                    result.name = result.name.replace('\'', '\\\'');
                     db.restaurant.insertRestaurant(result.id, result.name, result.alias, result.location.display_address, result.location.city, result.location.state,
                         result.location.zip_code, result.coordinates.latitude, result.coordinates.longitude, result.display_phone, result.url,
                         function(err){
