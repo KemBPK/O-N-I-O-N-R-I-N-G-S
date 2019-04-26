@@ -3,20 +3,38 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="#">OnionRingsWorldWide</a>
         </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Search</a></li>
-        </ul>
-        <div id="notloggedDiv" hidden>
-                <ul class="nav navbar-nav navbar-right">
-                        <!-- <li><a href="#">template</a></li>
-                        <li><a href="#">template</a></li> -->
-                        <!-- <li><a id="aLogin" href="/User/Login">Login</a></li> -->
-                        <li><a id="aLogin">Login</a></li>
-                        <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
-                </ul>
+        <div id="homeSearchDiv">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a id="aSearch">Search</a></li>
+            </ul>
+        </div>   
+        <div id="searchFormDiv" hidden>
+            <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;">
+                <div class="form-group">               
+                    City:&nbsp;<input type="text" name="city" class="form-control" placeholder="Fullerton"  title="Alphabetic characters only" style="width: auto;" required />
+                </div>
+                <div class="form-group">                   
+                    State:&nbsp;
+                    <select name="state" class="form-control" style="width: auto;" required>
+                            <option value="">-- Please Select --</option>
+                            <option value="ca">CA</option>
+                    </select>
+                </div>
+                <input type="submit" value="Search" class="btn btn-default"/>
+                <button id="searchFormCancel" type="button" class="btn btn-danger">Cancel</button>                
+            </form>    
         </div>
-        <div id="formDiv" hidden>
+        <div id="notloggedDiv" hidden>
+            <ul class="nav navbar-nav navbar-right">
+                    <!-- <li><a href="#">template</a></li>
+                    <li><a href="#">template</a></li> -->
+                    <!-- <li><a id="aLogin" href="/User/Login">Login</a></li> -->
+                    <li><a id="aLogin">Login</a></li>
+                    <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
+            </ul>
+        </div>
+        <div id="loginFormDiv" hidden>
             <form id="loginForm" class="navbar-form navbar-right" style="color: white;">
                 <div class="form-group">
                     Email:&nbsp;<input id="formEmail" name="email" type="text" class="form-control" required>
@@ -24,8 +42,8 @@
                 <div class="form-group">
                     Password:&nbsp;<input id="formPass" name="pass" type="password" class="form-control" required>
                 </div>
-                <button id="formSubmit" type="submit" class="btn btn-default">Login</button>
-                <button id="formCancel" type="button" class="btn btn-danger">Cancel</button>
+                <button type="submit" class="btn btn-default">Login</button>
+                <button id="loginFormCancel" type="button" class="btn btn-danger">Cancel</button>
             </form>
         </div>
 
@@ -40,16 +58,10 @@
                         $('#aAccount').html(account.username);
                         $('#loggedDiv').show();
                         $('#notloggedDiv').hide();
-                        // $('#ddAccount').show();
-                        // $('#aLogin').hide();
-                        // $('#aRegister').hide();
                     }
                     else{
                         $('#loggedDiv').hide();
                         $('#notloggedDiv').show();
-                        // $('#ddAccount').hide();
-                        // $('#aLogin').show();
-                        // $('#aRegister').show();
                     }
                     }
                 });
@@ -59,7 +71,6 @@
         
         <div id="loggedDiv" hidden>
             <ul class="nav navbar-nav navbar-right">
-                <!--TODO: Only show Account Dropdown when someone is logged in -->
                 <li><a href="#">Reviews</a></li>
                 <li id="ddAccount" class="dropdown">
                     <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
@@ -76,7 +87,7 @@
 <script>
     $('#aLogin').click(function(){
         $('#notloggedDiv').hide();
-        $('#formDiv').show();
+        $('#loginFormDiv').show();
     });
 
     $('#loginForm').submit(function(event){
@@ -88,7 +99,7 @@
             data: { email: $('#formEmail').val(), password: ($('#formPass').val())} ,
             success: function(isLogged) {
                 if(isLogged){
-                    $('#formDiv').hide();
+                    $('#loginFormDiv').hide();
                     checkUser();
                 }
                 else{
@@ -97,8 +108,8 @@
         });
     });
 
-    $('#formCancel').click(function(){
-        $('#formDiv').hide();
+    $('#loginFormCancel').click(function(){
+        $('#loginFormDiv').hide();
         $('#notloggedDiv').show();      
     });
 
@@ -109,11 +120,22 @@
             type: 'POST',
             url: '/User/Logout',
             success: function() {
-                $('#formDiv').hide();
+                $('#loginFormDiv').hide();
                 $('#loggedDiv').hide();
                 $('#notloggedDiv').show();
             }
         });
     
     })
+
+    $('#aSearch').click(function(){
+        $('#homeSearchDiv').hide();
+        $('#searchFormDiv').show();      
+    });
+ 
+    $('#searchFormCancel').click(function(){
+        $('#homeSearchDiv').show();
+        $('#searchFormDiv').hide();      
+    });
+
 </script>
