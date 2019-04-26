@@ -28,6 +28,25 @@ module.exports = function(app, yelp, db) {
         })   
     })
 
+    app.post('/User/Register/CheckEmail', function(req, res){
+        var email = req.body.email;
+        db.user.validateEmail(email, function(err, isValid){
+            if(err){
+                console.log('Error when calling validateEmail');
+                res.send(false);
+                return;
+            }
+            if(isValid == true){
+                res.send(true);
+                return;
+            }
+            else{
+                res.send(false);
+                return;
+            }
+        })
+    })
+
     app.get('/User/Login', function (req, res) { 
         res.render('./User/login');
     })

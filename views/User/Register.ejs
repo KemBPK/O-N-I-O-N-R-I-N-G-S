@@ -103,7 +103,7 @@
 </head>
 <body>
 <div class="signup-form">
-    <form method="POST" action="Register">
+    <form id="formRegister" method="POST" action="Register">
 		<h2>Register</h2>
 		<p class="hint-text">Create your account. It's free and only takes a minute.</p>
         <div class="form-group">
@@ -117,7 +117,8 @@
 			</div>        	
         </div>
 		<div class="form-group">
-			<input type="email" class="form-control" name="email" placeholder="Email" required="required">
+			<input id="formEmail" type="email" class="form-control" name="email" placeholder="Email" required="required">
+			<p id="emailError" class="text-danger"></p>
 		</div>
 		<div class="form-group">
 			<input type="password" class="form-control" name="password" placeholder="Password" pattern=".{3,}" title="Enter 3 or more characters" required="required">
@@ -131,5 +132,24 @@
 		</form>
 	<div class="text-center">Already on Onion Rings Worldwide? <a href="/User/login">Login</a></div>
 </div>
+<script>
+	$('#formRegister').submit(function(event){
+		
+		$.ajax({
+            async: false, //needs to be non async 
+            type: 'POST',
+            url: '/User/Register/CheckEmail',
+            data: { email: $('#formEmail').val()} ,
+            success: function(isValid) {
+                if(isValid){
+                }
+                else{
+					event.preventDefault();
+					$('#emailError').html("Email is already taken.");
+                }
+            }
+		});
+	})
+</script>
 </body>
 </html>
