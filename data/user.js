@@ -24,7 +24,6 @@ function registerUser(email, password, fname, lname, callback) {
         if(err) {
             console.log('Database connection failed: ' + err.stack);
             return callback(err);
-            //throw err;
         }
 
         bcrypt.hash(password, saltRounds, function(err, hash){
@@ -42,7 +41,6 @@ function registerUser(email, password, fname, lname, callback) {
                     console.log("registerUser SQL INSERT FAILED\n");
                     con.end(); 
                     return callback(err);
-                    //throw err;
                 }
                 con.end(); 
                 console.log('Returning result');
@@ -59,7 +57,6 @@ function authenicateUser(email, password, callback){
         if(err) {
             console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
-            //throw err;
         }
 
         //var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
@@ -68,7 +65,6 @@ function authenicateUser(email, password, callback){
                 console.log("authenicateUser SQL INSERT FAILED\n");
                 con.end(); 
                 return callback(err, null);
-                //throw err;
             }
             con.end(); 
             console.log('Returning result');
@@ -95,7 +91,6 @@ function getUserId(email, callback){
         if(err) {
             console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
-            //throw err;
         }
 
         //var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
@@ -104,7 +99,6 @@ function getUserId(email, callback){
                 console.log("getUserId SQL SELECT FAILED\n");
                 con.end(); 
                 return callback(err, null);
-                //throw err;
             }
             if(result.length < 1){
                 console.log('User ' + email + ' not found');
@@ -124,7 +118,6 @@ function getUsername(id, callback){
         if(err) {
             console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
-            //throw err;
         }
 
         //var sql = "SELECT firstName, lastName  FROM tblUser WHERE userID = " + id;
@@ -133,7 +126,6 @@ function getUsername(id, callback){
                 console.log("getUsername SQL SELECT FAILED\n");
                 con.end(); 
                 return callback(err, null);
-                //throw err;
             }
             if(result.length < 1){
                 console.log('User id ' + id + ' not found');
@@ -146,7 +138,38 @@ function getUsername(id, callback){
     })
 }
 
+function validateEmail(email, callback){
+    var validator = require("email-validator");
+
+    if(validator.validate(email.toString()) == true){
+        var con = connection();
+        con.connect(function(err) {
+            if(err) {
+                console.log('Database connection failed: ' + err.stack);
+                return callback(err, null);
+            }
+            con.query("SELECT email  FROM tblUser WHERE email = ?", [email.toString()], function(err, result, field) {
+                con.end();
+                if(err){
+                    console.log("validateEmail SQL SELECT FAILED\n");
+                    return callback(err, null);
+                }
+                if(result.length > 0){
+                    return callback(null, false);
+                }
+                else{
+                    return callback(null, true);
+                }
+            })           
+        })
+    }
+    else{
+        return callback(err, null)
+    }    
+}
+
 module.exports.registerUser = registerUser;
 module.exports.authenicateUser = authenicateUser;
 module.exports.getUserId = getUserId;
 module.exports.getUsername = getUsername;
+module.exports.validateEmail = validateEmail;

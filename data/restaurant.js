@@ -61,7 +61,7 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
     //           + zipCode + "\', \'" + latitude + "\', \'" + longitude + "\', \'" + phoneNum + "\', \'" + yelpURL + "\')";
     con.query("INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) " +
               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-              [yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL], function (err, result){
+              [yelpID.toString(), restName.toString(), alias.toString(), address.toString(), city.toString(), state.toString(), zipCode, latitude, longitude, phoneNum.toString(), yelpURL.toString()], function (err, result){
       if(err){
         console.log("insertRestaurant SQL failed\n");
         con.end(); 
