@@ -60,7 +60,7 @@
     </div>
     <br>
     <div class="container">
-        <form action="/Restaurant/Review" >
+        <form action="/Restaurant/Review" method="POST">
           <div class="form-group">
               <label>Title</label>
               <input type="text" name="title" class="form-control" title="Alphabetic characters only" style="width: auto;" required />
@@ -69,11 +69,14 @@
               <label>Description</label>
               <textarea class="form-control" required name="description" rows="10" cols="30">
 
-                </textarea>
+              </textarea>
           </div>
           <div class="form-group">
               <label>Rating / 5</label>
-              <select name="rating" class="form-control" style="width: auto;" required>
+
+              <input type="number" name="rating" min="0" max="5" class="form-control" style="width: auto;" required>
+
+              <!-- <select name="rating" class="form-control" style="width: auto;" required>
                       <option value="">-- Please Select --</option>
                       <option value="0">0</option>
                       <option value="1">1</option>
@@ -81,7 +84,7 @@
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
-              </select>
+              </select> -->
           </div>
           <input type="submit" value="Submit Review" class="btn btn-primary"/>
       </form>    
