@@ -61,6 +61,7 @@
     <br>
     <div class="container">
         <form action="/Restaurant/Review" method="POST">
+          <input type="text" name="restID" value="<%= locals.profile.restID %>" hidden>
           <div class="form-group">
               <label>Title</label>
               <input type="text" name="title" class="form-control" title="Alphabetic characters only" style="width: auto;" required />

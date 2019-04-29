@@ -175,8 +175,30 @@ function getRestaurantInfoByAlias(alias, callback){
   })
 }
 
+function insertReview(restID, userID, title, description, rating, callback){
+  var con = connection();
+  con.connect(function(err){
+    if(err){
+      console.log('Database connection failed: ' + err.stack);  
+      return callback(err);
+    }
+
+    con.query("INSERT INTO tblReview (restID, userID, title, description, rating, rDate) VALUES (?, ?, ?, ?, ?, NOW())", [restID, userID, title.toString(), description.toString(), rating], function(err, result){
+      con.end();
+      if(err){
+        console.log("insertReview SQL failed"+ err.stack);
+        return callback(err);
+      }
+      console.log("successfully inserted the review");
+      return callback(null);
+    })
+
+  })
+}
+
 module.exports.checkRestaurant  = checkRestaurant;
 module.exports.insertRestaurant = insertRestaurant;
 module.exports.getRestaurantID = getRestaurantID;
 module.exports.getRatingSumAndCount = getRatingSumAndCount;
 module.exports.getRestaurantInfoByAlias = getRestaurantInfoByAlias;
+module.exports.insertReview = insertReview;
