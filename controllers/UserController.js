@@ -48,7 +48,7 @@ module.exports = function(app, yelp, db) {
     })
 
     app.get('/User/Login', function (req, res) { 
-        res.render('./User/login');
+        res.render('./User/Login');
     })
 
     app.post('/User/Login', function (req, res) {
