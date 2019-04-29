@@ -90,7 +90,7 @@ function getRestaurantID(yelpID, callback) {
       }
       con.end();
       if (result.length < 1) {
-        console.log("yelpID: " + yelpID + "not found");
+        console.log("yelpID: " + yelpID + " not found");
         var error = { messsage: "yelpID: " + yelpID + " not found" };
         return callback(error, null);
       }
@@ -175,7 +175,7 @@ function getRestaurantInfoByAlias(alias, callback) {
   })
 }
 
-function insertReview(restID, userID, title, description, rating, callback) {
+function insertReview(restID, userID, description, rating, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
@@ -183,7 +183,7 @@ function insertReview(restID, userID, title, description, rating, callback) {
       return callback(err);
     }
 
-    con.query("INSERT INTO tblReview (restID, userID, title, description, rating, rDate) VALUES (?, ?, ?, ?, ?, NOW())", [restID, userID, title.toString(), description.toString(), rating], function (err, result) {
+    con.query("INSERT INTO tblReview (restID, userID, description, rating, rDate) VALUES (?, ?, ?, ?, NOW())", [restID, userID, description.toString(), rating], function (err, result) {
       con.end();
       if (err) {
         console.log("insertReview SQL failed" + err.stack);
@@ -205,7 +205,7 @@ function getReviews(restID, callback) {
     }
   })
 
-  con.query("SELECT * FROM tblReview WHERE restID = ?", [restID], function (err, result) {
+  con.query("SELECT R.userID, R.reviewID, R.rating, R.description, R.rDate, U.firstName, U.lastName FROM ebdb.tblReview R JOIN tblUser U ON U.userID = R.userID WHERE R.restID = ? ORDER BY rDate DESC LIMIT 50", [restID], function (err, result) {
     con.end();
     if (err) {
       console.log("getReviews SQL failed" + err.stack);
@@ -215,7 +215,31 @@ function getReviews(restID, callback) {
     return callback(null, result);
 
   })
+}
 
+function getMostRecentReview(restID, callback) {
+  var con = connection();
+  con.connect(function (err) {
+    if (err) {
+      console.log('Database connection failed: ' + err.stack);
+      return callback(err, null);
+    }
+  })
+
+  con.query("SELECT R.userID, R.reviewID, R.rating, R.description, R.rDate, U.firstName, U.lastName FROM ebdb.tblReview R JOIN tblUser U ON U.userID = R.userID WHERE R.restID = ? ORDER BY rDate DESC LIMIT 1", [restID], function (err, result) {
+    con.end();
+    if (err) {
+      console.log("getMostRecentReview SQL failed" + err.stack);
+      return callback(err, null);
+    }
+    if(result.length == 0){
+      console.log("no review");
+      return callback(null, null);
+    }
+    console.log("successfully retreived recent review");
+    return callback(null, result[0]);
+
+  })
 }
 
 module.exports.checkRestaurant = checkRestaurant;
@@ -225,3 +249,4 @@ module.exports.getRatingSumAndCount = getRatingSumAndCount;
 module.exports.getRestaurantInfoByAlias = getRestaurantInfoByAlias;
 module.exports.insertReview = insertReview;
 module.exports.getReviews = getReviews;
+module.exports.getMostRecentReview = getMostRecentReview;

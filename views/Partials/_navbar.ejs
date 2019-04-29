@@ -17,8 +17,7 @@
                 <div class="form-group">                   
                     State:&nbsp;
                     <select name="state" class="form-control" style="width: auto;" required>
-                            <option value="">-- Please Select --</option>
-                            <option value="ca">CA</option>
+                            <% include ../Partials/_states //relative path %>
                     </select>
                 </div>
                 <input type="submit" value="Search" class="btn btn-default"/>
