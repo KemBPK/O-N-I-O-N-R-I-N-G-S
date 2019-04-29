@@ -107,5 +107,22 @@ module.exports = function(app, yelp, db) {
 
         }) 
     })
+
+    app.post('/Restaurant/Review', function(req, res){
+        var restID = req.body.restID;
+        var title = req.body.title;
+        var description = req.body.description;
+        var rating = req.body.rating;
+
+        var userID = req.session.id;
+
+        db.restaurant.insertReview(restID, userID, title, description, rating, function(err){
+            if(err){
+                console.log("error when calling insertReview");
+                return; 
+            }
+            res.redirect('/');
+        })
+    })
     
 }
