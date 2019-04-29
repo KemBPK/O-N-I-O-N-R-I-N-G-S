@@ -1,83 +1,87 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <% include ../Partials/_head //relative path %>
 </head>
+
 <body style="padding-top: 60px;">
     <% include ../Partials/_navbar //relative path %>
 
     <div class="container-fluid" style="border-radius: 25px;background-color: #F3F3F3;">
-      <div class="row">
-        <div class="col-md-4">
-          <!-- picture -->
-          <% if(locals.profile){ %>
-              <p><%= locals.profile.restName %></p>
-              <img src="<%= locals.profile.image_url %>" class="rest-img">
-          <% } %>
-        </div>
-        <div class="col-md-4">
-            <p><label>Yelp's rating:&nbsp;</label> <%= locals.profile.rating %> / 5</p>
-            <p><label>Yelp's review count:&nbsp;</label> </p>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- picture -->
+                <% if(locals.profile){ %>
+                <p><%= locals.profile.restName %></p>
+                <img src="<%= locals.profile.image_url %>" class="rest-img">
+                <% } %>
+            </div>
+            <div class="col-md-4">
+                <p><label>Yelp's rating:&nbsp;</label> <%= locals.profile.rating %> / 5</p>
+                <p><label>Yelp's review count:&nbsp;</label> </p>
 
-            <p><label>ORWW's rating:&nbsp;</label> / 5</p>
-            <p><label>ORWW's review count:&nbsp;</label></p>
+                <p><label>ORWW's rating:&nbsp;</label> / 5</p>
+                <p><label>ORWW's review count:&nbsp;</label></p>
 
-            <p><label>Location:&nbsp;</label><%= locals.profile.address %></p>
-            <p><label>Phone:&nbsp;</label><%= locals.profile.phoneNum %></p>
-            <p><label>Price:&nbsp;</label></p>
-          <!-- stats -->
-        </div>
-        <div >
-            <% if(locals.profile.latitude){ %>
-                        
-                    <div id="latitude" hidden><%= locals.profile.latitude %></div>
-                    <div id="longitude" hidden><%= locals.profile.longitude %></div>
-            
-                    <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
-                    <script>		
-                        function initMap() {
-                            var latitude = $('#latitude').html();
-                            latitude = Math.round(latitude * 10000000) / 10000000;
-                            var longitude = $('#longitude').html()
-                            longitude = Math.round(longitude * 10000000) / 10000000;
-            
-                            var location = {lat: latitude, lng: longitude};
-                            // alert("latitude: " + latitude);
-                            // alert("longitude: " + longitude);
-                            var map = new google.maps.Map(document.getElementById('map'), {
-                                center: location,
-                                zoom: 15
-                            });
-                            var marker = new google.maps.Marker({position: location, map: map});
-                        }
-                    </script>
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
+                <p><label>Location:&nbsp;</label><%= locals.profile.address %></p>
+                <p><label>Phone:&nbsp;</label><%= locals.profile.phoneNum %></p>
+                <p><label>Price:&nbsp;</label></p>
+                <!-- stats -->
+            </div>
+            <div>
+                <% if(locals.profile.latitude){ %>
+
+                <div id="latitude" hidden><%= locals.profile.latitude %></div>
+                <div id="longitude" hidden><%= locals.profile.longitude %></div>
+
+                <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
+                <script>
+                    function initMap() {
+                        var latitude = $('#latitude').html();
+                        latitude = Math.round(latitude * 10000000) / 10000000;
+                        var longitude = $('#longitude').html()
+                        longitude = Math.round(longitude * 10000000) / 10000000;
+
+                        var location = { lat: latitude, lng: longitude };
+                        // alert("latitude: " + latitude);
+                        // alert("longitude: " + longitude);
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            center: location,
+                            zoom: 15
+                        });
+                        var marker = new google.maps.Marker({ position: location, map: map });
+                    }
+                </script>
+                <script
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
                     async defer></script>
-                        
-            <% } %>
+
+                <% } %>
+            </div>
         </div>
-      </div>
     </div>
     <br>
     <div class="container">
         <form action="/Restaurant/Review" method="POST">
-          <input type="text" name="restID" value="<%= locals.profile.restID %>" hidden>
-          <div class="form-group">
-              <label>Title</label>
-              <input type="text" name="title" class="form-control" title="Alphabetic characters only" style="width: auto;" required />
-          </div>
-          <div class="form-group">
-              <label>Description</label>
-              <textarea class="form-control" required name="description" rows="10" cols="30">
+            <input type="text" name="restID" value="<%= locals.profile.restID %>" hidden>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" class="form-control" title="Alphabetic characters only"
+                    style="width: auto;" required />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" required name="description" rows="10" cols="30">
 
               </textarea>
-          </div>
-          <div class="form-group">
-              <label>Rating / 5</label>
+            </div>
+            <div class="form-group">
+                <label>Rating / 5</label>
 
-              <input type="number" name="rating" min="0" max="5" class="form-control" style="width: auto;" required>
+                <input type="number" name="rating" min="0" max="5" class="form-control" style="width: auto;" required>
 
-              <!-- <select name="rating" class="form-control" style="width: auto;" required>
+                <!-- <select name="rating" class="form-control" style="width: auto;" required>
                       <option value="">-- Please Select --</option>
                       <option value="0">0</option>
                       <option value="1">1</option>
@@ -86,12 +90,20 @@
                       <option value="4">4</option>
                       <option value="5">5</option>
               </select> -->
-          </div>
-          <input type="submit" value="Submit Review" class="btn btn-primary"/>
-      </form>    
-      <!-- List of review (order by new to old) -->
+            </div>
+            <input type="submit" value="Submit Review" class="btn btn-primary" />
+        </form>
+        <!-- List of review (order by new to old) -->
     </div>
-    
+    <div class="container">
+        <% for(var i=0; i<locals.reviews.length; ++i){ %>
+            <p><%= locals.reviews[i].title %></p>
+            <p><%= locals.reviews[i].rating %></p>
+            <p><%= locals.reviews[i].description %></p>
+            <p><%= locals.reviews[i].RDate %></p>
+        <% } %>
+    </div>
+
 </body>
 
 </html>
