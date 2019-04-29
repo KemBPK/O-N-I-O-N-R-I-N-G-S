@@ -3,7 +3,7 @@
 var mysql = require('mysql');
 require('dotenv').config();
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 
 // connect to mysql
