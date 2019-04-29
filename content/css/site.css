@@ -8,6 +8,7 @@
 .rest-img{
   width: 250px;
   height: 250px;
+  max-width:100%;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -15,6 +16,7 @@
 .profile-img{
   width: 400px;
   height: 400px;
+  max-width:100%;
   object-fit: cover;
   border-radius: 8px;
 }
@@ -22,7 +24,8 @@
 .logo{
   height: 100px; 
   width: 125px; 
-  object-fit: cover;
+  max-width:100%;
+ object-fit: scale-down;
   background: transparent;
 }
 
@@ -36,7 +39,9 @@
 
 #map {
   height: 400px;
-  width: 400px; 
+  width: 400px;
+  max-width:100%;
+  object-fit: scale-down; 
 }
 
 body { padding-right: 0 !important }
