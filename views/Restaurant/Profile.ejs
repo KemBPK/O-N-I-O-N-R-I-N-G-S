@@ -1,30 +1,155 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <% include ../Partials/_head //relative path %>
 </head>
+
 <body style="padding-top: 60px;">
     <% include ../Partials/_navbar //relative path %>
 
     <div class="container-fluid" style="border-radius: 25px;background-color: #F3F3F3;">
-      <div class="row">
-        <div class="col-md-4">
-          <!-- picture -->
+        <div class="row">
+            <div class="col-md-4">
+                <!-- picture -->
+                <% if(locals.profile){ %>
+                <p><%= locals.profile.restName %></p>
+                <img src="<%= locals.profile.image_url %>" class="rest-img">
+                <% } %>
+            </div>
+            <div class="col-md-4">
+                <p><label>Yelp's rating:&nbsp;</label> <%= locals.profile.rating %> / 5</p>
+                <p><label>Yelp's review count:&nbsp;</label> </p>
+
+                <p><label>ORWW's rating:&nbsp;</label> / 5</p>
+                <p><label>ORWW's review count:&nbsp;</label></p>
+
+                <p><label>Location:&nbsp;</label><%= locals.profile.address %></p>
+                <p><label>Phone:&nbsp;</label><%= locals.profile.phoneNum %></p>
+                <p><label>Price:&nbsp;</label></p>
+                <!-- stats -->
+            </div>
+            <div>
+                <% if(locals.profile.latitude){ %>
+
+                <div id="latitude" hidden><%= locals.profile.latitude %></div>
+                <div id="longitude" hidden><%= locals.profile.longitude %></div>
+
+                <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
+                <script>
+                    function initMap() {
+                        var latitude = $('#latitude').html();
+                        latitude = Math.round(latitude * 10000000) / 10000000;
+                        var longitude = $('#longitude').html()
+                        longitude = Math.round(longitude * 10000000) / 10000000;
+
+                        var location = { lat: latitude, lng: longitude };
+                        // alert("latitude: " + latitude);
+                        // alert("longitude: " + longitude);
+                        var map = new google.maps.Map(document.getElementById('map'), {
+                            center: location,
+                            zoom: 15
+                        });
+                        var marker = new google.maps.Marker({ position: location, map: map });
+                    }
+                </script>
+                <script
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
+                    async defer></script>
+
+                <% } %>
+            </div>
         </div>
-        <div class="col-md-4">
-          <!-- stats -->
-        </div>
-        <div class="col-md-4">
-          <!-- map -->
-        </div>
-      </div>
     </div>
     <br>
     <div class="container">
-      <!-- Write Review -->
+        <form action="/Restaurant/Review" method="POST">
+
+
+          <input type="text" name="restID" value="<%= locals.profile.restID %>" hidden>
+          <div class="form-group">
+              <label>Title</label>
+              <input type="text" name="title" class="form-control" title="Alphabetic characters only" style="width: auto;" required />
+          </div>
+          <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" required name="description" rows="10" cols="30" wrap="hard" style="resize: none">
+                
+              </textarea>
+          </div>
+          <div class=rating>
+                <fieldset class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                        <input type="radio" id="star4half" name="rating" value="4.5" /><label class="half" for="star4half" title="Great - 4.5 stars"></label>
+                        <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Good - 4 stars"></label>
+                        <input type="radio" id="star3half" name="rating" value="3.5" /><label class="half" for="star3half" title="Better than Average - 3.5 stars"></label>
+                        <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Average- 3 stars"></label>
+                        <input type="radio" id="star2half" name="rating" value="2.5" /><label class="half" for="star2half" title="Below Average - 2.5 stars"></label>
+                        <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Mediocre - 2 stars"></label>
+                        <input type="radio" id="star1half" name="rating" value="1.5" /><label class="half" for="star1half" title="Bad - 1.5 stars"></label>
+                        <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Terrible - 1 star"></label>
+                        <input type="radio" id="starhalf" name="rating" value=".5" /><label class="half" for="starhalf" title="Not Worth Your Time - 0.5 stars"></label>
+                    </fieldset>
+            <style>
+            @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+            fieldset, label { margin: 0; padding: 0; }
+            body{ margin: 20px; }
+            h1 { font-size: 1.5em; margin: 10px; }
+
+            /****** Style Star Rating Widget *****/
+
+            .rating { 
+            border: none;
+            float: left;
+            }
+
+            .rating > input { display: none; } 
+            .rating > label:before { 
+            margin: 5px;
+            font-size: 2em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+            }
+
+            .rating > .half:before { 
+            content: "\f089";
+            position: absolute;
+            }
+
+            .rating > label { 
+            color: #ddd; 
+            float: right; 
+            }
+
+            /***** CSS Magic to Highlight Stars on Hover *****/
+
+            .rating > input:checked ~ label, /* show gold star when clicked */
+            .rating:not(:checked) > label:hover, /* hover current star */
+            .rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+
+            .rating > input:checked + label:hover, /* hover current star when changing rating */
+            .rating > input:checked ~ label:hover,
+            .rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+            .rating > input:checked ~ label:hover ~ label { color: #FFED85;  } 
+            </style>
+          </div>
+          <div>
+                <input type="submit" value="Submit Review" class="btn btn-primary"/>
+          </div>
+          
+      </form>    
       <!-- List of review (order by new to old) -->
     </div>
-    
+    <div class="container">
+        <% for(var i=0; i<locals.reviews.length; ++i){ %>
+            <p><%= locals.reviews[i].title %></p>
+            <p><%= locals.reviews[i].rating %></p>
+            <p><%= locals.reviews[i].description %></p>
+            <p><%= locals.reviews[i].RDate %></p>
+        <% } %>
+    </div>
+
 </body>
 
 </html>
