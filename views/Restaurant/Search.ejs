@@ -72,7 +72,7 @@
                     data: { yelpID: yelpID} ,
                     success: function(review) {
                         if(review){
-                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br><p>\"" + review.description + "\"</p><div style=\"float: right;\">-" + review.firstName + ' ' + review.lastName.charAt(0) + "</div><div class=\"clearfix\"</div>");
+                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br><p>\"" + review.description + "\"</p><div style=\"float: right;\">- " + review.firstName + ' ' + review.lastName.charAt(0) + ".</div><div class=\"clearfix\"</div>");
                         }
                         else{
                             $('#review' + index).html("<label>Recent Review:&nbsp;</label><br>Be the first to review this restaurant!");
@@ -122,13 +122,11 @@
                                     <p id="review<%= i %>"><label>Recent Review:&nbsp;</label><br></p>
                                     <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
                                 </div>
-                                <!-- TODO ajax request to get most recent review -->
                                 <div style="float: right;">
                                     <a href="/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
                                         data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
-                                    <!-- <input type="button" value="Get Direction" class="btn" data-toggle="modal" data-target="#myModal" > -->
                                 </div>
-                                <div class="clear"></div>
+                                <div class="clearfix"></div>
                             </div>                     
                         </div>              
                     </div>
@@ -222,91 +220,203 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 10){ %> "+
-                        " <% for(var i=0; i<locals.result.length; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=0; i<result.length; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " +
-
+                    " </div>" +
+                    " <% } %> " + 
                     " <% } else { %> " +
-                        " <% for(var i=0; i<10; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=0; i<10; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " + 
+                    " </div>" +
+                    " <% } %> " + 
                     "<% } %>"
-                   
-
                 )             
             }
             else if(pagenum === 2){
                 $('#list').html(
 
                     " <% if(locals.result.length < 20){ %> "+
-                        " <% for(var i=10; i<locals.result.length; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=10; i<result.length; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " +
-
+                    " </div>" +
+                    " <% } %> " + 
                     " <% } else { %> " +
-                        " <% for(var i=10; i<20; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=10; i<20; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " + 
+                    " </div>" +
+                    " <% } %> " + 
                     "<% } %>"
 
                 )             
@@ -315,44 +425,101 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 30){ %> "+
-                        " <% for(var i=20; i<locals.result.length; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=20; i<result.length; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " +
-
+                    " </div>" +
+                    " <% } %> " + 
                     " <% } else { %> " +
-                        " <% for(var i=20; i<30; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=20; i<30; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " + 
+                    " </div>" +
+                    " <% } %> " + 
                     "<% } %>"
 
                 )             
@@ -361,44 +528,101 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 40){ %> "+
-                        " <% for(var i=30; i<locals.result.length; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=30; i<result.length; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " +
-
+                    " </div>" +
+                    " <% } %> " + 
                     " <% } else { %> " +
-                        " <% for(var i=30; i<40; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=30; i<40; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " + 
+                    " </div>" +
+                    " <% } %> " + 
                     "<% } %>"
 
                 )             
@@ -407,44 +631,101 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 50){ %> "+
-                        " <% for(var i=40; i<locals.result.length; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=40; i<result.length; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " +
-
+                    " </div>" +
+                    " <% } %> " + 
                     " <% } else { %> " +
-                        " <% for(var i=40; i<50; ++i){ %> " +
-                        " <div class=\"panel panel-default opaque\"> " +
+                    " <% for(var i=40; i<50; ++i){ %> " +
+                    " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "     <div class=\"panel-body row\"> " +
-                        "        <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
-                        "            <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "        </div> " +
-                        "        <div class=\"col-md-9\"> " +
-                        "             <div style=\"height: 125px; border-bottom:  1px solid black; width: 100%;\"> " +
-                        "                 test " +
-                        "             </div> " +
-                        "             <div style=\"height: 125px;\"> " +
-                        "                 test " +
-                        "             </div> " +                          
-                        "         </div> " +                           
-                        "     </div> " +
+                        "   <div class=\"panel-body row\"> " +
+                        "       <div class=\"col-md-3\" style=\"border-right: 1px solid black;\"> " +
+                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
+                        "   </div>" +
+                        "   <div class=\"col-md-4\"> " + 
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
+                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
+                        "           </div>" +
+                                
+                        "       </div>" +
+                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                        "           <div class=\"col-md-5\"> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "           </div>" +
+                        "           <div class=\"col-md-7\"> " +
+                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
+                        "           </div>" +
+                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
+                        "       </div>" +                    
+                        "   </div> " +
+                        "   <div class=\"col-md-5\"> " +
+                        "        <div style=\"height: 250px;\"> " +
+                        "            <div style=\"height: 230px;\"> " +
+                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
+                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
+                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
+                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
+                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
+                        "            </div> " +
+                        "           <div style=\"float: right;\"> " +
+                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                        "            </div>" +
+                        "            <div class=\"clearfix\"></div> " +
+                        "        </div> " +                     
+                        "    </div> " +                     
                         " </div>" +
-                        " <% } %> " + 
+                    " </div>" +
+                    " <% } %> " + 
                     "<% } %>"
 
                 )             
