@@ -50,7 +50,7 @@
                         // alert('success');
                         // alert(rating.count);
                         if(rating.count > 0){
-                            var avg = (rating.sum / rating.count) * 100 / 100 
+                            var avg = (rating.sum / rating.count).toFixed(2);
                             $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
                             $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
                         }
@@ -58,6 +58,25 @@
                             $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>none");
                             $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
                         }                       
+                    }
+                });
+            };
+
+            function getReview(yelpID, index){
+                // alert(yelpID);
+                // alert(index);
+                $.ajax({
+                    async: true,
+                    type: 'POST',
+                    url: '/Restaurant/GetMostRecentReview',
+                    data: { yelpID: yelpID} ,
+                    success: function(review) {
+                        if(review){
+                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br><p>\"" + review.description + "\"</p><div style=\"float: right;\">-" + review.firstName + ' ' + review.lastName.charAt(0) + "</div><div class=\"clearfix\"</div>");
+                        }
+                        else{
+                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br>Be the first to review this restaurant!");
+                        }                   
                     }
                 });
             };
@@ -100,7 +119,8 @@
                                     <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
                                     <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
-                                    <p id="rating<%= i %>"><label>Recent Review:&nbsp;</label><br></p>
+                                    <p id="review<%= i %>"><label>Recent Review:&nbsp;</label><br></p>
+                                    <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
                                 </div>
                                 <!-- TODO ajax request to get most recent review -->
                                 <div style="float: right;">

@@ -81,12 +81,19 @@ module.exports = function (app, yelp, db) {
                     res.render('./Error/404', { url: req.url });
                     return;
                 }
-                res.render('./Restaurant/Profile', {
-                    profile: restaurant,
-                    reviews: result
 
+                var search = yelp.SearchRestaurant(restaurant.yelpID);
+                search.then(function (response) {
+                    //res.send(response.jsonBody);   
+                    res.render('./Restaurant/Profile', {
+                        profile: restaurant,
+                        reviews: result,
+                        yelp:    response.jsonBody
+                    });
+                    return;        
                 });
-                return;
+
+                
             })
         })
 
@@ -120,19 +127,43 @@ module.exports = function (app, yelp, db) {
 
     app.post('/Restaurant/Review', function (req, res) {
         var restID = req.body.restID;
-        var title = req.body.title;
         var description = req.body.description;
         var rating = req.body.rating;
 
         var userID = req.session.id;
 
-        db.restaurant.insertReview(restID, userID, title, description, rating, function (err) {
+        db.restaurant.insertReview(restID, userID, description, rating, function (err) {
             if (err) {
                 console.log("error when calling insertReview");
                 return;
             }
             res.redirect('/');
         })
+    })
+
+    app.post('/Restaurant/GetMostRecentReview', function(req, res){
+        var yelpID = req.body.yelpID;
+        db.restaurant.getRestaurantID(yelpID, function (err, restID) {
+            if (err) {
+                console.log("getRestaurantID did not find the restaurant with yelpID: " + yelpID);
+                res.send(null);
+                return;
+            }
+            db.restaurant.getMostRecentReview(restID, function(err, review){
+                if(err || review == null){
+                    res.send(null);
+                    return;
+                }
+                else{
+                    console.log('returning recent review');
+                    res.send(review);
+                    return;
+                }
+            })
+
+        })
+
+        
     })
 
 }
