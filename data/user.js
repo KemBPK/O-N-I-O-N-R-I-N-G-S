@@ -9,11 +9,19 @@ const saltRounds = 10;
 // connect to mysql
 function connection() {
     var con = mysql.createConnection({
-        host: process.env.DB_HOSTNAME,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_SCHEMA
+
+        //deployment code
+        host     : process.env.RDS_HOSTNAME,
+        user     : process.env.RDS_USERNAME,
+        password : process.env.RDS_PASSWORD,
+        port     : process.env.RDS_PORT,
+        database : process.env.DB_SCHEMA
+
+        // host: process.env.DB_HOSTNAME,
+        // port: process.env.DB_PORT,
+        // user: process.env.DB_USER,
+        // password: process.env.DB_PASSWORD,
+        // database: process.env.DB_SCHEMA
       });
     return con;    
 }
