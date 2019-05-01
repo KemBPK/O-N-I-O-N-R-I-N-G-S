@@ -159,6 +159,7 @@
     <div class="container">
         <form id="formReview" action="/Restaurant/Review" method="POST">
             <input type="text" name="restID" value="<%= locals.profile.restID %>" hidden>
+            <input type="text" name="alias" value="<%= locals.profile.alias %>" hidden>
             <div class="form-group">
                 <textarea id="formDescription" class="form-control" required name="description"
                     placeholder="Write review here" rows="10" cols="30" wrap="hard" style="resize: none"

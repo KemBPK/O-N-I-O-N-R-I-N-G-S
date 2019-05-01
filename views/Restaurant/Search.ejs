@@ -78,7 +78,10 @@
         </script>
 
         <div id="list">  
-            <% for(var i=0; i<10; ++i){ %>
+            <% 
+            var length = 10;
+            if(locals.result.length < 10){ length = locals.result.length;}
+            for(var i=0; i<length; ++i){ %>
                 <div class="panel panel-default opaque">
                     <div class="panel-heading"><h3><%= locals.result[i].name %></h3></div>
                     <div class="panel-body row">
