@@ -10,7 +10,7 @@
             </ul>
         </div>   
         <div id="searchFormDiv" hidden>
-            <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;">
+            <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;">                
                 <div class="form-group">               
                     City:&nbsp;<input type="text" name="city" class="form-control" placeholder="Fullerton"  title="Alphabetic characters only" style="width: auto;" required />
                 </div>
@@ -41,6 +41,7 @@
                 <div class="form-group">
                     Password:&nbsp;<input id="formPass" name="pass" type="password" class="form-control" required>
                 </div>
+                <div id="loginErrorMsg" class="form-group"></div>
                 <button type="submit" class="btn btn-default">Login</button>
                 <button id="loginFormCancel" type="button" class="btn btn-danger">Cancel</button>
             </form>
@@ -102,6 +103,7 @@
                     checkUser();
                 }
                 else{
+                    $('#loginErrorMsg').html('Login failed');
                 }
             }
         });

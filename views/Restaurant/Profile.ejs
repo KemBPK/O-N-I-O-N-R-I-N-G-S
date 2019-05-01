@@ -66,85 +66,92 @@
             <div class="panel-heading">
                 <h3><%= locals.profile.restName %></h3>
             </div>
-            <div class="panel-body row">
-                <div class="col-xs-4">
-                    <!-- picture -->
-                    <img src="<%= locals.yelp.image_url %>" class="profile-img">
-                </div>
-                <div class="col-xs-4">
-                    <div style="padding-top: 75px;">
-                        <p><label>Yelp's rating:&nbsp;</label> <%= locals.yelp.rating %> / 5</p>
-                        <p><label>Yelp's review count:&nbsp;</label> <%= locals.yelp.review_count %></p>
+            <div class="panel-body container-fluid">
 
-                        <div id="yelpID" hidden><%= locals.yelp.id %></div>
-                        <script>
-                            function getRating(yelpID) {
-                                // alert(yelpID);
-                                // alert(index);
-                                $.ajax({
-                                    async: true,
-                                    type: 'POST',
-                                    url: '/Restaurant/Rating',
-                                    data: { id: yelpID },
-                                    success: function (rating) {
-                                        // alert('success');
-                                        // alert(rating.count);
-                                        if (rating.count > 0) {
-                                            var avg = (rating.sum / rating.count).toFixed(2);
-                                            $('#rating').html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
-                                            $('#count').html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
-                                        }
-                                        else {
-                                            $('#rating').html("<label>ORWW's rating:&nbsp;</label>none");
-                                            $('#count').html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
-                                        }
-                                    }
-                                });
-                            };
-                            getRating($('#yelpID').html());
-                        </script>
-
-                        <p id="rating"><label>ORWW's rating:&nbsp;</label> / 5</p>
-                        <p id="count"><label>ORWW's review count:&nbsp;</label></p>
-
-                        <p><label>Location:&nbsp;</label><%= locals.profile.address %></p>
-                        <p><label>Phone:&nbsp;</label><%= locals.profile.phoneNum %></p>
-                        <p><label>Price:&nbsp;</label><%= locals.yelp.price %></p>
-                        <!-- stats -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <!-- picture -->
+                        
+                        <img src="<%= locals.yelp.image_url %>" class="profile-img" style="display: block; margin-left: auto; margin-right: auto;">
+                        
                     </div>
+                    <div class="col-md-4">
+                        <div style="padding-top: 75px;margin-left: 35px;">
+                            <p><label>Yelp's rating:&nbsp;</label> <%= locals.yelp.rating %> / 5</p>
+                            <p><label>Yelp's review count:&nbsp;</label> <%= locals.yelp.review_count %></p>
 
+                            <div id="yelpID" hidden><%= locals.yelp.id %></div>
+                            <script>
+                                function getRating(yelpID) {
+                                    // alert(yelpID);
+                                    // alert(index);
+                                    $.ajax({
+                                        async: true,
+                                        type: 'POST',
+                                        url: '/Restaurant/Rating',
+                                        data: { id: yelpID },
+                                        success: function (rating) {
+                                            // alert('success');
+                                            // alert(rating.count);
+                                            if (rating.count > 0) {
+                                                var avg = (rating.sum / rating.count).toFixed(2);
+                                                $('#rating').html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
+                                                $('#count').html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                                            }
+                                            else {
+                                                $('#rating').html("<label>ORWW's rating:&nbsp;</label>none");
+                                                $('#count').html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                                            }
+                                        }
+                                    });
+                                };
+                                getRating($('#yelpID').html());
+                            </script>
+
+                            <p id="rating"><label>ORWW's rating:&nbsp;</label> / 5</p>
+                            <p id="count"><label>ORWW's review count:&nbsp;</label></p>
+
+                            <p><label>Location:&nbsp;</label><%= locals.profile.address %></p>
+                            <p><label>Phone:&nbsp;</label><%= locals.profile.phoneNum %></p>
+                            <p><label>Price:&nbsp;</label><%= locals.yelp.price %></p>
+                            <!-- stats -->
+                        </div>
+                        <br>
+
+                    </div>
+                    <div class="col-md-4">
+                        <% if(locals.profile.latitude){ %>
+
+                        <div id="latitude" hidden><%= locals.profile.latitude %></div>
+                        <div id="longitude" hidden><%= locals.profile.longitude %></div>
+
+                        <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
+                        <script>
+                            function initMap() {
+                                var latitude = $('#latitude').html();
+                                latitude = Math.round(latitude * 10000000) / 10000000;
+                                var longitude = $('#longitude').html()
+                                longitude = Math.round(longitude * 10000000) / 10000000;
+
+                                var location = { lat: latitude, lng: longitude };
+                                // alert("latitude: " + latitude);
+                                // alert("longitude: " + longitude);
+                                var map = new google.maps.Map(document.getElementById('map'), {
+                                    center: location,
+                                    zoom: 15
+                                });
+                                var marker = new google.maps.Marker({ position: location, map: map });
+                            }
+                        </script>
+                        <script
+                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
+                            async defer></script>
+
+                        <% } %>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
-                <div>
-                    <% if(locals.profile.latitude){ %>
 
-                    <div id="latitude" hidden><%= locals.profile.latitude %></div>
-                    <div id="longitude" hidden><%= locals.profile.longitude %></div>
-
-                    <div id="map" style="display: block; margin-left: auto; margin-right: auto;">map</div>
-                    <script>
-                        function initMap() {
-                            var latitude = $('#latitude').html();
-                            latitude = Math.round(latitude * 10000000) / 10000000;
-                            var longitude = $('#longitude').html()
-                            longitude = Math.round(longitude * 10000000) / 10000000;
-
-                            var location = { lat: latitude, lng: longitude };
-                            // alert("latitude: " + latitude);
-                            // alert("longitude: " + longitude);
-                            var map = new google.maps.Map(document.getElementById('map'), {
-                                center: location,
-                                zoom: 15
-                            });
-                            var marker = new google.maps.Marker({ position: location, map: map });
-                        }
-                    </script>
-                    <script
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k&callback=initMap"
-                        async defer></script>
-
-                    <% } %>
-                </div>
-                <div class="clearfix"></div>
             </div>
         </div>
     </div>
