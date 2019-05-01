@@ -11,8 +11,8 @@ app.use(session({
   keys: ['id'],
   // Cookie Options
   maxAge: 60 * 60 * 1000//, // 1 hour
-  //secure: true, //for deployment
-  //httpOnly: true //for deployment
+  // secure: true, //for deployment
+  // httpOnly: true //for deployment
 }));
 
 app.use('/', httpsRedirect());

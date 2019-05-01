@@ -31,21 +31,21 @@ module.exports = function(app, yelp, db) {
     //     });
     // })
 
-    app.get('/Example/Table', function(req, res){
-        db.data.selectAll(function(result){
-            console.log(result);
-            res.render('./Example/Table', {
-                result: result
-            });
-        });     
-    })
+    // app.get('/Example/Table', function(req, res){
+    //     db.data.selectAll(function(result){
+    //         console.log(result);
+    //         res.render('./Example/Table', {
+    //             result: result
+    //         });
+    //     });     
+    // })
 
-    app.post('/Example/Insert', function(req, res){
-        var input = req.body;
-        db.data.insert(input.first, input.last, input.age, function(){
-            res.redirect('./Table');
-        });  
-    })
+    // app.post('/Example/Insert', function(req, res){
+    //     var input = req.body;
+    //     db.data.insert(input.first, input.last, input.age, function(){
+    //         res.redirect('./Table');
+    //     });  
+    // })
     
     //POST example
     // app.post('/Example/get_input', function (req, res) {

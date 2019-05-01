@@ -90,7 +90,7 @@ function getRestaurantID(yelpID, callback) {
       }
       con.end();
       if (result.length < 1) {
-        console.log("yelpID: " + yelpID + " not found");
+        //console.log("yelpID: " + yelpID + " not found");
         var error = { messsage: "yelpID: " + yelpID + " not found" };
         return callback(error, null);
       }
