@@ -189,9 +189,13 @@
             // alert(alias);
             var form = document.getElementById('frm_prof');
 
-            for(var i=0; i<form.childNodes.length; ++i){
+            if(form.childNodes.length == 2){
+                form.removeChild(form.childNodes[0]);
                 form.removeChild(form.childNodes[0]);
             }
+            // for(var i=0; i<form.childNodes.length; ++i){
+            //     form.removeChild(form.childNodes[0]);
+            // }
 
             var input_id = document.createElement("INPUT");
             input_id.setAttribute("name", "id");
