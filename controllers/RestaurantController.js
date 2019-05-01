@@ -18,9 +18,9 @@ module.exports = function (app, yelp, db) {
 
     app.post('/Restaurant/Search', function (req, res) {
         var id = req.body.id; //post parameter
-        console.log(id);
+        console.log('POST parameter id:' + id);
         var alias = req.body.alias; //post parameter
-        console.log(alias);
+        console.log('POST parameter alias:' + alias);
 
         db.restaurant.checkRestaurant(id, function (err, doesExist) {
             if (err) {
@@ -53,7 +53,8 @@ module.exports = function (app, yelp, db) {
                                 return;
                             }
                             console.log('inserted new restaurant');
-                            res.redirect('/Restaurant?alias=' + alias);
+                            console.log('COMPARISON TEST - local alias: ' + alias + ' - result.alias: ' + result.alias);
+                            res.redirect('/Restaurant?alias=' + result.alias);
                             return;
                         });
                 }).catch(function (err) {
@@ -145,7 +146,7 @@ module.exports = function (app, yelp, db) {
         var yelpID = req.body.yelpID;
         db.restaurant.getRestaurantID(yelpID, function (err, restID) {
             if (err) {
-                console.log("getRestaurantID did not find the restaurant with yelpID: " + yelpID);
+                //console.log("getRestaurantID did not find the restaurant with yelpID: " + yelpID);
                 res.send(null);
                 return;
             }
