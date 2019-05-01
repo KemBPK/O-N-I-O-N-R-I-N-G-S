@@ -27,6 +27,14 @@
   width:100%;
 }
 
+#slide2{
+  background-image: url("/content/images/hero-onion-ring.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+}
+
 #map {
   height: 400px;
   width: 400px; 
