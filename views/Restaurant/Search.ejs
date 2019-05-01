@@ -39,16 +39,12 @@
 
         <script>             
             function getRating(yelpID, index){
-                // alert(yelpID);
-                // alert(index);
                 $.ajax({
                     async: true,
                     type: 'POST',
                     url: '/Restaurant/Rating',
                     data: { id: yelpID} ,
                     success: function(rating) {
-                        // alert('success');
-                        // alert(rating.count);
                         if(rating.count > 0){
                             var avg = (rating.sum / rating.count).toFixed(2);
                             $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
@@ -63,8 +59,6 @@
             };
 
             function getReview(yelpID, index){
-                // alert(yelpID);
-                // alert(index);
                 $.ajax({
                     async: true,
                     type: 'POST',
@@ -104,7 +98,7 @@
                             </div>
                             <div class="row" style="height: 125px;">
                                 <div class="col-xs-5">
-                                    <a title="Click here to go to the restaurant's profile page." href="#top" onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
+                                    <a title="Click here to go to the restaurant's profile page." onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
                                 </div>
                                 <div class="col-xs-7">
                                         <p id="rating<%= i %>"><label>ORWW's rating:&nbsp;</label> / 5</p>
@@ -115,7 +109,7 @@
                         </div>
                         <div class="col-xs-5">
                             <div style="height: 250px;">
-                                <div style="height: 230px;">
+                                <div style="height: 95%;">
                                     <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
                                     <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
                                     <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
@@ -187,7 +181,7 @@
             $(this).removeData('bs.modal');
             // and empty the modal-content element
             $('#myModal .modal-content').empty();
-            $('body').attr("style", "padding-top: 60px; padding-right:0px;");           
+            // $('body').attr("style", "padding-top: 60px; padding-right:0px;");           
         });
        
         function clickProfilePage(id, alias){
@@ -240,7 +234,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -288,7 +282,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -342,7 +336,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -390,7 +384,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -445,7 +439,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -493,7 +487,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -548,7 +542,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -596,7 +590,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -651,7 +645,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
@@ -699,7 +693,7 @@
                         "       </div>" +
                         "       <div class=\"row\" style=\"height: 125px;\"> " + 
                         "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" href=\"#top\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
                         "           </div>" +
                         "           <div class=\"col-xs-7\"> " +
                         "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
