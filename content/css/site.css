@@ -163,11 +163,11 @@ input[type=submit] {
 }
 
 .autocomplete-items {
-  position: absolute;
   border: 1px solid #d4d4d4;
   border-bottom: none;
   border-top: none;
   z-index: 99;
+  position: relative;;
   /*position the autocomplete items to be the same width as the container:*/
   top: 100%;
   left: 0;
