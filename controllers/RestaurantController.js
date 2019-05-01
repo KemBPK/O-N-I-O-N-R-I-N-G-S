@@ -130,7 +130,7 @@ module.exports = function (app, yelp, db) {
         var restID = req.body.restID;
         var description = req.body.description;
         var rating = req.body.rating;
-
+        var alias = req.body.alias;
         var userID = req.session.id;
 
         db.restaurant.insertReview(restID, userID, description, rating, function (err) {
@@ -138,7 +138,7 @@ module.exports = function (app, yelp, db) {
                 console.log("error when calling insertReview");
                 return;
             }
-            res.redirect('/');
+            res.redirect('/Restaurant?alias=' + alias);
         })
     })
 
