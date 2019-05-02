@@ -4,15 +4,15 @@ var session  = require('cookie-session');
 
 var app = express();
 
-//app.set('trust proxy', 1) // trust first proxy (for deployment)
+app.set('trust proxy', 1) // trust first proxy (for deployment)
 
 app.use(session({
   name: 'session',
   keys: ['id'],
   // Cookie Options
-  maxAge: 60 * 60 * 1000//, // 1 hour
-  // secure: true, //for deployment
-  // httpOnly: true //for deployment
+  maxAge: 60 * 60 * 1000, // 1 hour
+  secure: true, //for deployment
+  httpOnly: true //for deployment
 }));
 
 app.use('/', httpsRedirect());
