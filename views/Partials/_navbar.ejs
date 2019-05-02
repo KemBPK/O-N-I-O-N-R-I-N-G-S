@@ -12,7 +12,7 @@
         <div id="searchFormDiv" hidden>
             <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;" autocomplete="off">                
                 <div class="form-group" style="color: black;">               
-                    City:&nbsp;<input id="navbarInput" type="text" name="city" class="form-control" placeholder="Fullerton"  title="Alphabetic characters only" style="width: auto; color: black;" required />
+                    <span style="color: white">City:</span>&nbsp;<input id="navbarInput" type="text" name="city" class="form-control" placeholder="Fullerton"  title="Alphabetic characters only" style="width: auto; color: black;" required />
                 </div>
                 <div class="form-group">                   
                     State:&nbsp;
@@ -20,7 +20,7 @@
                             <% include ../Partials/_states //relative path %>
                     </select>
                 </div>
-                <input type="submit" value="Search" class="btn btn-default"/>
+                <button type="submit" class="btn btn-default">Search</button>
                 <button id="searchFormCancel" type="button" class="btn btn-danger">Cancel</button>                
             </form>    
         </div>

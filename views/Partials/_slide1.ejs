@@ -1,12 +1,12 @@
 <div style="margin:0 auto;width: 200px;padding: 300px 0;">
     <form action="/Home/Search" autocomplete="off">
         <div class="form-group">
-            <label>City:</label>
+            <label style="background-color: white;border: 2px solid black; border-radius: 25px;">&nbsp;City:&nbsp;</label>
             <input id="myInput" type="text" name="city" class="form-control" placeholder="Fullerton"
                 title="Alphabetic characters only" style="width: auto;"required />
         </div>
         <div class="form-group">
-            <label>State:</label>
+            <label style="background-color: white;border: 2px solid black; border-radius: 25px;">&nbsp;State:&nbsp;</label>
             <select name="state" class="form-control" style="width: auto;" required>
                 <% include ../Partials/_states //relative path %>
             </select>
@@ -16,6 +16,10 @@
         </div>
     </form>
 </div>
+<div class="text-center" style="bottom: 0;">
+    Free Vector Art by <a href="https://www.vecteezy.com">www.vecteezy.com</a>
+</div>
+
 
 <script>
     /*the autocomplete function takes two arguments,

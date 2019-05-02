@@ -29,9 +29,20 @@
   background: transparent;
 }
 
+#slide0{
+  /* Free Vector Art by <a href="https://www.vecteezy.com">www.vecteezy.com</a> */
+  background-image: url("/content/images/vegpattern1ver2-03.jpg"); 
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width:100%;
+}
+
 #slide1{
   background-image: url("/content/images/onions-248027_1280.jpg");
-  background-size: 100%;
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
   height: 100%;
   width:100%;
@@ -39,7 +50,8 @@
 
 #slide2{
   background-image: url("/content/images/hero-onion-ring.jpg");
-  background-size: 100%;
+  background-size: cover;
+  background-position: center center;
   background-repeat: no-repeat;
   height: 100%;
   width:100%;
@@ -69,8 +81,8 @@ hr {
 
 /* navbar */
 .navbar-default {
-    background-color: #337ab7;
-    border-color: #337ab7;
+    background-color: #63738a;
+    border-color: #63738a;
   }
   .navbar-default .navbar-brand {
     color: #ecf0f1;
@@ -93,20 +105,20 @@ hr {
   .navbar-default .navbar-nav > .active > a:hover,
   .navbar-default .navbar-nav > .active > a:focus {
     color: #000000;
-    background-color: #337ab7;
+    background-color: #63738a;
   }
   .navbar-default .navbar-nav > .open > a,
   .navbar-default .navbar-nav > .open > a:hover,
   .navbar-default .navbar-nav > .open > a:focus {
     color: #000000;
-    background-color: #337ab7;
+    background-color: #63738a;
   }
   .navbar-default .navbar-toggle {
-    border-color: #337ab7;
+    border-color: #63738a;
   }
   .navbar-default .navbar-toggle:hover,
   .navbar-default .navbar-toggle:focus {
-    background-color: #337ab7;
+    background-color: #63738a;
   }
   .navbar-default .navbar-toggle .icon-bar {
     background-color: #ecf0f1;
@@ -134,15 +146,15 @@ hr {
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
       color: #000000;
-      background-color: #337ab7;
+      background-color: #63738a;
     }
   }
 
   /* panel */
 
 .panel > .panel-heading {
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #63738a;
+  border-color: #63738a;
   color: white;
 }
 
