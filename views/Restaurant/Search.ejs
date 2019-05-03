@@ -7,37 +7,104 @@
     <% include ../Partials/_navbar //relative path %>
     <div class="container">
         
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-            <!-- <li>
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li> -->
-            <% if(locals.result.length > 0){ %>
-                <li><a href="#top" onclick="switchPage(1);">1</a></li>
-            <% } %>
-            <% if(locals.result.length > 10){ %>
-                <li><a href="#top" onclick="switchPage(2);">2</a></li>
-            <% } %>
-            <% if(locals.result.length > 20){ %>
-                <li><a href="#top" onclick="switchPage(3);">3</a></li>
-            <% } %>
-            <% if(locals.result.length > 30){ %>
-                <li><a href="#top" onclick="switchPage(4);">4</a></li>
-            <% } %>
-            <% if(locals.result.length > 40){ %>
-                <li><a href="#top" onclick="switchPage(5);">5</a></li>
-            <% } %>
-            <!-- <li>
-                <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li> -->
-            </ul>
-        </nav>
-
-        <script>             
+        <div>
+            <nav aria-label="Page navigation" style="float: left;">
+                <ul class="pagination">
+                <!-- <li>
+                    <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li> -->
+                <% if(locals.result.length > 0){ %>
+                    <li><a href="#top" onclick="switchPage(1);">1</a></li>
+                <% } %>
+                <% if(locals.result.length > 10){ %>
+                    <li><a href="#top" onclick="switchPage(2);">2</a></li>
+                <% } %>
+                <% if(locals.result.length > 20){ %>
+                    <li><a href="#top" onclick="switchPage(3);">3</a></li>
+                <% } %>
+                <% if(locals.result.length > 30){ %>
+                    <li><a href="#top" onclick="switchPage(4);">4</a></li>
+                <% } %>
+                <% if(locals.result.length > 40){ %>
+                    <li><a href="#top" onclick="switchPage(5);">5</a></li>
+                <% } %>
+                <!-- <li>
+                    <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li> -->
+                </ul>
+            </nav>
+            <div class="pagination" style="float: right;">
+                <div class="form-inline inner-addon right-addon">
+                    <input type="text" id="txtSearchBar" class="form-control">
+                    <i class="glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>      
+        <script>
+            $("#txtSearchBar").on('keyup', function (e) {
+                var searchTerm = $('#txtSearchBar').val().trim().toLowerCase();
+                //alert(searchTerm);
+                if (e.keyCode === 13 && searchTerm.length > 0) {
+                    var restaurants = JSON.parse($('#storedResult').html());
+                    var htmlString = "";
+                    for(var i=0; i<restaurants.length; ++i){
+                        if(restaurants[i].name.toLowerCase().includes(searchTerm)){
+                            htmlString += 
+                            "<div class=\"panel panel-default opaque\"> " +
+                                " <div class=\"panel-heading\"><h3>"+ restaurants[i].name + "</h3></div> " +
+                                "   <div class=\"panel-body row\"> " +
+                                "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
+                                "       <img src=\""+ restaurants[i].image_url + "\" class=\"rest-img\"> " +
+                                "   </div>" +
+                                "   <div class=\"col-xs-4\"> " + 
+                                "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                                "           <div class=\"col-xs-5\"> " +
+                                "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"" + restaurants[i].url + "\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                                "           </div>" +
+                                "           <div class=\"col-xs-7\"> " +
+                                "               <p><label>Yelp's rating:&nbsp;</label> " + restaurants[i].rating  + " / 5</p> " +
+                                "               <p><label>Yelp's review count:&nbsp;</label> " + restaurants[i].review_count + "</p> " +
+                                "           </div>" +
+                                        
+                                "       </div>" +
+                                "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                                "           <div class=\"col-xs-5\"> " +
+                                "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('"+ restaurants[i].id + "', '"+ restaurants[i].alias +"');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                                "           </div>" +
+                                "           <div class=\"col-xs-7\"> " +
+                                "               <p id=\"rating"+ i +"\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                                "               <p id=\"count"+ i +"\"><label>ORWW's review count:&nbsp;</label></p>" +
+                                "           </div>" +
+                                "           <script>getRating('"+ restaurants[i].id +"', parseInt('"+ i +"'));<\/script> " + 
+                                "       </div>" +                    
+                                "   </div> " +
+                                "   <div class=\"col-xs-5\"> " +
+                                "        <div style=\"height: 250px;\"> " +
+                                "            <div style=\"height: 230px;\"> " +
+                                "               <p><label>Location:&nbsp;</label>" + restaurants[i].location.display_address + "</p> " +
+                                "               <p><label>Phone:&nbsp;</label>" + restaurants[i].display_phone + "</p> " +
+                                "               <p><label>Price:&nbsp;</label>" + restaurants[i].price +"</p> " +
+                                "               <p id=\"review"+ i +"\"><label>Recent Review:&nbsp;</label><br></p> " +
+                                "               <script>getReview('" + restaurants[i].id + "', parseInt('"+ i +"'));<\/script> " +
+                                "            </div> " +
+                                "           <div style=\"float: right;\"> " +
+                                "                <a href=\"/Restaurant/Map?restaurant=" + restaurants[i].alias + "&latitude=" + restaurants[i].coordinates['latitude'] + "&longitude=" + restaurants[i].coordinates['longitude'] + "\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                                "            </div>" +
+                                "            <div class=\"clearfix\"></div> " +
+                                "        </div> " +                     
+                                "    </div> " +                     
+                                " </div>" +
+                            " </div>";
+                        }
+                    }
+                    $('#list').html(htmlString);
+                }
+            });
             function getRating(yelpID, index){
                 $.ajax({
                     async: true,
@@ -177,6 +244,8 @@
             </div>
         </div>
     </div>
+
+    <div id="storedResult" hidden><%= JSON.stringify(locals.result) %></div>
     
     <script>    
         // when the modal is closed
@@ -208,7 +277,7 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 10){ %> "+
-                    " <% for(var i=0; i<result.length; ++i){ %> " +
+                    " <% for(var i=0; i<locals.result.length; ++i){ %> " +
                     " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
                         "   <div class=\"panel-body row\"> " +
@@ -310,7 +379,7 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 20){ %> "+
-                    " <% for(var i=10; i<result.length; ++i){ %> " +
+                    " <% for(var i=10; i<locals.result.length; ++i){ %> " +
                     " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
                         "   <div class=\"panel-body row\"> " +
@@ -413,7 +482,7 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 30){ %> "+
-                    " <% for(var i=20; i<result.length; ++i){ %> " +
+                    " <% for(var i=20; i<locals.result.length; ++i){ %> " +
                     " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
                         "   <div class=\"panel-body row\"> " +
@@ -516,7 +585,7 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 40){ %> "+
-                    " <% for(var i=30; i<result.length; ++i){ %> " +
+                    " <% for(var i=30; i<locals.result.length; ++i){ %> " +
                     " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
                         "   <div class=\"panel-body row\"> " +
@@ -619,7 +688,7 @@
                 $('#list').html(
 
                     " <% if(locals.result.length < 50){ %> "+
-                    " <% for(var i=40; i<result.length; ++i){ %> " +
+                    " <% for(var i=40; i<locals.result.length; ++i){ %> " +
                     " <div class=\"panel panel-default opaque\"> " +
                         " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
                         "   <div class=\"panel-body row\"> " +
