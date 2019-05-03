@@ -7,136 +7,60 @@
     <% include ../Partials/_navbar //relative path %>
     <div class="container">
         
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-            <!-- <li>
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li> -->
-            <% if(locals.result.length > 0){ %>
-                <li><a href="#top" onclick="switchPage(1);">1</a></li>
-            <% } %>
-            <% if(locals.result.length > 10){ %>
-                <li><a href="#top" onclick="switchPage(2);">2</a></li>
-            <% } %>
-            <% if(locals.result.length > 20){ %>
-                <li><a href="#top" onclick="switchPage(3);">3</a></li>
-            <% } %>
-            <% if(locals.result.length > 30){ %>
-                <li><a href="#top" onclick="switchPage(4);">4</a></li>
-            <% } %>
-            <% if(locals.result.length > 40){ %>
-                <li><a href="#top" onclick="switchPage(5);">5</a></li>
-            <% } %>
-            <!-- <li>
-                <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li> -->
-            </ul>
-        </nav>
+        <div id="storedResult" hidden><%= locals.cryptr.encrypt(JSON.stringify(locals.result)) %></div>
 
-        <script>             
-            function getRating(yelpID, index){
+        <script> 
+            function setup(){        
                 $.ajax({
-                    async: true,
+                    async: false,
                     type: 'POST',
-                    url: '/Restaurant/Rating',
-                    data: { id: yelpID} ,
-                    success: function(rating) {
-                        if(rating.count > 0){
-                            var avg = (rating.sum / rating.count).toFixed(2);
-                            $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
-                            $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
-                        }
-                        else{
-                            $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>none");
-                            $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
-                        }                       
+                    url: '/Restaurant/DecryptSearchResult',
+                    data: { string: $('#storedResult').text().toString()} ,
+                    success: function(decryptedString) {
+                        //alert(decryptedString);
+                        $('#storedResult').html(decryptedString);               
                     }
                 });
-            };
-
-            function getReview(yelpID, index){
-                $.ajax({
-                    async: true,
-                    type: 'POST',
-                    url: '/Restaurant/GetMostRecentReview',
-                    data: { yelpID: yelpID} ,
-                    success: function(review) {
-                        if(review){
-                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br><p>\"" + review.description + "\"</p><div style=\"float: right;\">- " + review.firstName + ' ' + review.lastName.charAt(0) + ".</div><div class=\"clearfix\"</div>");
-                        }
-                        else{
-                            $('#review' + index).html("<label>Recent Review:&nbsp;</label><br>Be the first to review this restaurant!");
-                        }                   
-                    }
-                });
-            };
-                
+            }                     
+            setup();
         </script>
 
-        <div id="list">  
-            <% 
-            var length = 10;
-            if(locals.result.length < 10){ length = locals.result.length;}
-            for(var i=0; i<length; ++i){ %>
-                <div class="panel panel-default opaque">
-                    <div class="panel-heading"><h3><%= locals.result[i].name %></h3></div>
-                    <div class="panel-body row">
-                        <div class="col-xs-3" style="border-right: 1px solid black;">
-                            <img src="<%= locals.result[i].image_url %>" class="rest-img">
-                        </div>
-                        <div class="col-xs-4">
-                            <div class="row" style="height: 125px;">
-                                <div class="col-xs-5">
-                                    <a title="Click here to go to the restaurant's yelp page." target="_blank" rel="noopener noreferrer" href="<%= locals.result[i].url %>"> <img src="/content/images/yelp2.png" class="logo"> </a>
-                                </div>
-                                <div class="col-xs-7">
-                                        <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p>
-                                        <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p>
-                                </div>
-                                
-                            </div>
-                            <div class="row" style="height: 125px;">
-                                <div class="col-xs-5">
-                                    <a title="Click here to go to the restaurant's profile page." onclick="clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');"> <img src="/content/images/temp.jpg" class="logo"> </a>
-                                </div>
-                                <div class="col-xs-7">
-                                        <p id="rating<%= i %>"><label>ORWW's rating:&nbsp;</label> / 5</p>
-                                        <p id="count<%= i %>"><label>ORWW's review count:&nbsp;</label></p>
-                                </div>
-                                <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
-                            </div>                     
-                        </div>
-                        <div class="col-xs-5">
-                            <div style="height: 250px;">
-                                <div style="height: 95%;">
-                                    <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p>
-                                    <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p>
-                                    <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p>
-                                    <p id="review<%= i %>"><label>Recent Review:&nbsp;</label><br></p>
-                                    <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));</script>
-                                </div>
-                                <div style="float: right;">
-                                    <a href="/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>" 
-                                        data-toggle="modal" data-target="#myModal" data-backdrop="false">View Map</a>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>                     
-                        </div>              
-                    </div>
-                </div>              
-            <% } %>
-        </div>
+        <div>
+            <nav aria-label="Page navigation" style="float: left;">
+                <ul class="pagination">
+
+                <% if(locals.result.length > 0){ %>
+                    <li><a href="#top" onclick="switchPage(1);">1</a></li>
+                <% } %>
+                <% if(locals.result.length > 10){ %>
+                    <li><a href="#top" onclick="switchPage(2);">2</a></li>
+                <% } %>
+                <% if(locals.result.length > 20){ %>
+                    <li><a href="#top" onclick="switchPage(3);">3</a></li>
+                <% } %>
+                <% if(locals.result.length > 30){ %>
+                    <li><a href="#top" onclick="switchPage(4);">4</a></li>
+                <% } %>
+                <% if(locals.result.length > 40){ %>
+                    <li><a href="#top" onclick="switchPage(5);">5</a></li>
+                <% } %>
+
+                </ul>
+            </nav>
+            <div class="pagination" style="float: right;">
+                <div class="form-inline inner-addon right-addon">
+                    <input type="text" id="txtSearchBar" class="form-control">
+                    <i class="glyphicon glyphicon-search"></i>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>  
+
+        <div id="list"></div>
+
         <nav aria-label="Page navigation">
             <ul class="pagination">
-            <!-- <li>
-                <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li> -->
+
             <% if(locals.result.length > 0){ %>
                 <li><a href="#top" onclick="switchPage(1);">1</a></li>
             <% } %>
@@ -152,11 +76,7 @@
             <% if(locals.result.length > 40){ %>
                 <li><a href="#top" onclick="switchPage(5);">5</a></li>
             <% } %>
-            <!-- <li>
-                <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li> -->
+
             </ul>
         </nav>
         <div style="margin-right: 0; padding-right: 0;">
@@ -177,8 +97,8 @@
             </div>
         </div>
     </div>
-    
-    <script>    
+  
+    <script>
         // when the modal is closed
         $('#myModal').on('hidden.bs.modal', function () {
             // remove the bs.modal data attribute from it
@@ -202,526 +122,175 @@
             form.submit();
         };
 
-        function switchPage(pagenum){
-            $('#list').html('');
-            if(pagenum === 1){
-                $('#list').html(
-
-                    " <% if(locals.result.length < 10){ %> "+
-                    " <% for(var i=0; i<result.length; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    " <% } else { %> " +
-                    " <% for(var i=0; i<10; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    "<% } %>"
-                )             
+        $("#txtSearchBar").on('keyup', function (e) {
+            var searchTerm = $('#txtSearchBar').val().trim().toLowerCase();
+            //alert(searchTerm);
+            if (e.keyCode === 13 && searchTerm.length === 0) { 
+                renderPage(1);
             }
-            else if(pagenum === 2){
-                $('#list').html(
-
-                    " <% if(locals.result.length < 20){ %> "+
-                    " <% for(var i=10; i<result.length; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    " <% } else { %> " +
-                    " <% for(var i=10; i<20; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    "<% } %>"
-
-                )             
+            if (e.keyCode === 13 && searchTerm.length > 0) {
+                var restaurants = JSON.parse($('#storedResult').html());
+                var htmlString = "";
+                for(var i=0; i<restaurants.length; ++i){
+                    if(restaurants[i].name.toLowerCase().includes(searchTerm)){
+                        htmlString += 
+                        "<div class=\"panel panel-default opaque\"> " +
+                            " <div class=\"panel-heading\"><h3>"+ restaurants[i].name + "</h3></div> " +
+                            "   <div class=\"panel-body row\"> " +
+                            "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
+                            "       <img src=\""+ restaurants[i].image_url + "\" class=\"rest-img\"> " +
+                            "   </div>" +
+                            "   <div class=\"col-xs-4\"> " + 
+                            "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                            "           <div class=\"col-xs-5\"> " +
+                            "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"" + restaurants[i].url + "\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                            "           </div>" +
+                            "           <div class=\"col-xs-7\"> " +
+                            "               <p><label>Yelp's rating:&nbsp;</label> " + restaurants[i].rating  + " / 5</p> " +
+                            "               <p><label>Yelp's review count:&nbsp;</label> " + restaurants[i].review_count + "</p> " +
+                            "           </div>" +
+                                    
+                            "       </div>" +
+                            "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                            "           <div class=\"col-xs-5\"> " +
+                            "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('"+ restaurants[i].id + "', '"+ restaurants[i].alias +"');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                            "           </div>" +
+                            "           <div class=\"col-xs-7\"> " +
+                            "               <p id=\"rating"+ i +"\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                            "               <p id=\"count"+ i +"\"><label>ORWW's review count:&nbsp;</label></p>" +
+                            "           </div>" +
+                            "           <script>getRating('"+ restaurants[i].id +"', parseInt('"+ i +"'));<\/script> " + 
+                            "       </div>" +                    
+                            "   </div> " +
+                            "   <div class=\"col-xs-5\"> " +
+                            "        <div style=\"height: 250px;\"> " +
+                            "            <div style=\"height: 230px;\"> " +
+                            "               <p><label>Location:&nbsp;</label>" + restaurants[i].location.display_address + "</p> " +
+                            "               <p><label>Phone:&nbsp;</label>" + restaurants[i].display_phone + "</p> " +
+                            "               <p><label>Price:&nbsp;</label>" + restaurants[i].price +"</p> " +
+                            "               <p id=\"review"+ i +"\"><label>Recent Review:&nbsp;</label><br></p> " +
+                            "               <script>getReview('" + restaurants[i].id + "', parseInt('"+ i +"'));<\/script> " +
+                            "            </div> " +
+                            "           <div style=\"float: right;\"> " +
+                            "                <a href=\"/Restaurant/Map?restaurant=" + restaurants[i].alias + "&latitude=" + restaurants[i].coordinates['latitude'] + "&longitude=" + restaurants[i].coordinates['longitude'] + "\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                            "            </div>" +
+                            "            <div class=\"clearfix\"></div> " +
+                            "        </div> " +                     
+                            "    </div> " +                     
+                            " </div>" +
+                        " </div>";
+                    }
+                }
+                $('#list').html(htmlString);
             }
-            else if(pagenum === 3){
-                $('#list').html(
+        });
 
-                    " <% if(locals.result.length < 30){ %> "+
-                    " <% for(var i=20; i<result.length; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    " <% } else { %> " +
-                    " <% for(var i=20; i<30; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    "<% } %>"
-
-                )             
-            }
-            else if(pagenum === 4){
-                $('#list').html(
-
-                    " <% if(locals.result.length < 40){ %> "+
-                    " <% for(var i=30; i<result.length; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    " <% } else { %> " +
-                    " <% for(var i=30; i<40; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    "<% } %>"
-
-                )             
-            }
-            else if(pagenum === 5){
-                $('#list').html(
-
-                    " <% if(locals.result.length < 50){ %> "+
-                    " <% for(var i=40; i<result.length; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    " <% } else { %> " +
-                    " <% for(var i=40; i<50; ++i){ %> " +
-                    " <div class=\"panel panel-default opaque\"> " +
-                        " <div class=\"panel-heading\"><h3><%= locals.result[i].name %></h3></div> " +
-                        "   <div class=\"panel-body row\"> " +
-                        "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
-                        "       <img src=\"<%= locals.result[i].image_url %>\" class=\"rest-img\"> " +
-                        "   </div>" +
-                        "   <div class=\"col-xs-4\"> " + 
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"<%= locals.result[i].url %>\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p><label>Yelp's rating:&nbsp;</label> <%= locals.result[i].rating %> / 5</p> " +
-                        "               <p><label>Yelp's review count:&nbsp;</label> <%= locals.result[i].review_count %></p> " +
-                        "           </div>" +
-                                
-                        "       </div>" +
-                        "       <div class=\"row\" style=\"height: 125px;\"> " + 
-                        "           <div class=\"col-xs-5\"> " +
-                        "               <a title=\"Click here to go to the restaurant's profile page.\"  onclick=\"clickProfilePage('<%= locals.result[i].id %>', '<%= locals.result[i].alias %>');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
-                        "           </div>" +
-                        "           <div class=\"col-xs-7\"> " +
-                        "               <p id=\"rating<%= i %>\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
-                        "               <p id=\"count<%= i %>\"><label>ORWW's review count:&nbsp;</label></p>" +
-                        "           </div>" +
-                        "           <script>getRating('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " + 
-                        "       </div>" +                    
-                        "   </div> " +
-                        "   <div class=\"col-xs-5\"> " +
-                        "        <div style=\"height: 250px;\"> " +
-                        "            <div style=\"height: 230px;\"> " +
-                        "               <p><label>Location:&nbsp;</label><%= locals.result[i].location.display_address %></p> " +
-                        "               <p><label>Phone:&nbsp;</label><%= locals.result[i].display_phone %></p> " +
-                        "               <p><label>Price:&nbsp;</label><%= locals.result[i].price %></p> " +
-                        "               <p id=\"review<%= i %>\"><label>Recent Review:&nbsp;</label><br></p> " +
-                        "               <script>getReview('<%= locals.result[i].id %>', parseInt('<%= i %>'));<\/script> " +
-                        "            </div> " +
-                        "           <div style=\"float: right;\"> " +
-                        "                <a href=\"/Restaurant/Map?restaurant=<%= locals.result[i].alias %>&latitude=<%= locals.result[i].coordinates['latitude'] %>&longitude=<%= locals.result[i].coordinates['longitude'] %>\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
-                        "            </div>" +
-                        "            <div class=\"clearfix\"></div> " +
-                        "        </div> " +                     
-                        "    </div> " +                     
-                        " </div>" +
-                    " </div>" +
-                    " <% } %> " + 
-                    "<% } %>"
-
-                )             
-            }
-            
-            
+        function renderPage(pagenum){
+            if(pagenum > 0 && pagenum < 6){
+                var max = pagenum * 10;
+                var min = max - 10;
+                var restaurants = JSON.parse($('#storedResult').html());
+                if(restaurants.length < max){
+                    max = restaurants.length;
+                }
+                var htmlString = "";
+                for(var i=min; i<max; ++i){
+                    htmlString += 
+                        "<div class=\"panel panel-default opaque\"> " +
+                            " <div class=\"panel-heading\"><h3>"+ restaurants[i].name + "</h3></div> " +
+                            "   <div class=\"panel-body row\"> " +
+                            "       <div class=\"col-xs-3\" style=\"border-right: 1px solid black;\"> " +
+                            "       <img src=\""+ restaurants[i].image_url + "\" class=\"rest-img\"> " +
+                            "   </div>" +
+                            "   <div class=\"col-xs-4\"> " + 
+                            "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                            "           <div class=\"col-xs-5\"> " +
+                            "               <a title=\"Click here to go to the restaurant's yelp page.\" target=\"_blank\" rel=\"noopener noreferrer\" href=\"" + restaurants[i].url + "\"> <img src=\"/content/images/yelp2.png\" class=\"logo\"> </a> " +
+                            "           </div>" +
+                            "           <div class=\"col-xs-7\"> " +
+                            "               <p><label>Yelp's rating:&nbsp;</label> " + restaurants[i].rating  + " / 5</p> " +
+                            "               <p><label>Yelp's review count:&nbsp;</label> " + restaurants[i].review_count + "</p> " +
+                            "           </div>" +
+                                    
+                            "       </div>" +
+                            "       <div class=\"row\" style=\"height: 125px;\"> " + 
+                            "           <div class=\"col-xs-5\"> " +
+                            "               <a title=\"Click here to go to the restaurant's profile page.\" onclick=\"clickProfilePage('"+ restaurants[i].id + "', '"+ restaurants[i].alias +"');\"> <img src=\"/content/images/temp.jpg\" class=\"logo\"> </a> " +
+                            "           </div>" +
+                            "           <div class=\"col-xs-7\"> " +
+                            "               <p id=\"rating"+ i +"\"><label>ORWW's rating:&nbsp;</label> / 5</p> " +
+                            "               <p id=\"count"+ i +"\"><label>ORWW's review count:&nbsp;</label></p>" +
+                            "           </div>" +
+                            "           <script>getRating('"+ restaurants[i].id +"', parseInt('"+ i +"'));<\/script> " + 
+                            "       </div>" +                    
+                            "   </div> " +
+                            "   <div class=\"col-xs-5\"> " +
+                            "        <div style=\"height: 250px;\"> " +
+                            "            <div style=\"height: 230px;\"> " +
+                            "               <p><label>Location:&nbsp;</label>" + restaurants[i].location.display_address + "</p> " +
+                            "               <p><label>Phone:&nbsp;</label>" + restaurants[i].display_phone + "</p> " +
+                            "               <p><label>Price:&nbsp;</label>" + restaurants[i].price +"</p> " +
+                            "               <p id=\"review"+ i +"\"><label>Recent Review:&nbsp;</label><br></p> " +
+                            "               <script>getReview('" + restaurants[i].id + "', parseInt('"+ i +"'));<\/script> " +
+                            "            </div> " +
+                            "           <div style=\"float: right;\"> " +
+                            "                <a href=\"/Restaurant/Map?restaurant=" + restaurants[i].alias + "&latitude=" + restaurants[i].coordinates['latitude'] + "&longitude=" + restaurants[i].coordinates['longitude'] + "\" data-toggle=\"modal\" data-target=\"#myModal\" data-backdrop=\"false\">View Map</a>" +
+                            "            </div>" +
+                            "            <div class=\"clearfix\"></div> " +
+                            "        </div> " +                     
+                            "    </div> " +                     
+                            " </div>" +
+                        " </div>";
+                }
+                $('#list').html(htmlString);
+            }            
         };
-     
+
+        renderPage(1);
+
+        function switchPage(pagenum){
+            //alert("page " + pagenum);
+            $('#txtSearchBar').val('');
+            renderPage(pagenum);
+        };  
+
+        function getRating(yelpID, index){
+            $.ajax({
+                async: true,
+                type: 'POST',
+                url: '/Restaurant/Rating',
+                data: { id: yelpID} ,
+                success: function(rating) {
+                    if(rating.count > 0){
+                        var avg = (rating.sum / rating.count).toFixed(2);
+                        $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>" + avg + " / 5");
+                        $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                    }
+                    else{
+                        $('#rating' + index).html("<label>ORWW's rating:&nbsp;</label>none");
+                        $('#count'  + index).html("<label>ORWW's review count:&nbsp;</label>" + rating.count);
+                    }                       
+                }
+            });
+        };
+
+        function getReview(yelpID, index){
+            $.ajax({
+                async: true,
+                type: 'POST',
+                url: '/Restaurant/GetMostRecentReview',
+                data: { yelpID: yelpID} ,
+                success: function(review) {
+                    if(review){
+                        $('#review' + index).html("<label>Recent Review:&nbsp;</label><br><p>\"" + review.description + "\"</p><div style=\"float: right;\">- " + review.firstName + ' ' + review.lastName.charAt(0) + ".</div><div class=\"clearfix\"</div>");
+                    }
+                    else{
+                        $('#review' + index).html("<label>Recent Review:&nbsp;</label><br>Be the first to review this restaurant!");
+                    }                   
+                }
+            });
+        };
+
     </script>
 
 

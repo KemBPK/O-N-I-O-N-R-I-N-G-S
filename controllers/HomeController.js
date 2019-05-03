@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = function(app, yelp, db) {
+module.exports = function (app, yelp, db) {
     app.get('/', function (req, res) { //redirect to homepage when the root URL is requested
-        if(req.session.id){
+        if (req.session.id) {
             console.log('test');
             console.log(req.session.id);
         }
@@ -14,29 +14,49 @@ module.exports = function(app, yelp, db) {
     })
 
     app.get('/Home/Welcome', function (req, res) {
-        res.redirect('/');     
+        res.redirect('/');
         //res.render('./Home/Welcome'); //relative to the root view folder
     })
 
     app.get('/Home/Search', function (req, res) {
-        //console.log("hello");
-        const input = {
-            term:'Onion Rings',
-            location: req.query.city + ", " + req.query.state,
-            limit: 50
-            //categories: 'hotdogs' //fast food 
-          };
-        var search = yelp.SearchPlaces(input);
 
-        search.then(function(response){
-            // console.log(response.jsonBody);
-            return response.jsonBody.businesses;
-        }).then(function(result){
-            res.render('./Restaurant/Search', {
-                input: input,
-                result: result
+        if (req.query.city && req.query.state) {
+            var input;
+            if (req.query.searchFastFood) {
+                input = {
+                    term: 'Onion Rings',
+                    location: req.query.city + ", " + req.query.state,
+                    limit: 50,
+                    categories: 'hotdogs' //fast food 
+                };
+            }
+            else {
+                input = {
+                    term: 'Onion Rings',
+                    location: req.query.city + ", " + req.query.state,
+                    limit: 50
+                };
+            }
+
+            var search = yelp.SearchPlaces(input);
+
+            search.then(function (response) {
+                // console.log(response.jsonBody);
+                return response.jsonBody.businesses;
+            }).then(function (result) {
+                const Cryptr = require('cryptr');
+                const cryptr = new Cryptr(process.env.SEARCH_KEY);
+                res.render('./Restaurant/Search', {
+                    input: input,
+                    result: result,
+                    cryptr: cryptr
+                });
             });
-        });
+        }
+        else{
+            res.redirect('/');
+        }
+
     })
 
 }
