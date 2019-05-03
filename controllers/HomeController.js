@@ -44,9 +44,12 @@ module.exports = function (app, yelp, db) {
                 // console.log(response.jsonBody);
                 return response.jsonBody.businesses;
             }).then(function (result) {
+                const Cryptr = require('cryptr');
+                const cryptr = new Cryptr(process.env.SEARCH_KEY);
                 res.render('./Restaurant/Search', {
                     input: input,
-                    result: result
+                    result: result,
+                    cryptr: cryptr
                 });
             });
         }
