@@ -40,7 +40,7 @@
 }
 
 #slide1{
-  background-image: url("/content/images/onions-248027_1280.jpg");
+  background-image: url("/content/images/vegpattern3-13.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -49,7 +49,7 @@
 }
 
 #slide2{
-  background-image: url("/content/images/hero-onion-ring.jpg");
+  background-image: url("/content/images/v1-03.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -78,6 +78,25 @@ hr {
   color: #333; /* old IE */
   background-color: #333; /* Modern Browsers */
 }
+
+.inner-addon {
+  position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .glyphicon  { left:  0px;}
+.right-addon .glyphicon { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
 
 /* navbar */
 .navbar-default {

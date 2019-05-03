@@ -167,4 +167,11 @@ module.exports = function (app, yelp, db) {
         
     })
 
+    app.post('/Restaurant/DecryptSearchResult', function(req, res){
+        const Cryptr = require('cryptr');
+        const cryptr = new Cryptr(process.env.SEARCH_KEY);
+        const decryptedString = cryptr.decrypt(req.body.string);
+        res.send(decryptedString);
+    })
+
 }
