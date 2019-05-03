@@ -242,6 +242,25 @@ function getMostRecentReview(restID, callback) {
   })
 }
 
+function deleteReview(reviewID, callback){
+  var con = connection();
+  con.connect(function (err) {
+    if (err) {
+      console.log('Database connection failed: ' + err.stack);
+      return callback(err, null);
+    }
+  })
+
+  con.query("DELETE FROM tblReview WHERE reviewID = ?", [reviewID], function (err, result) {
+    con.end();
+    if (err) {
+      console.log("deleteReview SQL failed" + err.stack);
+      return callback(err);
+    }
+    return callback(null);
+  })
+}
+
 module.exports.checkRestaurant = checkRestaurant;
 module.exports.insertRestaurant = insertRestaurant;
 module.exports.getRestaurantID = getRestaurantID;
@@ -250,3 +269,4 @@ module.exports.getRestaurantInfoByAlias = getRestaurantInfoByAlias;
 module.exports.insertReview = insertReview;
 module.exports.getReviews = getReviews;
 module.exports.getMostRecentReview = getMostRecentReview;
+module.exports.deleteReview = deleteReview;
