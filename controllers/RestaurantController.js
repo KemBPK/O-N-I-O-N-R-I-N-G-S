@@ -82,19 +82,45 @@ module.exports = function (app, yelp, db) {
                     res.render('./Error/404', { url: req.url });
                     return;
                 }
-
-                var search = yelp.SearchRestaurant(restaurant.yelpID);
-                search.then(function (response) {
-                    //res.send(response.jsonBody);   
-                    res.render('./Restaurant/Profile', {
-                        profile: restaurant,
-                        reviews: result,
-                        yelp:    response.jsonBody
+                if(req.session.id){
+                    db.user.checkAdmin(req.session.id, function(err, isAdmin){
+                        if(err == null && isAdmin == true){
+                            console.log("admin signing in");
+                            var search = yelp.SearchRestaurant(restaurant.yelpID);
+                            search.then(function (response) {                
+                                res.render('./Restaurant/Profile', {
+                                    profile: restaurant,
+                                    reviews: result,
+                                    yelp:    response.jsonBody,
+                                    isAdmin: true
+                                });
+                                return;        
+                            });
+                        }
+                        else{
+                            var search = yelp.SearchRestaurant(restaurant.yelpID);
+                            search.then(function (response) {                
+                                res.render('./Restaurant/Profile', {
+                                    profile: restaurant,
+                                    reviews: result,
+                                    yelp:    response.jsonBody
+                                });
+                                return;        
+                            });
+                        }
+                    })
+                }
+                else{
+                    var search = yelp.SearchRestaurant(restaurant.yelpID);
+                    search.then(function (response) {                
+                        res.render('./Restaurant/Profile', {
+                            profile: restaurant,
+                            reviews: result,
+                            yelp:    response.jsonBody
+                        });
+                        return;        
                     });
-                    return;        
-                });
-
-                
+                }            
             })
         })
 
@@ -172,6 +198,31 @@ module.exports = function (app, yelp, db) {
         const cryptr = new Cryptr(process.env.SEARCH_KEY);
         const decryptedString = cryptr.decrypt(req.body.string);
         res.send(decryptedString);
+    })
+
+    app.post('/Restaurant/DeleteReview', function(req, res){
+        if(req.session.id){
+            db.user.checkAdmin(req.session.id, function(err, isAdmin){
+                if(err == null && isAdmin == true){
+                    db.restaurant.deleteReview(req.body.reviewID, function(err){
+                        if(err){
+                            console.log('failed to delete review');
+                        }
+                        console.log('deleted review');
+                        res.redirect('/Restaurant?alias=' + req.body.alias);
+                        return;
+                    })
+                }
+                else{
+                    res.redirect('/Restaurant?alias=' + req.body.alias);
+                    return; 
+                }
+            })
+        }
+        else{
+            res.redirect('/Restaurant?alias=' + req.body.alias);
+            return;
+        }
     })
 
 }
