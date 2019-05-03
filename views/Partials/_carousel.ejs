@@ -9,30 +9,31 @@
 
     <!-- <div class="container" style="height: 800px;"> -->
 
-        <!-- Wrapper for slides -->
+    <!-- Wrapper for slides -->
     <div class="carousel-inner" style="height: 800px;">
-        <div class="item active">
-                <% include ./_slide1 //relative path %>                     
+        <div id="slide0" class="item active">
+            <% include ./_slide1 //relative path %>
         </div>
-        
+
         <div id="slide1" class="item">
-            <!-- <img src="onions-248027_1280.jpg" height="800" > -->
+            <% include ./_slide2 //relative path %>
         </div>
-        
-        <div class="item" id="slide2">
-            <div class="text-center">
-            </div>
+
+        <div id="slide2" class="item">
+            <% include ./_slide3 //relative path %>
         </div>
+
     </div>
     <!-- </div> -->
 
     <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev" title="Free Vector Art by https://www.vecteezy.com">
         <span class="glyphicon glyphicon-chevron-left"></span>
         <span class="sr-only">Previous</span>
     </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <a class="right carousel-control" href="#myCarousel" data-slide="next" title="Free Vector Art by https://www.vecteezy.com">
         <span class="glyphicon glyphicon-chevron-right"></span>
         <span class="sr-only">Next</span>
     </a>
+
 </div>
