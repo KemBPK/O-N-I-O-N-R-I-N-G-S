@@ -103,9 +103,9 @@ function getUserId(email, callback){
 
         //var sql = "SELECT userID FROM tblUser WHERE email = \'" + email + "\'";
         con.query("SELECT userID FROM tblUser WHERE email = ?", [email], function(err, result, field) {
+            con.end(); 
             if(err){
                 console.log("getUserId SQL SELECT FAILED\n");
-                con.end(); 
                 return callback(err, null);
             }
             if(result.length < 1){
@@ -130,9 +130,9 @@ function getUsername(id, callback){
 
         //var sql = "SELECT firstName, lastName  FROM tblUser WHERE userID = " + id;
         con.query("SELECT firstName, lastName  FROM tblUser WHERE userID = ?", [id], function(err, result, field) {
+            con.end(); 
             if(err){
                 console.log("getUsername SQL SELECT FAILED\n");
-                con.end(); 
                 return callback(err, null);
             }
             if(result.length < 1){
@@ -176,8 +176,34 @@ function validateEmail(email, callback){
     }    
 }
 
+function checkAdmin(id, callback){
+    var con = connection();
+    con.connect(function(err) {
+        if(err) {
+            console.log('Database connection failed: ' + err.stack);
+            return callback(err, null);
+        }
+
+        con.query("SELECT * FROM tblAdmin WHERE userID = ?", [id], function(err, result, field) {
+            con.end();
+            if(err){
+                console.log("checkAdmin SQL SELECT FAILED\n");
+                return callback(err, null);
+            }
+            if(result.length > 0){
+                return callback(null, true);
+            }
+            else{
+                return callback(null, false);
+            }
+        })
+        
+    })
+}
+
 module.exports.registerUser = registerUser;
 module.exports.authenicateUser = authenicateUser;
 module.exports.getUserId = getUserId;
 module.exports.getUsername = getUsername;
 module.exports.validateEmail = validateEmail;
+module.exports.checkAdmin = checkAdmin;

@@ -214,10 +214,33 @@
             </div>
             <br>
             <p><%= locals.reviews[i].description %></p>
-        </div>
+            <% if(locals.isAdmin){ %>
+                <div style="float: left;"></div>
+                <div style="float: right;">
+                    <a onclick="DeleteReview(parseInt('<%= locals.reviews[i].reviewID %>'), '<%= locals.profile.alias %>');">delete</a>
+                </div>
+                <div class="clearfix"></div>
+            <% } %>
+            
         <hr>
         <% } %>
     </div>
+
+    <% if(locals.isAdmin){ %>
+        <div hidden>
+            <form id="frmDelete" action="/Restaurant/DeleteReview" method="POST">
+                <input id="reviewID" type="number" name="reviewID">
+                <input id="inputAlias" type="text" name="alias">
+            </form>
+        </div>
+        <script>
+            function DeleteReview(id, alias){
+                $('#reviewID').val(id);
+                $('#inputAlias').val(alias);
+                $('#frmDelete').submit();
+            }
+        </script>
+    <% } %>
 
     <script>
         $('#formReview').submit(function (event) {
