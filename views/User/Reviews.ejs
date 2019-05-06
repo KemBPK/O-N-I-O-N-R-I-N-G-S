@@ -10,6 +10,13 @@
 
     <div class="container" style="border-radius: 25px;background-color: #F3F3F3;">
 
+        <% if(locals.reviews.length == 0) { %>
+            <div class="panel panel-danger">
+                <div class="panel-heading"></div>
+                <div class="panel-body">You have not written a review yet.</div>
+            </div>
+        <% } %>
+
         <% for(var i=0; i<locals.reviews.length; ++i){ %>
         <br>
         <div>

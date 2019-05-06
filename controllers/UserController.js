@@ -162,7 +162,46 @@ module.exports = function (app, yelp, db) {
                 res.render('./User/Reviews', {
                     reviews: result
                 });
+                return;
             })
+        }
+        else {
+            res.redirect('/');
+            return;
+        }
+    })
+
+    app.get('/User/ChangePassword', function(req, res){
+        if (req.session.id) {
+            res.render('./User/ChangePassword');
+            return;
+        }
+        else {
+            res.redirect('/');
+            return;
+        }
+    })
+
+    app.post('/User/ChangePassword', function(req, res){
+        if (req.session.id) {
+            var oldPass = req.body.oldPass;
+            var newPass = req.body.newPass;
+            db.user.changePassword(req.session.id, oldPass, newPass, function(err, isChanged){
+                if(err){
+                    res.render('./User/ChangePassword', {
+                        errMsg: "There was an error when contacting the database. Please try again."
+                    });
+                    return;
+                }
+                if(isChanged === false){
+                    res.render('./User/ChangePassword', {
+                        errMsg: "Please enter the correct old password."
+                    });
+                    return;
+                }
+                res.redirect('/');
+                return;
+            })  
         }
         else {
             res.redirect('/');
