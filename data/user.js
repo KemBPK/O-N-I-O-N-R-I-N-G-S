@@ -226,6 +226,61 @@ function getUserReviews(id, callback) {
     })
 }
 
+function changePassword(id, oldPass, newPass, callback) {
+    var con = connection();
+    con.connect(function (err) {
+        if (err) {
+            //console.log('Database connection failed: ' + err.stack);
+            return callback(err, null);
+        }
+
+        con.query("SELECT * FROM tblUser WHERE userID = ?", [id], function (err, result) {
+            if (err) {
+                con.end();
+                //console.log("changePassword SQL SELECT FAILED\n");
+                return callback(err, null);
+            }
+            if (result.length > 0) {
+                bcrypt.compare(oldPass, result[0].pass, function (err, res) {
+                    if (err) {
+                        con.end();
+                        //console.log('Hash function failed');
+                        return callback(err, null);
+                    }
+                    if (res === true) {
+                        bcrypt.hash(newPass, saltRounds, function (err, hash) {
+                            if (err) {
+                                //con.end();
+                                //console.log('Hash function failed: ' + err.stack);
+                                return callback(err, null);
+                            }
+
+                            con.query("UPDATE tblUser SET pass = ? WHERE userID = ? ", [hash, id], function (err, result) {
+                                con.end();
+                                if (err) {
+                                    //console.log("changePassword SQL UPDATE FAILED\n");
+                                    //console.log(err.stack);
+                                    return callback(err, null);
+                                }
+                                return callback(null, true);
+                            })
+                        })
+                    }
+                    else {
+                        con.end();
+                        return callback(null, false) //true or false
+                    }
+
+                })
+            }
+            else {
+                con.end();
+                return callback(null, false);
+            }
+        })
+    })
+}
+
 module.exports.registerUser = registerUser;
 module.exports.authenicateUser = authenicateUser;
 module.exports.getUserId = getUserId;
@@ -233,3 +288,4 @@ module.exports.getUsername = getUsername;
 module.exports.validateEmail = validateEmail;
 module.exports.checkAdmin = checkAdmin;
 module.exports.getUserReviews = getUserReviews;
+module.exports.changePassword = changePassword;
