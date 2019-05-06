@@ -1,13 +1,13 @@
 'use strict';
 
-module.exports = function(app, yelp, db) {
+module.exports = function (app, yelp, db) {
 
-    app.get('/User/Register', function (req, res) { 
+    app.get('/User/Register', function (req, res) {
         res.render('./User/Register');
     })
 
-    app.post('/User/Register', function (req, res) { 
-        //console.log("test");
+    app.post('/User/Register', function (req, res) {
+        ////console.log("test");
         //res.render('./User/Register');
 
         // POST parameters
@@ -16,65 +16,65 @@ module.exports = function(app, yelp, db) {
         var email = req.body.email;
         var password = req.body.password;
 
-        db.user.registerUser(email, password, fname, lname, function(err){
-            if(err){
-                console.log("didn't work");
+        db.user.registerUser(email, password, fname, lname, function (err) {
+            if (err) {
+                //console.log("didn't work");
                 res.redirect('/User/Register');
                 return;
-            }             
-            console.log("worked");
+            }
+            //console.log("worked");
             res.redirect('/User/Login');
             return;
-        })   
+        })
     })
 
-    app.post('/User/Register/CheckEmail', function(req, res){
+    app.post('/User/Register/CheckEmail', function (req, res) {
         var email = req.body.email;
-        db.user.validateEmail(email, function(err, isValid){
-            if(err){
-                console.log('Error when calling validateEmail');
+        db.user.validateEmail(email, function (err, isValid) {
+            if (err) {
+                //console.log('Error when calling validateEmail');
                 res.send(false);
                 return;
             }
-            if(isValid == true){
+            if (isValid == true) {
                 res.send(true);
                 return;
             }
-            else{
+            else {
                 res.send(false);
                 return;
             }
         })
     })
 
-    app.get('/User/Login', function (req, res) { 
+    app.get('/User/Login', function (req, res) {
         res.render('./User/Login');
     })
 
     app.post('/User/Login', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function(err, isAuthenticated){
-            if(err){
-                console.log("email " + email + " not found");
+        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+            if (err) {
+                //console.log("email " + email + " not found");
                 res.redirect('/User/Login');
                 return;
             }
-            if(isAuthenticated == true){
-                db.user.getUserId(email, function(err, id){
-                    if(err){
-                        console.log('Login failed');
+            if (isAuthenticated == true) {
+                db.user.getUserId(email, function (err, id) {
+                    if (err) {
+                        //console.log('Login failed');
                         res.redirect('/User/Login');
                         return;
                     }
                     req.session.id = id;
-                    console.log('Login succeeded');
+                    //console.log('Login succeeded');
                     res.redirect('/');
                     return;
                 })
             }
-            else{
-                console.log('Login failed');
+            else {
+                //console.log('Login failed');
                 res.redirect('/User/Login');
                 return;
             }
@@ -85,30 +85,30 @@ module.exports = function(app, yelp, db) {
     app.post('/User/LoginNav', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function(err, isAuthenticated){
-            if(err){
-                console.log("email " + email + " not found");        
+        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+            if (err) {
+                //console.log("email " + email + " not found");
                 res.send(false);
                 //res.redirect('/User/Login');
                 return;
             }
-            if(isAuthenticated == true){
-                db.user.getUserId(email, function(err, id){
-                    if(err){
-                        console.log('Login failed');
+            if (isAuthenticated == true) {
+                db.user.getUserId(email, function (err, id) {
+                    if (err) {
+                        //console.log('Login failed');
                         res.send(false);
                         //res.redirect('/User/Login');
                         return;
                     }
                     req.session.id = id;
-                    console.log('Login succeeded');
+                    //console.log('Login succeeded');
                     res.send(true);
                     //res.redirect('/');
                     return;
                 })
             }
-            else{
-                console.log('Login failed');
+            else {
+                //console.log('Login failed');
                 res.send(false);
                 // res.redirect('/User/Login');
                 return;
@@ -116,25 +116,25 @@ module.exports = function(app, yelp, db) {
 
         })
     })
- 
-    app.post('/User/Logout', function (req, res) { 
+
+    app.post('/User/Logout', function (req, res) {
         req.session = null;
         res.send(null);
         //res.redirect('/User/Login');
     })
 
-    app.post('/User/GetUsername', function(req, res){
-        console.log('called GetUsername');
-        if(req.session.id){
-            db.user.getUsername(req.session.id, function(err, name){
-                if(err){
+    app.post('/User/GetUsername', function (req, res) {
+        //console.log('called GetUsername');
+        if (req.session.id) {
+            db.user.getUsername(req.session.id, function (err, name) {
+                if (err) {
                     var account = {
-                        isLogged: false,                
+                        isLogged: false,
                     }
                     // return callback(JSON.stringify(account));
                     res.send(account);
                 }
-                console.log('logged in');
+                //console.log('logged in');
                 var account = {
                     isLogged: true,
                     username: name
@@ -142,12 +142,31 @@ module.exports = function(app, yelp, db) {
                 res.send(account);
             })
         }
-        else{
-            console.log('not logged in');
+        else {
+            //console.log('not logged in');
             var account = {
-                isLogged: false,                
+                isLogged: false,
             }
             res.send(account);
+        }
+    })
+
+    app.get('/User/GetReviews', function (req, res) {
+        //console.log('called getUserReviews');
+        if (req.session.id) {
+            db.user.getUserReviews(req.session.id, function (err, result) {
+                if (err) {
+                    res.redirect('/');
+                    return;
+                }
+                res.render('./User/Reviews', {
+                    reviews: result
+                });
+            })
+        }
+        else {
+            res.redirect('/');
+            return;
         }
     })
 

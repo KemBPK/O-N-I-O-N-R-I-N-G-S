@@ -1,6 +1,7 @@
 <nav class="navbar navbar-default navbar-static-top opaque">
     <div class="container-fluid">
         <div class="navbar-header">
+            <a class="navbar-brand" href="/Home/Welcome"><img src="/content/images/onion-24-293103.png"></a>
             <a class="navbar-brand" href="/Home/Welcome">OnionRingsWorldWide</a>
         </div>
         <div id="homeSearchDiv">
@@ -8,32 +9,35 @@
                 <li><a href="/Home/Welcome">Home</a></li>
                 <li><a id="aSearch">Search</a></li>
             </ul>
-        </div>   
+        </div>
         <div id="searchFormDiv" hidden>
-            <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;" autocomplete="off">                
-                <div class="form-group" style="color: black;">               
-                    <span style="color: white">City:</span>&nbsp;<input id="navbarInput" type="text" name="city" class="form-control" placeholder="Fullerton"  title="Alphabetic characters only" style="width: auto; color: black;" required />
+            <form id="searchForm" action="/Home/Search" class="navbar-form navbar-left" style="color: white;"
+                autocomplete="off">
+                <div class="form-group" style="color: black;">
+                    <span style="color: white">City:</span>&nbsp;<input id="navbarInput" type="text" name="city"
+                        class="form-control" placeholder="Fullerton" title="Alphabetic characters only"
+                        style="width: auto; color: black;" required />
                 </div>
-                <div class="form-group">                   
+                <div class="form-group">
                     State:&nbsp;
                     <select name="state" class="form-control" style="width: auto;" required>
-                            <% include ../Partials/_states //relative path %>
+                        <% include ../Partials/_states //relative path %>
                     </select>
                 </div>
                 <div class="form-group">
-                        <input type="checkbox" name="searchFastFood">&nbsp;Fast Food Only           
+                    <input type="checkbox" name="searchFastFood">&nbsp;Fast Food Only
                 </div>
                 <button type="submit" class="btn btn-default">Search</button>
-                <button id="searchFormCancel" type="button" class="btn btn-danger">Cancel</button>                
-            </form>    
+                <button id="searchFormCancel" type="button" class="btn btn-danger">Cancel</button>
+            </form>
         </div>
         <div id="notloggedDiv" hidden>
             <ul class="nav navbar-nav navbar-right">
-                    <!-- <li><a href="#">template</a></li>
+                <!-- <li><a href="#">template</a></li>
                     <li><a href="#">template</a></li> -->
-                    <!-- <li><a id="aLogin" href="/User/Login">Login</a></li> -->
-                    <li><a id="aLogin">Login</a></li>
-                    <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
+                <!-- <li><a id="aLogin" href="/User/Login">Login</a></li> -->
+                <li><a id="aLogin">Login</a></li>
+                <li><a id="aRegister" href="/User/Register">Sign Up</a></li>
             </ul>
         </div>
         <div id="loginFormDiv" hidden>
@@ -51,95 +55,94 @@
         </div>
 
         <script>
-            function checkUser(){
+            function checkUser() {
                 $.ajax({
-                async: true,
-                type: 'POST',
-                url: '/User/GetUsername',
-                success: function(account) {
-                    if(account.isLogged){
-                        $('#aAccount').html(account.username);
-                        $('#loggedDiv').show();
-                        $('#notloggedDiv').hide();
-                    }
-                    else{
-                        $('#loggedDiv').hide();
-                        $('#notloggedDiv').show();
-                    }
+                    async: true,
+                    type: 'POST',
+                    url: '/User/GetUsername',
+                    success: function (account) {
+                        if (account.isLogged) {
+                            $('#aAccount').html(account.username);
+                            $('#loggedDiv').show();
+                            $('#notloggedDiv').hide();
+                        }
+                        else {
+                            $('#loggedDiv').hide();
+                            $('#notloggedDiv').show();
+                        }
                     }
                 });
             };
             checkUser();
         </script>
-        
+
         <div id="loggedDiv" hidden>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Reviews</a></li>
-                <li id="ddAccount" class="dropdown">
-                    <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
-                    <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a id="aLogout">Sign out</a></li> 
-                    </ul>
-                </li>
-            </ul> 
+                <li><a href="/User/GetReviews">Reviews</a></li>
+                    <li id="ddAccount" class="dropdown">
+                        <a id="aAccount" class="dropdown-toggle" data-toggle="dropdown" href="#">Account_Name
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="aLogout">Sign out</a></li>
+                        </ul>
+                    </li>
+            </ul>
         </div>
-              
     </div>
 </nav>
 <script>
-    $('#aLogin').click(function(){
+    $('#aLogin').click(function () {
         $('#notloggedDiv').hide();
         $('#loginFormDiv').show();
     });
 
-    $('#loginForm').submit(function(event){
+    $('#loginForm').submit(function (event) {
         event.preventDefault();
         $.ajax({
             async: true,
             type: 'POST',
             url: '/User/LoginNav',
-            data: { email: $('#formEmail').val(), password: ($('#formPass').val())} ,
-            success: function(isLogged) {
-                if(isLogged){
+            data: { email: $('#formEmail').val(), password: ($('#formPass').val()) },
+            success: function (isLogged) {
+                if (isLogged) {
                     $('#loginFormDiv').hide();
                     checkUser();
                 }
-                else{
+                else {
                     $('#loginErrorMsg').html('Login failed');
                 }
             }
         });
     });
 
-    $('#loginFormCancel').click(function(){
+    $('#loginFormCancel').click(function () {
         $('#loginFormDiv').hide();
-        $('#notloggedDiv').show();      
+        $('#notloggedDiv').show();
     });
 
-    $('#aLogout').click(function(event){
+    $('#aLogout').click(function (event) {
         event.preventDefault();
         $.ajax({
             async: true,
             type: 'POST',
             url: '/User/Logout',
-            success: function() {
+            success: function () {
                 $('#loginFormDiv').hide();
                 $('#loggedDiv').hide();
                 $('#notloggedDiv').show();
             }
         });
-    
+
     })
 
-    $('#aSearch').click(function(){
+    $('#aSearch').click(function () {
         $('#homeSearchDiv').hide();
-        $('#searchFormDiv').show();      
+        $('#searchFormDiv').show();
     });
- 
-    $('#searchFormCancel').click(function(){
+
+    $('#searchFormCancel').click(function () {
         $('#homeSearchDiv').show();
-        $('#searchFormDiv').hide();      
+        $('#searchFormDiv').hide();
     });
 
 </script>
