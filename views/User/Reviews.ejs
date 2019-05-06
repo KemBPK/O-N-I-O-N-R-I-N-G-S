@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../Partials/_head //relative path %>
+</head>
+
+<body>
+    <% include ../Partials/_navbar //relative path %>
+
+    <div class="container" style="border-radius: 25px;background-color: #F3F3F3;">
+
+        <% for(var i=0; i<locals.reviews.length; ++i){ %>
+        <br>
+        <div>
+            <div>
+                <div style="float: left;">
+                    <a href="/Restaurant?alias=<%= locals.reviews[i].alias %>"><%= locals.reviews[i].restName %></a><br><br>
+                    <%= locals.reviews[i].firstName %>&nbsp;<%= locals.reviews[i].lastName.charAt(0) %>. -
+                    <%= locals.reviews[i].rating %> / 5</div>
+                <div style="float: right;"><%= locals.reviews[i].rDate.toDateString() %></div>
+                <div class="clearfix"></div>
+            </div>
+            <br>
+            <p><%= locals.reviews[i].description %></p>
+
+            <hr>
+            <% } %>
+        </div>
+
+</body>
+
+</html>
