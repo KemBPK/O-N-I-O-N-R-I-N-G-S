@@ -18,47 +18,47 @@ module.exports = function (app, yelp, db) {
 
     app.post('/Restaurant/Search', function (req, res) {
         var id = req.body.id; //post parameter
-        console.log('POST parameter id:' + id);
+        //console.log('POST parameter id:' + id);
         var alias = req.body.alias; //post parameter
-        console.log('POST parameter alias:' + alias);
+        //console.log('POST parameter alias:' + alias);
 
         db.restaurant.checkRestaurant(id, function (err, doesExist) {
             if (err) {
-                console.log('caught error in checkRestaurant');
+                //console.log('caught error in checkRestaurant');
                 res.redirect('/');
                 return;
             }
             if (doesExist) {
-                console.log('exists');
+                //console.log('exists');
                 //res.redirect
                 res.redirect('/Restaurant?alias=' + alias);
                 return;
             }
             else {
-                console.log('does not exists');
+                //console.log('does not exists');
 
                 var search = yelp.SearchRestaurant(id);
                 search.then(function (response) {
-                    //console.log(response.jsonBody);
+                    ////console.log(response.jsonBody);
                     return response.jsonBody;
                 }).then(function (result) {
-                    //console.log(result);
+                    ////console.log(result);
                     result.name = result.name.replace('\'', '\\\'');
                     db.restaurant.insertRestaurant(result.id, result.name, result.alias, result.location.display_address, result.location.city, result.location.state,
                         result.location.zip_code, result.coordinates.latitude, result.coordinates.longitude, result.display_phone, result.url,
                         function (err) {
                             if (err) {
-                                console.log('caught error in insertRestaurant');
+                                //console.log('caught error in insertRestaurant');
                                 res.redirect('/');
                                 return;
                             }
-                            console.log('inserted new restaurant');
-                            console.log('COMPARISON TEST - local alias: ' + alias + ' - result.alias: ' + result.alias);
+                            //console.log('inserted new restaurant');
+                            //console.log('COMPARISON TEST - local alias: ' + alias + ' - result.alias: ' + result.alias);
                             res.redirect('/Restaurant?alias=' + result.alias);
                             return;
                         });
                 }).catch(function (err) {
-                    console.log('SearchRestaurant error: ');
+                    //console.log('SearchRestaurant error: ');
                     res.redirect('/');
                     return;
                 });
@@ -70,14 +70,14 @@ module.exports = function (app, yelp, db) {
         var alias = req.query.alias;
         db.restaurant.getRestaurantInfoByAlias(alias, function (err, restaurant) {
             if (err) {
-                console.log("error when calling getRestaurantInfoByAlias");
+                //console.log("error when calling getRestaurantInfoByAlias");
                 res.status(404);
                 res.render('./Error/404', { url: req.url });
                 return;
             }
             db.restaurant.getReviews(restaurant.restID, function (err, result) {
                 if (err) {
-                    console.log("error when calling getReviews");
+                    //console.log("error when calling getReviews");
                     res.status(404);
                     res.render('./Error/404', { url: req.url });
                     return;
@@ -85,7 +85,7 @@ module.exports = function (app, yelp, db) {
                 if(req.session.id){
                     db.user.checkAdmin(req.session.id, function(err, isAdmin){
                         if(err == null && isAdmin == true){
-                            console.log("admin signing in");
+                            //console.log("admin signing in");
                             var search = yelp.SearchRestaurant(restaurant.yelpID);
                             search.then(function (response) {                
                                 res.render('./Restaurant/Profile', {
@@ -127,11 +127,11 @@ module.exports = function (app, yelp, db) {
     })
 
     app.post('/Restaurant/Rating', function (req, res) {
-        console.log('calling Rating');
+        //console.log('calling Rating');
         var yelpID = req.body.id;
         db.restaurant.getRestaurantID(yelpID, function (err, restID) {
             if (err) {
-                console.log("error when calling getRestaurantID");
+                //console.log("error when calling getRestaurantID");
                 var rating = {
                     count: 0,
                     sum: 0
@@ -139,7 +139,7 @@ module.exports = function (app, yelp, db) {
                 res.send(rating);
                 return;
             }
-            console.log('returning rating result');
+            //console.log('returning rating result');
             db.restaurant.getRatingSumAndCount(restID, function (err, count, sum) {
                 var rating = {
                     count: count,
@@ -161,7 +161,7 @@ module.exports = function (app, yelp, db) {
 
         db.restaurant.insertReview(restID, userID, description, rating, function (err) {
             if (err) {
-                console.log("error when calling insertReview");
+                //console.log("error when calling insertReview");
                 return;
             }
             res.redirect('/Restaurant?alias=' + alias);
@@ -172,7 +172,7 @@ module.exports = function (app, yelp, db) {
         var yelpID = req.body.yelpID;
         db.restaurant.getRestaurantID(yelpID, function (err, restID) {
             if (err) {
-                //console.log("getRestaurantID did not find the restaurant with yelpID: " + yelpID);
+                ////console.log("getRestaurantID did not find the restaurant with yelpID: " + yelpID);
                 res.send(null);
                 return;
             }
@@ -182,7 +182,7 @@ module.exports = function (app, yelp, db) {
                     return;
                 }
                 else{
-                    console.log('returning recent review');
+                    //console.log('returning recent review');
                     res.send(review);
                     return;
                 }
@@ -206,9 +206,9 @@ module.exports = function (app, yelp, db) {
                 if(err == null && isAdmin == true){
                     db.restaurant.deleteReview(req.body.reviewID, function(err){
                         if(err){
-                            console.log('failed to delete review');
+                            //console.log('failed to delete review');
                         }
-                        console.log('deleted review');
+                        //console.log('deleted review');
                         res.redirect('/Restaurant?alias=' + req.body.alias);
                         return;
                     })

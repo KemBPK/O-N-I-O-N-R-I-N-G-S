@@ -30,13 +30,13 @@ function registerUser(email, password, fname, lname, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err);
         }
 
         bcrypt.hash(password, saltRounds, function (err, hash) {
             if (err) {
-                console.log('Hash function failed: ' + err.stack);
+                //console.log('Hash function failed: ' + err.stack);
                 return callback(err);
             }
 
@@ -46,12 +46,12 @@ function registerUser(email, password, fname, lname, callback) {
             // Prepare SQL statement, avoid SQL injection
             con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) VALUES (?, ?, ?, ?)", [email, hash, lname, fname], function (err, result, field) {
                 if (err) {
-                    console.log("registerUser SQL INSERT FAILED\n");
+                    //console.log("registerUser SQL INSERT FAILED\n");
                     con.end();
                     return callback(err);
                 }
                 con.end();
-                console.log('Returning result');
+                //console.log('Returning result');
                 return callback(null);
             })
 
@@ -63,28 +63,28 @@ function authenicateUser(email, password, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
         }
 
         //var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
         con.query("SELECT email, pass FROM tblUser WHERE email = ?", [email], function (err, result, field) {
             if (err) {
-                console.log("authenicateUser SQL INSERT FAILED\n");
+                //console.log("authenicateUser SQL INSERT FAILED\n");
                 con.end();
                 return callback(err, null);
             }
             con.end();
-            console.log('Returning result');
+            //console.log('Returning result');
             if (result.length < 1) {
-                console.log('User ' + email + ' not found');
+                //console.log('User ' + email + ' not found');
                 var error = { messsage: 'User ' + email + ' not found' };
                 return callback(error, null)
             }
             var dbPassword = result[0].pass;
             bcrypt.compare(password, dbPassword, function (err, res) {
                 if (err) {
-                    console.log('Hash function failed');
+                    //console.log('Hash function failed');
                     return callback(err, null);
                 }
                 return callback(null, res) //true or false
@@ -97,7 +97,7 @@ function getUserId(email, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
         }
 
@@ -105,11 +105,11 @@ function getUserId(email, callback) {
         con.query("SELECT userID FROM tblUser WHERE email = ?", [email], function (err, result, field) {
             con.end();
             if (err) {
-                console.log("getUserId SQL SELECT FAILED\n");
+                //console.log("getUserId SQL SELECT FAILED\n");
                 return callback(err, null);
             }
             if (result.length < 1) {
-                console.log('User ' + email + ' not found');
+                //console.log('User ' + email + ' not found');
                 var error = { messsage: 'User ' + email + ' not found' };
                 return callback(error, null);
             }
@@ -124,7 +124,7 @@ function getUsername(id, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
         }
 
@@ -132,11 +132,11 @@ function getUsername(id, callback) {
         con.query("SELECT firstName, lastName  FROM tblUser WHERE userID = ?", [id], function (err, result, field) {
             con.end();
             if (err) {
-                console.log("getUsername SQL SELECT FAILED\n");
+                //console.log("getUsername SQL SELECT FAILED\n");
                 return callback(err, null);
             }
             if (result.length < 1) {
-                console.log('User id ' + id + ' not found');
+                //console.log('User id ' + id + ' not found');
                 var error = { messsage: 'User id ' + id + ' not found' };
                 return callback(error, null);
             }
@@ -153,13 +153,13 @@ function validateEmail(email, callback) {
         var con = connection();
         con.connect(function (err) {
             if (err) {
-                console.log('Database connection failed: ' + err.stack);
+                //console.log('Database connection failed: ' + err.stack);
                 return callback(err, null);
             }
             con.query("SELECT email  FROM tblUser WHERE email = ?", [email.toString()], function (err, result, field) {
                 con.end();
                 if (err) {
-                    console.log("validateEmail SQL SELECT FAILED\n");
+                    //console.log("validateEmail SQL SELECT FAILED\n");
                     return callback(err, null);
                 }
                 if (result.length > 0) {
@@ -180,14 +180,14 @@ function checkAdmin(id, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
         }
 
         con.query("SELECT * FROM tblAdmin WHERE userID = ?", [id], function (err, result, field) {
             con.end();
             if (err) {
-                console.log("checkAdmin SQL SELECT FAILED\n");
+                //console.log("checkAdmin SQL SELECT FAILED\n");
                 return callback(err, null);
             }
             if (result.length > 0) {
@@ -205,14 +205,14 @@ function getUserReviews(id, callback) {
     var con = connection();
     con.connect(function (err) {
         if (err) {
-            console.log('Database connection failed: ' + err.stack);
+            //console.log('Database connection failed: ' + err.stack);
             return callback(err, null);
         }
 
         con.query("SELECT * FROM tblReview as R JOIN tblUser AS U ON R.userID = U.userID JOIN tblRestaurant AS R2 ON R2.restID = R.restID WHERE R.userID = ? ORDER BY rDate DESC", [id], function (err, result) {
             con.end();
             if (err) {
-                console.log("getUserReviews SQL SELECT FAILED\n");
+                //console.log("getUserReviews SQL SELECT FAILED\n");
                 return callback(err, null);
             }
             if (result.length > 0) {

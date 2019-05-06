@@ -26,20 +26,20 @@ function checkRestaurant(id, callback) { //Look up callback and asynchronous cal
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null);
     }
     con.query("SELECT COUNT(*) AS rowNum FROM tblRestaurant WHERE yelpID = ?", [id], function (err, result, fields) {
       if (err) {
-        console.log("CheckRestaurant SQL failed\n");
+        //console.log("CheckRestaurant SQL failed\n");
         con.end();
         return callback(err, null);
       }
       con.end();
-      console.log('Returning result');
-      console.log(result);
+      //console.log('Returning result');
+      //console.log(result);
       if (result[0].rowNum > 0) {
-        console.log('true')
+        //console.log('true')
         return callback(null, true);
       }
       else {
@@ -53,7 +53,7 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err);
     }
     // var sql = "INSERT INTO tblRestaurant (yelpID, restName, alias, address, city, state, zipCode, latitude, longitude, phoneNum, yelpURL) VALUES (\'" 
@@ -63,7 +63,7 @@ function insertRestaurant(yelpID, restName, alias, address, city, state, zipCode
       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [yelpID.toString(), restName.toString(), alias.toString(), address.toString(), city.toString(), state.toString(), zipCode, latitude, longitude, phoneNum.toString(), yelpURL.toString()], function (err, result) {
         if (err) {
-          console.log("insertRestaurant SQL failed\n");
+          //console.log("insertRestaurant SQL failed\n");
           con.end();
           return callback(err);
         }
@@ -77,24 +77,24 @@ function getRestaurantID(yelpID, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null);
     }
 
     //var sql = "SELECT restID FROM tblRestaurant WHERE yelpID = \'" + yelpID + "\'";
     con.query("SELECT restID FROM tblRestaurant WHERE yelpID = ?", [yelpID], function (err, result) {
       if (err) {
-        console.log("getRestaurantID SQL failed");
+        //console.log("getRestaurantID SQL failed");
         con.end();
         return callback(err, null);
       }
       con.end();
       if (result.length < 1) {
-        //console.log("yelpID: " + yelpID + " not found");
+        ////console.log("yelpID: " + yelpID + " not found");
         var error = { messsage: "yelpID: " + yelpID + " not found" };
         return callback(error, null);
       }
-      console.log(result);
+      //console.log(result);
       var id = result[0].restID;
       return callback(null, id);
     })
@@ -106,14 +106,14 @@ function getRestaurantID(yelpID, callback) {
 //   var con = connection();
 //   con.connect(function(err){
 //     if(err){
-//       console.log('Database connection failed: ' + err.stack);  
+//       //console.log('Database connection failed: ' + err.stack);  
 //       return callback(err);
 //       //throw err;
 //     }
 //     var sql = "SELECT COUNT(*) AS count FROM tblReview WHERE restID = " + restID;
 //     con.query(sql, function (err, result){
 //       if(err){
-//         console.log("getReviewCount failed");
+//         //console.log("getReviewCount failed");
 //         con.end(); 
 //         return callback(err, null);
 //       }
@@ -129,14 +129,14 @@ function getRatingSumAndCount(restID, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null, null);
     }
     //var sql = "SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = " + restID;
 
     con.query("SELECT COUNT(*) AS count, SUM(rating) AS sum FROM tblReview WHERE restID = ?", [restID], function (err, result) {
       if (err) {
-        console.log("getRating SQL failed");
+        //console.log("getRating SQL failed");
         con.end();
         return callback(err, null, null);
       }
@@ -152,7 +152,7 @@ function getRestaurantInfoByAlias(alias, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null, null);
     }
 
@@ -160,11 +160,11 @@ function getRestaurantInfoByAlias(alias, callback) {
     con.query("SELECT * FROM tblRestaurant WHERE alias = ?", [alias], function (err, result) {
       con.end();
       if (err) {
-        console.log("getRestaurantInfoByAlias SQL failed");
+        //console.log("getRestaurantInfoByAlias SQL failed");
         return callback(err, null);
       }
       if (result.length < 1) {
-        console.log("alias " + alias + " not found");
+        //console.log("alias " + alias + " not found");
         var error = {
           messsage: "alias " + alias + " not found"
         };
@@ -179,7 +179,7 @@ function insertReview(restID, userID, description, rating, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err);
     }
 
@@ -196,10 +196,10 @@ function insertReview(restID, userID, description, rating, callback) {
     con.query("INSERT INTO tblReview (restID, userID, description, rating, rDate) VALUES (?, ?, ?, ?, NOW())", [restID, userID, filter.clean(description), rating], function (err, result) {
       con.end();
       if (err) {
-        console.log("insertReview SQL failed" + err.stack);
+        //console.log("insertReview SQL failed" + err.stack);
         return callback(err);
       }
-      console.log("successfully inserted the review");
+      //console.log("successfully inserted the review");
       return callback(null);
     })
 
@@ -210,7 +210,7 @@ function getReviews(restID, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null);
     }
   })
@@ -218,10 +218,10 @@ function getReviews(restID, callback) {
   con.query("SELECT R.userID, R.reviewID, R.rating, R.description, R.rDate, U.firstName, U.lastName FROM ebdb.tblReview R JOIN tblUser U ON U.userID = R.userID WHERE R.restID = ? ORDER BY rDate DESC LIMIT 50", [restID], function (err, result) {
     con.end();
     if (err) {
-      console.log("getReviews SQL failed" + err.stack);
+      //console.log("getReviews SQL failed" + err.stack);
       return callback(err, null);
     }
-    console.log("successfully got list of reviews");
+    //console.log("successfully got list of reviews");
     return callback(null, result);
 
   })
@@ -231,7 +231,7 @@ function getMostRecentReview(restID, callback) {
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null);
     }
   })
@@ -239,14 +239,14 @@ function getMostRecentReview(restID, callback) {
   con.query("SELECT R.userID, R.reviewID, R.rating, R.description, R.rDate, U.firstName, U.lastName FROM ebdb.tblReview R JOIN tblUser U ON U.userID = R.userID WHERE R.restID = ? ORDER BY rDate DESC LIMIT 1", [restID], function (err, result) {
     con.end();
     if (err) {
-      console.log("getMostRecentReview SQL failed" + err.stack);
+      //console.log("getMostRecentReview SQL failed" + err.stack);
       return callback(err, null);
     }
     if(result.length == 0){
-      console.log("no review");
+      //console.log("no review");
       return callback(null, null);
     }
-    console.log("successfully retreived recent review");
+    //console.log("successfully retreived recent review");
     return callback(null, result[0]);
 
   })
@@ -256,7 +256,7 @@ function deleteReview(reviewID, callback){
   var con = connection();
   con.connect(function (err) {
     if (err) {
-      console.log('Database connection failed: ' + err.stack);
+      //console.log('Database connection failed: ' + err.stack);
       return callback(err, null);
     }
   })
@@ -264,7 +264,7 @@ function deleteReview(reviewID, callback){
   con.query("DELETE FROM tblReview WHERE reviewID = ?", [reviewID], function (err, result) {
     con.end();
     if (err) {
-      console.log("deleteReview SQL failed" + err.stack);
+      //console.log("deleteReview SQL failed" + err.stack);
       return callback(err);
     }
     return callback(null);
