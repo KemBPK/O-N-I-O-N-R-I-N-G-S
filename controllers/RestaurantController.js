@@ -31,7 +31,7 @@ module.exports = function (app, yelp, db) {
             if (doesExist) {
                 //console.log('exists');
                 //res.redirect
-                res.redirect('/Restaurant?alias=' + alias);
+                res.redirect('/Restaurant/' + alias);
                 return;
             }
             else {
@@ -54,7 +54,7 @@ module.exports = function (app, yelp, db) {
                             }
                             //console.log('inserted new restaurant');
                             //console.log('COMPARISON TEST - local alias: ' + alias + ' - result.alias: ' + result.alias);
-                            res.redirect('/Restaurant?alias=' + result.alias);
+                            res.redirect('/Restaurant/' + result.alias);
                             return;
                         });
                 }).catch(function (err) {
@@ -66,8 +66,8 @@ module.exports = function (app, yelp, db) {
         })
     })
 
-    app.get('/Restaurant/', function (req, res) {
-        var alias = req.query.alias;
+    app.get('/Restaurant/:alias', function (req, res) {
+        var alias = req.params.alias;
         db.restaurant.getRestaurantInfoByAlias(alias, function (err, restaurant) {
             if (err) {
                 //console.log("error when calling getRestaurantInfoByAlias");
