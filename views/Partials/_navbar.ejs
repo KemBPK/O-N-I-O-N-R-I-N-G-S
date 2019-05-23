@@ -91,6 +91,11 @@
         </div>
     </div>
 </nav>
+<div hidden>
+    <form id="verifyForm" action="/User/Verify" method="POST">
+    </form>
+</div>
+
 <script>
     $('#aLogin').click(function () {
         $('#notloggedDiv').hide();
@@ -104,14 +109,18 @@
             type: 'POST',
             url: '/User/LoginNav',
             data: { email: $('#formEmail').val(), password: ($('#formPass').val()) },
-            success: function (isLogged) {
-                if (isLogged) {
+            success: function (account) {
+                if (account.isLogged) {
                     $('#loginFormDiv').hide();
                     checkUser();
+                }
+                else if (!account.isVerified){
+                    $('#verifyForm').submit();
                 }
                 else {
                     $('#loginErrorMsg').html('Login failed');
                 }
+
             }
         });
     });

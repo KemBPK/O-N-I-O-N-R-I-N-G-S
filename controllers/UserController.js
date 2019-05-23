@@ -23,8 +23,13 @@ module.exports = function (app, yelp, db) {
                 return;
             }
             //console.log("worked");
-            res.redirect('/User/Login');
-            return;
+            db.email.sendVerificationEmail(email, function(err){
+                if(err){
+                    console.log(err);
+                }
+                res.render('./User/Verify');
+                return;
+            }) 
         })
     })
 
@@ -54,10 +59,14 @@ module.exports = function (app, yelp, db) {
     app.post('/User/Login', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+        db.user.authenicateUser(email, password, function (err, isAuthenticated, isVerified) {
             if (err) {
                 //console.log("email " + email + " not found");
                 res.redirect('/User/Login');
+                return;
+            }
+            if (isVerified == false){
+                res.render('./User/Verify');
                 return;
             }
             if (isAuthenticated == true) {
@@ -85,31 +94,35 @@ module.exports = function (app, yelp, db) {
     app.post('/User/LoginNav', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+        db.user.authenicateUser(email, password, function (err, isAuthenticated, isVerified) {
             if (err) {
                 //console.log("email " + email + " not found");
-                res.send(false);
+                var account = { isLogged: false, isVerified: false };
+                res.send(account);
                 //res.redirect('/User/Login');
                 return;
             }
-            if (isAuthenticated == true) {
+            if (isAuthenticated == true && isVerified == true) {
                 db.user.getUserId(email, function (err, id) {
                     if (err) {
                         //console.log('Login failed');
-                        res.send(false);
+                        var account = { isLogged: false, isVerified: false };
+                        res.send(account);
                         //res.redirect('/User/Login');
                         return;
                     }
                     req.session.id = id;
                     //console.log('Login succeeded');
-                    res.send(true);
+                    var account = { isLogged: true, isVerified: true };
+                    res.send(account);
                     //res.redirect('/');
                     return;
                 })
             }
             else {
                 //console.log('Login failed');
-                res.send(false);
+                var account = { isLogged: false, isVerified: false };
+                res.send(account);
                 // res.redirect('/User/Login');
                 return;
             }
@@ -207,6 +220,11 @@ module.exports = function (app, yelp, db) {
             res.redirect('/');
             return;
         }
+    })
+
+    app.post('/User/Verify', function(req, res){
+        res.render('./User/Verify');
+        return;
     })
 
 }

@@ -44,7 +44,7 @@ function registerUser(email, password, fname, lname, callback) {
             // "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\')";
 
             // Prepare SQL statement, avoid SQL injection
-            con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) VALUES (?, ?, ?, ?)", [email, hash, lname, fname], function (err, result, field) {
+            con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName, isVerified) VALUES (?, ?, ?, ?, ?)", [email, hash, lname, fname, false], function (err, result, field) {
                 if (err) {
                     //console.log("registerUser SQL INSERT FAILED\n");
                     con.end();
@@ -64,30 +64,31 @@ function authenicateUser(email, password, callback) {
     con.connect(function (err) {
         if (err) {
             //console.log('Database connection failed: ' + err.stack);
-            return callback(err, null);
+            return callback(err, null, null);
         }
 
         //var sql = "SELECT email, pass FROM tblUser WHERE email = \'" + email + "\'";
-        con.query("SELECT email, pass FROM tblUser WHERE email = ?", [email], function (err, result, field) {
+        con.query("SELECT email, pass, isVerified FROM tblUser WHERE email = ?", [email], function (err, result, field) {
             if (err) {
                 //console.log("authenicateUser SQL INSERT FAILED\n");
                 con.end();
-                return callback(err, null);
+                return callback(err, null, null);
             }
             con.end();
             //console.log('Returning result');
             if (result.length < 1) {
                 //console.log('User ' + email + ' not found');
                 var error = { messsage: 'User ' + email + ' not found' };
-                return callback(error, null)
+                return callback(error, null, null)
             }
+            var verificationStatus = result[0].isVerified;
             var dbPassword = result[0].pass;
             bcrypt.compare(password, dbPassword, function (err, res) {
                 if (err) {
                     //console.log('Hash function failed');
-                    return callback(err, null);
+                    return callback(err, null, null);
                 }
-                return callback(null, res) //true or false
+                return callback(null, res, verificationStatus) //true or false
             })
         })
     })
