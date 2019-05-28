@@ -228,7 +228,7 @@ module.exports = function (app, yelp, db) {
     })
 
     app.get('/User/Verify/:hash', function (req, res) {
-        //console.log('checking');
+        //console.log('checking'); /
         var hash = req.params.hash;
         db.email.verifyEmail(hash, function(err){
             if(err){
