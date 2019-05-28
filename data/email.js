@@ -54,14 +54,43 @@ function sendVerificationEmail(email, callback) {
 
                 sendEmail(email.toString(), link.toString()).then(function(err){
                     if(err){
-                        console.log('failed to send email');
+                        //console.log('failed to send email');
                         return callback(err);
                     }
                     else{             
-                        console.log('sent email');
+                        //console.log('sent email');
                         return callback(null);
                     } 
                 });
+            })
+        })
+    })
+}
+
+function verifyEmail(hash, callback){
+    var con = connection();
+    con.connect(function (err) {
+        if (err) {
+            //console.log('Database connection failed: ' + err.stack);
+            return callback(err);
+        }
+
+        con.query("SELECT userID FROM tblVerify WHERE hashVal = ?", [hash.toString()], function (err, result) {
+            if (err) {
+                con.end();
+                return callback(err);
+            }
+            if (result.length < 1) {
+                var error = { messsage: 'hash ' + hash.toString() + ' not found' };
+                return callback(error);
+            }
+            var userID = result[0].userID;
+            con.query("UPDATE tblUser SET isVerified = true WHERE userID = ?", [userID], function (err, result) {
+                con.end();
+                if (err) {      
+                    return callback(err);
+                }
+                return callback(null);
             })
         })
     })
@@ -94,3 +123,4 @@ async function sendEmail(email, link) {
 }
 
 module.exports.sendVerificationEmail = sendVerificationEmail;
+module.exports.verifyEmail = verifyEmail;

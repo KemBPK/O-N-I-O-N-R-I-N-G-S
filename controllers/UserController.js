@@ -227,4 +227,19 @@ module.exports = function (app, yelp, db) {
         return;
     })
 
+    app.get('/User/Verify/:hash', function (req, res) {
+        //console.log('checking');
+        var hash = req.params.hash;
+        db.email.verifyEmail(hash, function(err){
+            if(err){
+                //console.log(err);
+                res.status(404);
+                res.render('./Error/404', { url: req.url });
+                return;
+            }
+            res.render('./User/AccountVerified');
+            return;
+        })
+    })
+
 }
