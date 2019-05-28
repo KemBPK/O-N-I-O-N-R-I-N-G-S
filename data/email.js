@@ -85,12 +85,18 @@ function verifyEmail(hash, callback){
                 return callback(error);
             }
             var userID = result[0].userID;
-            con.query("UPDATE tblUser SET isVerified = true WHERE userID = ?", [userID], function (err, result) {
-                con.end();
-                if (err) {      
+            con.query("UPDATE tblUser SET isVerified = true WHERE userID = ?", [userID], function (err, result) {      
+                if (err) {
+                    con.end();  
                     return callback(err);
                 }
-                return callback(null);
+                con.query("DELETE FROM tblVerify WHERE userID = ?", [userID], function (err, result) {      
+                    con.end();
+                    if (err) {          
+                        return callback(err);
+                    }
+                    return callback(null);
+                }) 
             })
         })
     })
