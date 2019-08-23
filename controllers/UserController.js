@@ -23,8 +23,13 @@ module.exports = function (app, yelp, db) {
                 return;
             }
             //console.log("worked");
-            res.redirect('/User/Login');
-            return;
+            db.email.sendVerificationEmail(email, function(err){
+                if(err){
+                    //console.log(err);
+                }
+                res.render('./User/Verify');
+                return;
+            }) 
         })
     })
 
@@ -54,10 +59,14 @@ module.exports = function (app, yelp, db) {
     app.post('/User/Login', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+        db.user.authenicateUser(email, password, function (err, isAuthenticated, isVerified) {
             if (err) {
                 //console.log("email " + email + " not found");
                 res.redirect('/User/Login');
+                return;
+            }
+            if (isVerified == false){
+                res.render('./User/Verify');
                 return;
             }
             if (isAuthenticated == true) {
@@ -85,31 +94,35 @@ module.exports = function (app, yelp, db) {
     app.post('/User/LoginNav', function (req, res) {
         var email = req.body.email;
         var password = req.body.password;
-        db.user.authenicateUser(email, password, function (err, isAuthenticated) {
+        db.user.authenicateUser(email, password, function (err, isAuthenticated, isVerified) {
             if (err) {
                 //console.log("email " + email + " not found");
-                res.send(false);
+                var account = { isLogged: false, isVerified: false };
+                res.send(account);
                 //res.redirect('/User/Login');
                 return;
             }
-            if (isAuthenticated == true) {
+            if (isAuthenticated == true && isVerified == true) {
                 db.user.getUserId(email, function (err, id) {
                     if (err) {
                         //console.log('Login failed');
-                        res.send(false);
+                        var account = { isLogged: false, isVerified: false };
+                        res.send(account);
                         //res.redirect('/User/Login');
                         return;
                     }
                     req.session.id = id;
                     //console.log('Login succeeded');
-                    res.send(true);
+                    var account = { isLogged: true, isVerified: true };
+                    res.send(account);
                     //res.redirect('/');
                     return;
                 })
             }
             else {
                 //console.log('Login failed');
-                res.send(false);
+                var account = { isLogged: false, isVerified: false };
+                res.send(account);
                 // res.redirect('/User/Login');
                 return;
             }
@@ -207,6 +220,50 @@ module.exports = function (app, yelp, db) {
             res.redirect('/');
             return;
         }
+    })
+
+    app.post('/User/Verify', function(req, res){
+        res.render('./User/Verify');
+        return;
+    })
+
+    app.get('/User/Verify/:hash', function (req, res) {
+        //console.log('checking');
+        var hash = req.params.hash;
+        db.email.verifyEmail(hash, function(err){
+            if(err){
+                //console.log(err);
+                res.status(404);
+                res.render('./Error/404', { url: req.url });
+                return;
+            }
+            res.render('./User/AccountVerified');
+            return;
+        })
+    })
+
+    app.post('/User/ResendVerificationEmail', function(req, res){
+        var email = req.body.email;
+        db.user.getUserId(email, function(err, id){
+            if(err){
+                var result = { err: true, message: 'The email was not found.'};
+                res.send(result);
+                return
+            }
+            db.email.removeVerificationEmail(id, function(err){
+                db.email.sendVerificationEmail(email, function(err){
+                    if(err){
+                        var result = { err: true, message: 'Failed to send verificaiton email. Please try again.' };
+                        res.send(result);
+                        return;
+                    }
+
+                    var result = { err: false};
+                    res.send(result);
+                    return;
+                })
+            })
+        })
     })
 
 }
