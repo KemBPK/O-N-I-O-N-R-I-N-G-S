@@ -40,11 +40,8 @@ function registerUser(email, password, fname, lname, callback) {
                 return callback(err);
             }
 
-            // var sql = "INSERT INTO ebdb.tblUser (email, pass, lastName, firstName) " +
-            // "VALUES (\'" + email + "\', \'" + hash + "\', \'" + lname + "\', \'" + fname + "\')";
-
             // Prepare SQL statement, avoid SQL injection
-            con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName, isVerified) VALUES (?, ?, ?, ?, ?)", [email, hash, lname, fname, false], function (err, result, field) {
+            con.query("INSERT INTO ebdb.tblUser (email, pass, lastName, firstName, isVerified) VALUES (?, ?, ?, ?, ?)", [email, hash, lname, fname, 0], function (err, result, field) {
                 if (err) {
                     //console.log("registerUser SQL INSERT FAILED\n");
                     con.end();

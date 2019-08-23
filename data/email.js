@@ -102,6 +102,24 @@ function verifyEmail(hash, callback){
     })
 }
 
+function removeVerificationEmail(userID, callback){
+    var con = connection();
+    con.connect(function (err) {
+        if (err) {
+            //console.log('Database connection failed: ' + err.stack);
+            return callback(err);
+        }
+
+        con.query("DELETE FROM tblVerify WHERE userID = ?", [userID], function (err, result) {      
+            con.end();
+            if (err) {          
+                return callback(err);
+            }
+            return callback(null);
+        }) 
+    })  
+}
+
 async function sendEmail(email, link) {
     let transporter = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
@@ -130,3 +148,4 @@ async function sendEmail(email, link) {
 
 module.exports.sendVerificationEmail = sendVerificationEmail;
 module.exports.verifyEmail = verifyEmail;
+module.exports.removeVerificationEmail = removeVerificationEmail;
