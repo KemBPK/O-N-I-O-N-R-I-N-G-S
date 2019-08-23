@@ -25,7 +25,7 @@ module.exports = function (app, yelp, db) {
             //console.log("worked");
             db.email.sendVerificationEmail(email, function(err){
                 if(err){
-                    console.log(err);
+                    //console.log(err);
                 }
                 res.render('./User/Verify');
                 return;
@@ -239,6 +239,30 @@ module.exports = function (app, yelp, db) {
             }
             res.render('./User/AccountVerified');
             return;
+        })
+    })
+
+    app.post('/User/ResendVerificationEmail', function(req, res){
+        var email = req.body.email;
+        db.user.getUserId(email, function(err, id){
+            if(err){
+                var result = { err: true, message: 'The email was not found.'};
+                res.send(result);
+                return
+            }
+            db.email.removeVerificationEmail(id, function(err){
+                db.email.sendVerificationEmail(email, function(err){
+                    if(err){
+                        var result = { err: true, message: 'Failed to send verificaiton email. Please try again.' };
+                        res.send(result);
+                        return;
+                    }
+
+                    var result = { err: false};
+                    res.send(result);
+                    return;
+                })
+            })
         })
     })
 
