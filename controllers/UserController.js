@@ -130,7 +130,6 @@ module.exports = function (app, yelp, db) {
                 // res.redirect('/User/Login');
                 return;
             }
-
         })
     })
 
