@@ -106,22 +106,26 @@ module.exports = function (app, yelp, db) {
                 db.user.getUserId(email, function (err, id) {
                     if (err) {
                         //console.log('Login failed');
-                        var account = { isLogged: false, isVerified: false };
+                        var account = { isLogged: false, isVerified: true, isAuthenticated: true};
                         res.send(account);
                         //res.redirect('/User/Login');
                         return;
                     }
                     req.session.id = id;
                     //console.log('Login succeeded');
-                    var account = { isLogged: true, isVerified: true };
+                    var account = { isLogged: true, isVerified: true, isAuthenticated: true };
                     res.send(account);
                     //res.redirect('/');
                     return;
                 })
             }
+            else if(isAuthenticated == true && isVerified == false){
+                var account = { isLogged: true, isVerified: false, isAuthenticated: true };
+                res.send(account);
+            }
             else {
                 //console.log('Login failed');
-                var account = { isLogged: false, isVerified: false };
+                var account = { isLogged: false, isVerified: false, isAuthenticated: false };
                 res.send(account);
                 // res.redirect('/User/Login');
                 return;
