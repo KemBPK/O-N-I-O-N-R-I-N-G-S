@@ -114,7 +114,7 @@
                     $('#loginFormDiv').hide();
                     checkUser();
                 }
-                else if (!account.isVerified){
+                else if (account.isAuthenticated && !account.isVerified){
                     $('#verifyForm').submit();
                 }
                 else {
