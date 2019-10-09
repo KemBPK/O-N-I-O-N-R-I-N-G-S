@@ -102,5 +102,4 @@ module.exports.SearchRestaurant = SearchRestaurant;
 
 // 							Direction button will show a pop up modal with a google map 
 							
-// 							Google API key = AIzaSyCH0_20Xs3jNC7t0Z8JoZ8GeSC01tRxY8k //DO NOT SHARE THIS 
-// 						
+// 							Google API key = 
