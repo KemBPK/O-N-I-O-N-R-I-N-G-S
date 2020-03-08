@@ -1,4 +1,5 @@
-# O-N-I-O-N-R-I-N-G-S
+# OnionRingsWorldWide
+A website for all onion-rings enthusiasts that will help them search for restaurant spots that serve onion rings.
 
 # Install Node JS - https://nodejs.org/en/
 
