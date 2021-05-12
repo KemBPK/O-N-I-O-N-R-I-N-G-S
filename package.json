@@ -22,7 +22,7 @@
     "morgan": "~1.9.0",
     "mysql": "~2.16.0",
     "yelp-fusion": "~2.2.1",
-    "nodemailer": "~6.1.1",
+    "nodemailer": "~6.4.16",
     "crypto-random-string": "~3.0.0"
   }
 }
